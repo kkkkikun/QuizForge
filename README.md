@@ -2,6 +2,9 @@
 
 > 期末选填题速刷工具：Word/PDF 复习资料 → 一键生成**单文件静态答题网页**，只保留「核对答案 + 无限重做」。
 
+[![CI](https://github.com/kkkkikun/QuizForge/actions/workflows/ci.yml/badge.svg)](https://github.com/kkkkikun/QuizForge/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 把老师发的乱糟糟的题库（Word/PDF）丢进去，QuizForge 用「规则 + LLM 兜底」解析成结构化题库，再渲染成一个**双击即开、可离线、无限重做**的自包含 HTML 答题页。
 
 ---
@@ -14,6 +17,13 @@
 - **正确性把关**：结构校验 + 来源标记（规则/LLM）+ `--review` 人工逐题核对
 - **答题引擎**：单选 / 多选 / 填空、提交计分、乱序、localStorage 进度记忆、无限重做
 - **单文件自包含**：题库 JSON 内嵌，零依赖、零后端，拷贝给同学直接开
+
+## 📸 预览
+
+> 前端仍在打磨，截图稍后补上。
+
+<!-- 截图占位：前端定稿后把图片放到 docs/screenshot.png，并取消下面这行注释 -->
+<!-- ![QuizForge 答题页](docs/screenshot.png) -->
 
 ## 🔧 工作原理
 
