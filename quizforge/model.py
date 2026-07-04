@@ -30,6 +30,7 @@ class Question:
     tolerant: bool = False                                  # 填空容错匹配
     low_confidence: bool = False
     note: str | None = None                                # 如「本题含图，已省略」
+    source: str = "rule"                                   # rule | llm（结构化来源）
 
 
 @dataclass

@@ -19,7 +19,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 2,
@@ -38,7 +39,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 3,
@@ -57,7 +59,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 4,
@@ -76,7 +79,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 5,
@@ -95,7 +99,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 6,
@@ -114,7 +119,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 7,
@@ -133,7 +139,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 8,
@@ -152,7 +159,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 9,
@@ -171,7 +179,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 10,
@@ -190,7 +199,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 11,
@@ -209,7 +219,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 12,
@@ -228,7 +239,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 13,
@@ -247,7 +259,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 14,
@@ -266,7 +279,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 15,
@@ -285,7 +299,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 16,
@@ -304,7 +319,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 17,
@@ -323,7 +339,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 18,
@@ -342,7 +359,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 19,
@@ -361,7 +379,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 20,
@@ -380,7 +399,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 21,
@@ -399,7 +419,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 22,
@@ -418,7 +439,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 23,
@@ -437,7 +459,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 24,
@@ -456,7 +479,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 25,
@@ -475,7 +499,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 26,
@@ -494,7 +519,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 27,
@@ -513,7 +539,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 28,
@@ -532,7 +559,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 29,
@@ -551,7 +579,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 30,
@@ -570,7 +599,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 31,
@@ -589,7 +619,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 32,
@@ -608,7 +639,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 33,
@@ -627,7 +659,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 34,
@@ -646,7 +679,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 35,
@@ -665,7 +699,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 36,
@@ -684,7 +719,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 37,
@@ -703,7 +739,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 38,
@@ -722,7 +759,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 39,
@@ -741,7 +779,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 40,
@@ -760,7 +799,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 41,
@@ -779,7 +819,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 42,
@@ -798,7 +839,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 43,
@@ -817,7 +859,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 44,
@@ -836,7 +879,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 45,
@@ -855,7 +899,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 46,
@@ -874,7 +919,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 47,
@@ -893,7 +939,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     },
     {
       "id": 48,
@@ -912,7 +959,8 @@
       "accepted": [],
       "tolerant": false,
       "low_confidence": false,
-      "note": null
+      "note": null,
+      "source": "rule"
     }
   ],
   "ignored_summary": {

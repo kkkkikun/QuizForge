@@ -59,3 +59,10 @@ def test_render_includes_katex_when_latex():
         Question(1, "single", "x", r"求 $\int x\,dx$", {"A": "1"}, answer=["A"])])
     html = render_html(q)
     assert "katex" in html.lower()
+
+
+def test_render_blank_reveal_present():
+    """填空题提交后应显示正确答案（引擎 JS 含「正确答案」分支）。"""
+    html = render_html(_sample_quiz())
+    assert "正确答案" in html
+    assert "无标准答案" in html

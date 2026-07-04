@@ -74,12 +74,24 @@ Block {
    - 命中即停；多策略冲突 → 标 `low_confidence`。
 5. **题型推断**：选项数+答案数+section 类型 → single/multiple/blank；不确定标 `low_confidence`。
 6. **滤噪（R10）**：丢弃——带分值`（N分）`的大题、含子题`（1）（2）`的计算/简答题、知识点陈述（在非题目节或无选项无空的长陈述）、前言/标题。被丢内容计入 `ignored_summary`。
-7. **LLM 兜底（可选）**：对规则标 `low_confidence` 或结构残缺的 block，交 LLM 判定「是真题→抽结构 / 是噪声→归类丢弃」。结构化输出（JSON schema 约束）。无 key → 跳过，保留 `low_confidence` 标记照常输出。
+7. **LLM 兜底（可选）**：
+   - **补答案**：规则产出的 `low_confidence`（`source=rule`）题交 `adjudicate` 补答案。
+   - **结构化兜底（默认）**：规则判不定的残留块（choice leftover / 填空节非空位项 / unknown 节）逐块交 `adjudicate`，是题→`source=llm` 入库，否则计噪声。
+   - **`--llm-parse`**：整节文本交 `extract_questions` 批量结构化（规则旁路），用于规则完全搞不动的怪文档。
+   - 无 key → 全部跳过，纯规则 + `low_confidence` 照常输出。
+8. **结构校验**（关①）：所有题过 `validate_question`（题干非空/选项≥2 且键合法/答案⊆选项/题型已知）；不合规→`low_confidence=True`+`note`。
+9. **来源标记**：`Question.source ∈ {rule, llm}`；LLM 产出一律默认 `low_confidence`，HTML 卡片显示「LLM」标。
+10. **`--review`**：生成前逐题核对 `low_confidence` 题（`y/a/s/d/q`），人工把关只针对存疑题。
 
 ## 6. LLM 层
-- **可配置**：`LLM_BASE_URL`（默认 `https://api.deepseek.com`）/ `LLM_MODEL`（默认 `deepseek-chat`；用户可设 `v4-flash` 等中转模型）/ `LLM_API_KEY`（或 `DEEPSEEK_API_KEY`），CLI flag 可覆盖。OpenAI 兼容协议。
+- **双 provider**：OpenAI 系（DeepSeek/OpenAI/中转，`openai` SDK）与 Anthropic（Claude，`anthropic` SDK）。
+  - 判定：`LLM_PROVIDER` 显式 > `ANTHROPIC_API_KEY` 存在→anthropic > 其它 key→openai。
+  - openai：key=`LLM_API_KEY`||`DEEPSEEK_API_KEY`||`OPENAI_API_KEY`，base_url 默认 `https://api.deepseek.com`，model 默认 `deepseek-chat`。
+  - anthropic：key=`ANTHROPIC_API_KEY`||`LLM_API_KEY`，model 默认 `claude-haiku-4-5-20251001`。
+- **配置来源**：`.env`（gitignore，`python-dotenv` 启动自动加载）> 环境变量 > CLI flag（`--max-llm`/`--no-llm`）。
 - **降级**：无 key → 纯规则 + `low_confidence` 标记，仍能出 HTML（R3/R4 的"可选增强"语义）。
-- **Prompt 要点**：喂 block 原文 + 数据契约 schema，要求只输出符合 schema 的 JSON；few-shot 用样本里的真题。
+- **成本控制**：`--max-llm N` 限制调用次数（每低置信题一次）；`_llm_refine` 仅对 `low_confidence` 题触发。
+- **Prompt 要点**：喂 block 原文 + 数据契约 schema，要求只输出符合 schema 的 JSON；provider 无关。
 
 ## 7. 渲染层
 - **单文件自包含 HTML**：题库 JSON 以 `<script type="application/json">` 内嵌；CSS/JS 全内联；KaTeX 仅在检测到 LaTeX 时内联（否则不发）。

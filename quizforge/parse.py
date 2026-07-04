@@ -8,6 +8,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 from dataclasses import dataclass, field
 
@@ -89,10 +90,10 @@ def _strip_number(text: str) -> str:
     return QUESTION_NUM_RE.sub("", text, count=1).strip()
 
 
-def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], int]:
+def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
     """在 choice 节内，以选项块为锚吸附题干，识别选择题候选。
 
-    返回 (候选列表, 未匹配的 para 数)。连续选项块（一行多选项 / 一行一选项）
+    返回 (候选列表, 未匹配的题干文本列表)。连续选项块（一行多选项 / 一行一选项）
     合并为一个选项集；其前累积的 para 作为题干。
     """
     cands: list[ChoiceCandidate] = []
@@ -121,7 +122,7 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], int]:
                 if t:
                     pending.append(t)
             j += 1
-    return cands, len(pending)
+    return cands, pending
 
 
 def detect_choice_questions(section: Section) -> list[ChoiceCandidate]:
@@ -130,18 +131,23 @@ def detect_choice_questions(section: Section) -> list[ChoiceCandidate]:
 
 
 def parse_blocks(
-    blocks: list[Block], source_file: str = "", llm: "object | None" = None
+    blocks: list[Block],
+    source_file: str = "",
+    llm: "object | None" = None,
+    llm_parse: bool = False,
 ) -> Quiz:
     """编排：Block 流 → Quiz。
 
     管线：filter_blocks(滤噪) → segment(分节) → 按节类型解析(choice/blank) →
-    essay 整节丢弃 → LLM 兜底(可选) → 组装 Quiz。
+    essay 整节丢弃 → LLM（可选：低置信补答案 / 残留兜底 / --llm-parse 整节）→ 结构校验。
     """
     kept, ignored = filter_blocks(blocks)
     sections = segment(kept)
     title = ""
     questions: list[Question] = []
+    residual: list[tuple[str, str, str]] = []  # (text, section, 归类) 规则未成题的残留
     qid = 0
+
     for sec in sections:
         if sec.type == "preamble":
             title = title or sec.title
@@ -156,13 +162,21 @@ def parse_blocks(
             n = sum(1 for b in sec.blocks if QUESTION_NUM_RE.match(b.text.strip()))
             ignored["essay"] = ignored.get("essay", 0) + (n or len(sec.blocks))
             continue
+
+        # --llm-parse：整节交 LLM 批量结构化（规则旁路）
+        if llm_parse and llm is not None:
+            text = "\n".join(b.text for b in sec.blocks if b.text.strip())
+            for d in llm.extract_questions(text):
+                qid += 1
+                questions.append(_dict_to_question(d, qid, sec.title))
+            continue
+
         if sec.type == "choice":
-            cands, leftover = _detect_choice(sec)
+            cands, leftover_texts = _detect_choice(sec)
             for c in cands:
                 qid += 1
                 questions.append(choice_candidate_to_question(c, qid))
-            if leftover:
-                ignored["knowledge"] = ignored.get("knowledge", 0) + leftover
+            residual.extend((t, sec.title, "knowledge") for t in leftover_texts)
             continue
         if sec.type == "blank":
             for b in sec.blocks:
@@ -181,16 +195,33 @@ def parse_blocks(
                         )
                     )
                 else:
-                    # 填空节中无空位标记的项（如空位已填满的陈述）→ 规则无法成题，记账丢弃
-                    ignored["fill"] = ignored.get("fill", 0) + 1
+                    residual.append((t, sec.title, "fill"))
             continue
-        # unknown 节 → 当 knowledge 噪声丢弃
-        ignored["knowledge"] = ignored.get("knowledge", 0) + len(sec.blocks)
+        # unknown 节 → 残留（可能被 LLM 兜底救回）
+        residual.extend(
+            (b.text, sec.title, "knowledge")
+            for b in sec.blocks if b.kind == "para" and b.text.strip()
+        )
 
-    if llm is not None:
+    if llm is not None and not llm_parse:
+        # 1) 优先：给规则产出的低置信题补答案（保证已有题先拿到答案）
         for q in questions:
-            if q.low_confidence:
+            if q.source == "rule" and q.low_confidence:
                 _llm_refine(q, llm)
+        # 2) 残留兜底：逐块 adjudicate（是题→入库 source=llm，否则计噪声）
+        for text, section, cat in residual:
+            d = llm.adjudicate(text)
+            if d and d.get("is_question"):
+                qid += 1
+                questions.append(_dict_to_question(d, qid, section))
+            else:
+                ignored[cat] = ignored.get(cat, 0) + 1
+    else:
+        for _t, _s, cat in residual:
+            ignored[cat] = ignored.get(cat, 0) + 1
+
+    for q in questions:
+        _apply_validation(q)
 
     return Quiz(
         title=title or _guess_title(source_file),
@@ -198,6 +229,103 @@ def parse_blocks(
         questions=questions,
         ignored_summary=ignored,
     )
+
+
+def _normalize_llm_answers(vals) -> list[str]:
+    """规整 LLM 答案：递归展平嵌套列表 / 字符串化列表（LLM 偶尔返回 [['x']] 或 "['x']"）。"""
+    out: list[str] = []
+    for v in vals or []:
+        if isinstance(v, list):
+            out.extend(_normalize_llm_answers(v))
+            continue
+        s = str(v).strip().strip('"').strip("'")
+        if not s:
+            continue
+        if s.startswith("[") and s.endswith("]"):
+            try:
+                parsed = json.loads(s.replace("'", '"'))
+                if isinstance(parsed, list):
+                    out.extend(_normalize_llm_answers(parsed))
+                    continue
+            except json.JSONDecodeError:
+                pass
+        out.append(s)
+    return out
+
+
+def _dict_to_question(d: dict, qid: int, section: str) -> Question:
+    """LLM 抽取 dict → Question（source=llm，默认存疑）。"""
+    opts = d.get("options")
+    if opts == {}:
+        opts = None
+    answer = _normalize_llm_answers(d.get("answer") or [])
+    qtype = d.get("type") or "single"
+    # single 却给多答案 → 升级为 multiple（否则单选 UI 永远判错）
+    if qtype == "single" and len(answer) > 1:
+        qtype = "multiple"
+    return Question(
+        id=qid,
+        type=qtype,
+        section=section,
+        stem=(d.get("stem") or "").strip(),
+        options=opts,
+        answer=answer,
+        low_confidence=True,
+        source="llm",
+    )
+
+
+# ---------------- 交互审校（--review）----------------
+
+
+def review_quiz(quiz: Quiz, prompt_fn=input) -> Quiz:
+    """逐题核对 low_confidence 题目：y 确认 / a 改答案 / s 跳过 / d 删除 / q 结束。"""
+    low = [q for q in quiz.questions if q.low_confidence]
+    if not low:
+        return quiz
+    print(f"\n📋 共 {len(low)} 道存疑题目（规则未能确定 / LLM 产出），逐题核对。")
+    print("   [y]确认正确  [a]改答案  [s]跳过  [d]删除  [q]结束审校\n")
+    del_ids: set[int] = set()
+    for i, q in enumerate(low, 1):
+        if q.id in del_ids:
+            continue
+        _print_for_review(i, len(low), q)
+        cmd = (prompt_fn("[y/a/s/d/q]: ") or "").strip().lower()
+        if cmd == "y":
+            q.low_confidence = False
+            q.note = None
+        elif cmd == "a":
+            new = (prompt_fn("  新答案（选择填字母如 AC，填空填文本）: ") or "").strip()
+            q.answer = _parse_answer_input(new, q)
+            q.low_confidence = False
+            q.note = None
+        elif cmd == "d":
+            del_ids.add(q.id)
+            print("   → 已标记删除")
+        elif cmd == "q":
+            break
+        # s / 其它 → 跳过（保留存疑）
+    if del_ids:
+        quiz.questions = [q for q in quiz.questions if q.id not in del_ids]
+    print(f"\n审校完成：保留 {len(quiz.questions)} 题。\n")
+    return quiz
+
+
+def _parse_answer_input(s: str, q: Question) -> list[str]:
+    if q.type == "blank":
+        return [s] if s else []
+    return [c for c in s.upper() if "A" <= c <= "Z"]
+
+
+def _print_for_review(i: int, n: int, q: Question) -> None:
+    src = "LLM" if q.source == "llm" else "规则"
+    print(f"[{i}/{n}] (来源:{src} | {q.type} | {q.section}) {q.stem}")
+    if q.options:
+        for k in sorted(q.options):
+            mark = " ✓" if k in (q.answer or []) else ""
+            print(f"       {k}. {q.options[k]}{mark}")
+    if q.note:
+        print(f"       ⚠ {q.note}")
 
 
 # ---------------- 答案抽取（多策略）+ 题型推断 ----------------
@@ -298,10 +426,70 @@ def quiz_to_dict(quiz: Quiz) -> dict:
     return dataclasses.asdict(quiz)
 
 
+def dict_to_quiz(d: dict) -> Quiz:
+    """quiz_to_dict 的逆：dict → Quiz（用于从已留存的 JSON 重新渲染）。"""
+    qs = []
+    for qd in d.get("questions", []):
+        qs.append(
+            Question(
+                id=qd.get("id", 0),
+                type=qd.get("type", ""),
+                section=qd.get("section", ""),
+                stem=qd.get("stem", ""),
+                options=qd.get("options"),
+                answer=list(qd.get("answer") or []),
+                accepted=list(qd.get("accepted") or []),
+                tolerant=bool(qd.get("tolerant", False)),
+                low_confidence=bool(qd.get("low_confidence", False)),
+                note=qd.get("note"),
+                source=qd.get("source", "rule"),
+            )
+        )
+    return Quiz(
+        title=d.get("title", ""),
+        source_file=d.get("source_file", ""),
+        questions=qs,
+        ignored_summary=dict(d.get("ignored_summary") or {}),
+    )
+
+
 def _guess_title(source_file: str) -> str:
     import os
 
     return os.path.splitext(os.path.basename(source_file))[0] or "题库"
+
+
+# ---------------- 结构校验（关①：自动）----------------
+
+
+def validate_question(q: Question) -> str | None:
+    """结构校验：合规返回 None，否则返回原因字符串。"""
+    if not q.stem or len(q.stem.strip()) < 2:
+        return "题干为空或过短"
+    if q.type in ("single", "multiple"):
+        if not q.options or len(q.options) < 2:
+            return "选项不足"
+        bad = [k for k in (q.options or {}) if not (len(k) == 1 and k.isupper())]
+        if bad:
+            return f"选项键非法 {bad}"
+        if not q.answer:
+            return "无答案"
+        if not set(q.answer) <= set(q.options or {}):
+            return f"答案 {q.answer} 不在选项 {list(q.options)} 中"
+    elif q.type == "blank":
+        if not q.answer:
+            return "填空无答案"
+    else:
+        return f"未知题型 {q.type!r}"
+    return None
+
+
+def _apply_validation(q: Question) -> None:
+    reason = validate_question(q)
+    if reason:
+        q.low_confidence = True
+        if not q.note:
+            q.note = reason
 
 
 def _question_to_block_text(q: Question) -> str:
@@ -318,7 +506,10 @@ def _llm_refine(q: Question, llm) -> None:
     if not result or not result.get("is_question"):
         return
     if result.get("answer") and not q.answer:
-        q.answer = [str(a) for a in result["answer"]]
+        q.answer = _normalize_llm_answers(result["answer"])
+    # single 却补出多答案 → 升级 multiple（否则单选 UI 永远判错）
+    if q.type == "single" and len(q.answer) > 1:
+        q.type = "multiple"
     if result.get("type") and not q.type:
         q.type = result["type"]
     if result.get("stem") and len(q.stem) < 4:

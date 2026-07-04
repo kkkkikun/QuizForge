@@ -66,6 +66,7 @@ button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .q.low{border-color:var(--warn);background:#fffbeb}
 .num{color:var(--muted);font-size:13px;margin-bottom:6px}
 .num .warn{color:var(--warn);font-weight:600}
+.num .src{background:#fef3c7;color:#b45309;padding:1px 6px;border-radius:999px;font-size:12px}
 .num .typ{float:right;background:#eef2ff;color:var(--accent);padding:1px 8px;border-radius:999px;font-size:12px}
 .stem{margin:0 0 10px;white-space:pre-wrap}
 .opts{display:flex;flex-direction:column;gap:6px}
@@ -76,6 +77,9 @@ button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .L{font-weight:700;color:var(--accent)}
 .blank{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:15px;font-family:inherit}
 .norep{margin-top:6px;color:var(--warn);font-size:13px}
+.ans{margin-top:6px;font-size:13px}
+.ans.ok{color:var(--ok)}
+.ans.bad{color:var(--bad)}
 footer{color:var(--muted);font-size:12px;text-align:center}
 </style>
 </head>
@@ -120,12 +124,20 @@ function markClass(q,L){
 function card(q){
   const el=document.createElement('div');
   el.className='q'+(q.low_confidence?' low':'');
-  let h='<div class="num">第 '+q.id+' 题'+(q.low_confidence?' <span class="warn">⚠️ 存疑，请核对</span>':'')+'<span class="typ">'+typeLabel(q)+'</span></div>';
+  let h='<div class="num">第 '+q.id+' 题'+(q.low_confidence?' <span class="warn">⚠️ 存疑，请核对</span>':'')+(q.source==='llm'?' <span class="src">LLM</span>':'')+'<span class="typ">'+typeLabel(q)+'</span></div>';
   h+='<div class="stem">'+esc(q.stem)+'</div>';
   if(q.type==='blank'){
     const cur=(answers[q.id]&&answers[q.id][0])||'';
     h+='<input class="blank" data-id="'+q.id+'" value="'+esc(cur)+'" '+(submitted?'disabled':'')+' oninput="onBlank('+q.id+',this.value)">';
-    if(submitted&&(!q.answer||!q.answer.length))h+='<div class="norep">无标准答案（存疑）</div>';
+    if(submitted){
+      if(q.answer&&q.answer.length){
+        const acc=[...q.answer,...(q.accepted||[])].map(s=>String(s).trim().toLowerCase());
+        const ok=acc.includes((cur||'').trim().toLowerCase());
+        h+='<div class="ans '+(ok?'ok':'bad')+'">'+(ok?'✓ ':'✗ ')+'正确答案：'+esc(q.answer.join(' / '))+'</div>';
+      }else{
+        h+='<div class="norep">无标准答案（存疑）</div>';
+      }
+    }
   }else{
     let keys=Object.keys(q.options||{});
     if(!submitted&&shuffle)shuffleArr(keys);
