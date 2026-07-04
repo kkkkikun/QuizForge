@@ -26,7 +26,7 @@ jobs:
       - name: Install uv
         run: pip install --upgrade uv
 
-      - name: Sync dependencies（含 dev: pytest, fpdf2）
+      - name: Sync dependencies
         run: uv sync --python "${{ matrix.python-version }}"
 
       - name: Run tests
