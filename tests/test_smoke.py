@@ -18,5 +18,5 @@ def test_cli_help():
     )
     assert r.returncode == 0, r.stderr
     assert "quizforge" in r.stdout.lower()
-    for flag in ["--no-llm", "--interactive", "--keep-explanation", "--no-shuffle"]:
+    for flag in ["--no-llm", "--llm-parse", "--review", "--json", "--no-shuffle"]:
         assert flag in r.stdout

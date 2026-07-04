@@ -16,18 +16,8 @@ def build_parser() -> argparse.ArgumentParser:
         prog="quizforge",
         description="期末选填题速刷：Word/PDF/TXT → 单文件静态答题网页",
     )
-    p.add_argument("input", help="输入文件 (.docx/.pdf/.txt)")
+    p.add_argument("input", help="输入文件 (.docx/.pdf/.txt 或 .json 重渲染)")
     p.add_argument("-o", "--output", help="输出 HTML 路径（默认 <input>.html）")
-    p.add_argument(
-        "--interactive",
-        action="store_true",
-        help="低置信题目逐题人工确认",
-    )
-    p.add_argument(
-        "--keep-explanation",
-        action="store_true",
-        help="保留「解析」为折叠块（默认丢弃）",
-    )
     p.add_argument(
         "--no-llm",
         action="store_true",
