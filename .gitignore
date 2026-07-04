@@ -1,0 +1,11 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+.DS_Store
+
+# 生成的答题网页（构建产物，可由 quizforge 重新生成）
+*.html

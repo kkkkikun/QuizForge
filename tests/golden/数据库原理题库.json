@@ -1,0 +1,921 @@
+{
+  "title": "数据库原理题库",
+  "source_file": "数据库原理题库.docx",
+  "questions": [
+    {
+      "id": 1,
+      "type": "single",
+      "section": "单选题",
+      "stem": "数据库技术的核心是",
+      "options": {
+        "A": "数据",
+        "B": "数据库管理系统",
+        "C": "操作系统",
+        "D": "应用程序"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 2,
+      "type": "single",
+      "section": "单选题",
+      "stem": "数据库系统阶段相比文件系统阶段，不具备的特点是",
+      "options": {
+        "A": "数据结构化",
+        "B": "数据共享性高",
+        "C": "数据冗余度高",
+        "D": "数据独立性高"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 3,
+      "type": "single",
+      "section": "单选题",
+      "stem": "数据库三级模式结构中，描述全体数据的全局逻辑结构和特征的是",
+      "options": {
+        "A": "外模式",
+        "B": "模式",
+        "C": "内模式",
+        "D": "用户模式"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 4,
+      "type": "single",
+      "section": "单选题",
+      "stem": "SQL Server 2008是一个＿＿＿型数据库系统",
+      "options": {
+        "A": "网状",
+        "B": "层次",
+        "C": "关系",
+        "D": "以上都不是"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 5,
+      "type": "single",
+      "section": "单选题",
+      "stem": "下列选项中，不属于概念模型基本概念的是",
+      "options": {
+        "A": "实体",
+        "B": "属性",
+        "C": "码",
+        "D": "存储结构"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 6,
+      "type": "single",
+      "section": "单选题",
+      "stem": "学生与课程之间的选课联系属于",
+      "options": {
+        "A": "1:1联系",
+        "B": "1:n联系",
+        "C": "m:n联系",
+        "D": "无联系"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 7,
+      "type": "single",
+      "section": "单选题",
+      "stem": "在SELECT语句的WHERE子句中，可以匹配0个到多个字符的通配符是＿＿＿",
+      "options": {
+        "A": "*",
+        "B": "%",
+        "C": "_",
+        "D": "?"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 8,
+      "type": "single",
+      "section": "单选题",
+      "stem": "关系模型中，二维表的行称为",
+      "options": {
+        "A": "属性",
+        "B": "元组",
+        "C": "域",
+        "D": "码"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 9,
+      "type": "single",
+      "section": "单选题",
+      "stem": "下列不属于关系性质的是",
+      "options": {
+        "A": "同一列的数据类型必须相同",
+        "B": "任意两个元组不能完全重复",
+        "C": "列的顺序可以任意交换",
+        "D": "属性可以进一步拆分"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 10,
+      "type": "single",
+      "section": "单选题",
+      "stem": "关系数据库管理系统应能实现的专门关系运算包括",
+      "options": {
+        "A": "选择、投影、连接",
+        "B": "排序、索引、统计",
+        "C": "关联、更新、排序",
+        "D": "显示、打印、制表"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 11,
+      "type": "single",
+      "section": "单选题",
+      "stem": "若属性F是基本关系R的外码，参照基本关系S的主码K，则R中每个元组在F上的值",
+      "options": {
+        "A": "必须等于S中某个元组的主码值",
+        "B": "必须取空值",
+        "C": "要么取空值，要么等于S中某个元组的主码值",
+        "D": "可以取任意值"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 12,
+      "type": "single",
+      "section": "单选题",
+      "stem": "关系代数中，从关系中选取满足条件的元组的操作是",
+      "options": {
+        "A": "投影",
+        "B": "选择",
+        "C": "连接",
+        "D": "笛卡尔积"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 13,
+      "type": "single",
+      "section": "单选题",
+      "stem": "关系代数中，从关系中选取若干列组成新关系的操作是",
+      "options": {
+        "A": "投影",
+        "B": "选择",
+        "C": "连接",
+        "D": "并"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 14,
+      "type": "single",
+      "section": "单选题",
+      "stem": "函数依赖中，若Y函数依赖于X，且Y不是X的子集，则称为",
+      "options": {
+        "A": "平凡函数依赖",
+        "B": "非平凡函数依赖",
+        "C": "完全函数依赖",
+        "D": "传递函数依赖"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 15,
+      "type": "single",
+      "section": "单选题",
+      "stem": "若X→Y，且X的真子集不能决定Y，则Y对X是",
+      "options": {
+        "A": "部分函数依赖",
+        "B": "完全函数依赖",
+        "C": "传递函数依赖",
+        "D": "平凡依赖"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 16,
+      "type": "single",
+      "section": "单选题",
+      "stem": "关系模式满足1NF的要求是",
+      "options": {
+        "A": "每个属性都是不可再分的原子值",
+        "B": "不存在部分函数依赖",
+        "C": "不存在传递函数依赖",
+        "D": "没有数据冗余"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 17,
+      "type": "single",
+      "section": "单选题",
+      "stem": "SELECT语句中要使用HAVING子句必须使用＿＿＿子句",
+      "options": {
+        "A": "ORDER BY",
+        "B": "WHERE",
+        "C": "GROUP BY",
+        "D": "无需配合"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 18,
+      "type": "single",
+      "section": "单选题",
+      "stem": "概念结构设计最常用的方法是",
+      "options": {
+        "A": "自顶向下法",
+        "B": "自底向上法",
+        "C": "逐步扩张法",
+        "D": "混合策略法"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 19,
+      "type": "single",
+      "section": "单选题",
+      "stem": "E-R图转换为关系模型时，m:n联系需要",
+      "options": {
+        "A": "转换为一个独立的关系模式",
+        "B": "与任意一端合并",
+        "C": "与n端合并",
+        "D": "直接删除"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 20,
+      "type": "single",
+      "section": "单选题",
+      "stem": "SQL Server 2008中，用于存储数据库日志的文件后缀是",
+      "options": {
+        "A": ".mdf",
+        "B": ".ndf",
+        "C": ".ldf",
+        "D": ".sql"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 21,
+      "type": "single",
+      "section": "单选题",
+      "stem": "在关系数据库中，关于主键的说法正确的是",
+      "options": {
+        "A": "用于唯一的标识一个元组",
+        "B": "一个表允许有多个主键",
+        "C": "创建唯一的索引,允许取空值",
+        "D": "只允许以表中的首属性建立"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 22,
+      "type": "single",
+      "section": "单选题",
+      "stem": "定义表结构时，设置某列值不能为空的关键字是",
+      "options": {
+        "A": "UNIQUE",
+        "B": "PRIMARY KEY",
+        "C": "NOT NULL",
+        "D": "CHECK"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 23,
+      "type": "single",
+      "section": "单选题",
+      "stem": "若要限制某列的取值范围在1~100之间，应使用＿＿＿约束",
+      "options": {
+        "A": "PRIMARY KEY",
+        "B": "FOREIGN KEY",
+        "C": "CHECK",
+        "D": "DEFAULT"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 24,
+      "type": "single",
+      "section": "单选题",
+      "stem": "向表中插入数据的SQL语句是",
+      "options": {
+        "A": "INSERT",
+        "B": "UPDATE",
+        "C": "DELETE",
+        "D": "SELECT"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 25,
+      "type": "single",
+      "section": "单选题",
+      "stem": "自然连接是构成新关系的有效方法，一般情况下当对关系R和S使用自然连接时，要求R和S有一个或多个共有的",
+      "options": {
+        "A": "元组",
+        "B": "行",
+        "C": "记录",
+        "D": "属性"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 26,
+      "type": "single",
+      "section": "单选题",
+      "stem": "聚合函数中，用于统计行数的是",
+      "options": {
+        "A": "SUM()",
+        "B": "AVG()",
+        "C": "COUNT()",
+        "D": "MAX()"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 27,
+      "type": "single",
+      "section": "单选题",
+      "stem": "分组查询中，用于筛选分组后结果的关键字是",
+      "options": {
+        "A": "WHERE",
+        "B": "HAVING",
+        "C": "GROUP BY",
+        "D": "ORDER BY"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 28,
+      "type": "single",
+      "section": "单选题",
+      "stem": "内连接的关键字是",
+      "options": {
+        "A": "INNER JOIN",
+        "B": "LEFT JOIN",
+        "C": "RIGHT JOIN",
+        "D": "FULL JOIN"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 29,
+      "type": "single",
+      "section": "单选题",
+      "stem": "数据库中只存放视图的＿＿＿",
+      "options": {
+        "A": "操作",
+        "B": "对应的数据",
+        "C": "定义",
+        "D": "限制"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 30,
+      "type": "single",
+      "section": "单选题",
+      "stem": "视图是",
+      "options": {
+        "A": "真实存储数据的表",
+        "B": "从基本表导出的虚表",
+        "C": "索引的另一种称呼",
+        "D": "存储过程的别名"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 31,
+      "type": "single",
+      "section": "单选题",
+      "stem": "创建视图的SQL语句是",
+      "options": {
+        "A": "CREATE VIEW",
+        "B": "ALTER VIEW",
+        "C": "DROP VIEW",
+        "D": "CREATE INDEX"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 32,
+      "type": "single",
+      "section": "单选题",
+      "stem": "索引的主要作用是",
+      "options": {
+        "A": "减少数据冗余",
+        "B": "加快数据查询速度",
+        "C": "保证数据完整性",
+        "D": "实现表间连接"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 33,
+      "type": "single",
+      "section": "单选题",
+      "stem": "声明局部变量的关键字是",
+      "options": {
+        "A": "DECLARE",
+        "B": "SET",
+        "C": "SELECT",
+        "D": "PRINT"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 34,
+      "type": "single",
+      "section": "单选题",
+      "stem": "流程控制语句中，用于条件判断的是",
+      "options": {
+        "A": "BEGIN...END",
+        "B": "IF...ELSE",
+        "C": "WHILE",
+        "D": "GOTO"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 35,
+      "type": "single",
+      "section": "单选题",
+      "stem": "用户定义函数中，返回单个值的是",
+      "options": {
+        "A": "标量函数",
+        "B": "内嵌表值函数",
+        "C": "多语句表值函数",
+        "D": "存储过程"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 36,
+      "type": "single",
+      "section": "单选题",
+      "stem": "在创建索引时要用到下列哪个关键字",
+      "options": {
+        "A": "AS",
+        "B": "ON",
+        "C": "INTO",
+        "D": "SET"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 37,
+      "type": "single",
+      "section": "单选题",
+      "stem": "触发器是＿＿＿时自动执行的存储过程",
+      "options": {
+        "A": "用户手动调用",
+        "B": "特定事件触发",
+        "C": "定时执行",
+        "D": "数据库启动时"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 38,
+      "type": "single",
+      "section": "单选题",
+      "stem": "DML触发器不包括",
+      "options": {
+        "A": "INSERT触发器",
+        "B": "UPDATE触发器",
+        "C": "DELETE触发器",
+        "D": "CREATE触发器"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 39,
+      "type": "single",
+      "section": "单选题",
+      "stem": "事务的四大特性不包括",
+      "options": {
+        "A": "原子性",
+        "B": "一致性",
+        "C": "隔离性",
+        "D": "并发性"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 40,
+      "type": "single",
+      "section": "单选题",
+      "stem": "学生关系(学号，姓名，性别，年龄，系号，系名)中，“系名”对主关键字“学号”的函数依赖是＿＿＿",
+      "options": {
+        "A": "平凡函数依赖",
+        "B": "完全函数依赖",
+        "C": "部分函数依赖",
+        "D": "传递函数依赖"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 41,
+      "type": "single",
+      "section": "单选题",
+      "stem": "共享锁的作用是",
+      "options": {
+        "A": "允许其他事务读取数据，禁止修改",
+        "B": "禁止其他事务读取和修改",
+        "C": "允许其他事务修改数据",
+        "D": "只适用于索引"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 42,
+      "type": "single",
+      "section": "单选题",
+      "stem": "死锁发生后，SQL Server会",
+      "options": {
+        "A": "自动回滚优先级最低的事务",
+        "B": "等待用户手动处理",
+        "C": "重启数据库",
+        "D": "忽略死锁"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 43,
+      "type": "single",
+      "section": "单选题",
+      "stem": "SQL Server的身份验证模式不包括",
+      "options": {
+        "A": "Windows身份验证",
+        "B": "混合身份验证",
+        "C": "SQL Server身份验证",
+        "D": "指纹身份验证"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 44,
+      "type": "single",
+      "section": "单选题",
+      "stem": "在一个满足1NF的关系中，不存在部分函数依赖，那么该关系模式至少属于＿＿＿",
+      "options": {
+        "A": "4NF",
+        "B": "3NF",
+        "C": "2NF",
+        "D": "BCNF"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 45,
+      "type": "single",
+      "section": "单选题",
+      "stem": "授予用户权限的SQL语句是",
+      "options": {
+        "A": "GRANT",
+        "B": "REVOKE",
+        "C": "DENY",
+        "D": "REMOVE"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 46,
+      "type": "single",
+      "section": "单选题",
+      "stem": "撤销用户权限的SQL语句是",
+      "options": {
+        "A": "GRANT",
+        "B": "REVOKE",
+        "C": "DENY",
+        "D": "DELETE"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 47,
+      "type": "single",
+      "section": "单选题",
+      "stem": "数据库设计的最终目标是",
+      "options": {
+        "A": "生成E-R图",
+        "B": "建立符合需求的数据库及应用系统",
+        "C": "编写存储过程",
+        "D": "创建索引"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    },
+    {
+      "id": 48,
+      "type": "single",
+      "section": "单选题",
+      "stem": "下列属于系统数据库的是",
+      "options": {
+        "A": "master",
+        "B": "teaching",
+        "C": "inventory",
+        "D": "student"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null
+    }
+  ],
+  "ignored_summary": {
+    "fill": 30
+  }
+}
