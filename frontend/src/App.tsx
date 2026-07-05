@@ -35,6 +35,11 @@ export default function App() {
     }
   }, []);
 
+  // 把浏览器标签标题设为题库名
+  useEffect(() => {
+    document.title = TITLE;
+  }, []);
+
   // Save answer handler
   const handleAnswer = (qId: number, answerVal: string | string[]) => {
     const updated = { ...userAnswers, [qId]: answerVal };
