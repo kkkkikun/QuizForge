@@ -7,6 +7,7 @@ React Question（见 frontend/src/types.ts）：
 from __future__ import annotations
 
 import json
+import os
 import re
 
 from .model import Question, Quiz
@@ -88,15 +89,66 @@ def to_react_questions(quiz: Quiz) -> list[dict]:
     return out
 
 
-def write_data_ts(quiz: Quiz, path: str) -> None:
-    """写出 frontend/src/data.ts（TITLE + QUESTIONS）。"""
-    questions = to_react_questions(quiz)
-    title = quiz.title or "题库"
+def _slug(s: str) -> str:
+    stem = os.path.splitext((s or "").strip())[0].lower()
+    slug = re.sub(r"[^a-zA-Z0-9一-鿿]+", "-", stem).strip("-")
+    return slug or "quiz"
+
+
+def to_react_quiz(quiz: Quiz, qid: str | None = None) -> dict:
+    """Quiz → React Quiz {id, title, questions}。"""
+    return {
+        "id": qid or _slug(quiz.source_file or quiz.title or "quiz"),
+        "title": quiz.title or "题库",
+        "questions": to_react_questions(quiz),
+    }
+
+
+def write_quizzes_ts(quizzes: list[dict], path: str) -> None:
+    """写出 frontend/src/data.ts（QUIZZES）。"""
     content = (
-        "import { Question } from './types';\n\n"
-        f"export const TITLE: string = {json.dumps(title, ensure_ascii=False)};\n\n"
-        f"export const QUESTIONS: Question[] = "
-        f"{json.dumps(questions, ensure_ascii=False, indent=2)};\n"
+        "import { Quiz } from './types';\n\n"
+        f"export const QUIZZES: Quiz[] = "
+        f"{json.dumps(quizzes, ensure_ascii=False, indent=2)};\n"
     )
     with open(path, "w", encoding="utf-8") as f:
         f.write(content)
+
+
+def write_data_ts(quiz: Quiz, path: str) -> None:
+    """单题库 → data.ts（写成单元素 QUIZZES，与多题库格式统一）。"""
+    write_quizzes_ts([to_react_quiz(quiz)], path)
+
+
+def load_manifest(path: str) -> list[dict]:
+    """读取 quizzes.yaml → [{id, title, source}, ...]。"""
+    import yaml
+
+    with open(path, encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    return [
+        {"id": e.get("id"), "title": e.get("title", ""), "source": e.get("source")}
+        for e in (data.get("quizzes") or [])
+    ]
+
+
+def _load_quiz(src: str) -> Quiz:
+    """加载一个题库：.json → dict_to_quiz；docx/pdf/txt → ingest+parse（无 LLM）。"""
+    if src.lower().endswith(".json"):
+        with open(src, encoding="utf-8") as f:
+            data = json.load(f)
+        from .parse import dict_to_quiz
+        return dict_to_quiz(data)
+    from . import ingest, parse
+    blocks = ingest.load(src)
+    return parse.parse_blocks(blocks, source_file=os.path.basename(src))
+
+
+def build_react_quizzes(manifest_path: str) -> list[dict]:
+    """读 manifest，逐个加载源题库 → React Quiz 列表。"""
+    base = os.path.dirname(os.path.abspath(manifest_path))
+    out: list[dict] = []
+    for e in load_manifest(manifest_path):
+        src = os.path.join(base, e["source"])
+        out.append(to_react_quiz(_load_quiz(src), qid=e.get("id")))
+    return out

@@ -16,7 +16,7 @@ def build_parser() -> argparse.ArgumentParser:
         prog="quizforge",
         description="期末选填题速刷：Word/PDF/TXT → 单文件静态答题网页",
     )
-    p.add_argument("input", help="输入文件 (.docx/.pdf/.txt 或 .json 重渲染)")
+    p.add_argument("input", nargs="?", help="输入文件 (.docx/.pdf/.txt 或 .json)；--react-frontend 模式可省略")
     p.add_argument("-o", "--output", help="输出 HTML 路径（默认 <input>.html）")
     p.add_argument(
         "--no-llm",
@@ -63,6 +63,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="导出 React 前端数据到 PATH（如 frontend/src/data.ts），供 frontend/ 构建",
     )
     p.add_argument(
+        "--react-frontend",
+        metavar="DIR",
+        help="多题库模式：读 <DIR>/quizzes.yaml，生成 <DIR>/src/data.ts（QUIZZES）",
+    )
+    p.add_argument(
         "-V",
         "--version",
         action="version",
@@ -85,6 +90,20 @@ def main(argv: list[str] | None = None) -> int:
         load_dotenv()
     except Exception:
         pass
+
+    # 多题库模式：读 manifest 生成 frontend/src/data.ts
+    if args.react_frontend:
+        from . import reactfmt
+        manifest = os.path.join(args.react_frontend, "quizzes.yaml")
+        quizzes = reactfmt.build_react_quizzes(manifest)
+        out_ts = os.path.join(args.react_frontend, "src", "data.ts")
+        reactfmt.write_quizzes_ts(quizzes, out_ts)
+        titles = "、".join(q["title"] for q in quizzes)
+        print(f"✅ 已生成 {out_ts}（{len(quizzes)} 个题库：{titles}）")
+        return 0
+
+    if not args.input:
+        build_parser().error("需要 <input> 文件，或使用 --react-frontend <DIR> 多题库模式")
 
     # 延迟导入
     from . import parse, render

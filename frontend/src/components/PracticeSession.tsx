@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, ReactNode } from 'react';
-import { QUESTIONS } from '../data';
+import type { Question } from '../types';
 import { 
   ArrowLeft, 
   ArrowRight, 
@@ -98,7 +98,7 @@ export function renderQuestionStem(question: string, type: string, isAnswered: b
 }
 
 interface PracticeSessionProps {
-  questionsList: typeof QUESTIONS;
+  questionsList: Question[];
   initialIndex: number;
   userAnswers: { [qId: number]: string | string[] };
   onAnswer: (qId: number, answer: string | string[]) => void;

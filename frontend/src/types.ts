@@ -10,6 +10,12 @@ export interface Question {
   tags: string[];           // Topics, e.g. "数据库系统基础" or "SQL常用查询"
 }
 
+export interface Quiz {
+  id: string;
+  title: string;
+  questions: Question[];
+}
+
 export interface QuizSession {
   sessionId: string;
   startTime: number;

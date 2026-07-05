@@ -1,0 +1,7 @@
+quizzes:
+  - id: db
+    title: 数据库原理题库
+    source: ../data/数据库原理题库.docx
+  - id: net
+    title: 2026年重点复习题库
+    source: ../data/2026年重点复习题库.json
