@@ -45,14 +45,15 @@
 
 在线答题页：<https://kkkkikun.github.io/QuizForge/>（`deploy.yml` 自动构建部署）。
 
-`frontend/` 是独立的 **React + Vite + Tailwind** 子工程（源自 [database-quiz-app](https://github.com/kkkkikun/database-quiz-app)，清理并扩展了多选），从 `frontend/src/data.ts` 读取题目。
+`frontend/` 是独立的 **React + Vite + Tailwind** 子工程（源自 [database-quiz-app](https://github.com/kkkkikun/database-quiz-app)，清理并扩展了多选与多题库），首页列题库卡片，每题库独立 URL（`/quiz/:id`），进度按题库分别保存在本机。
 
-**更新部署的题库数据**：
+**多题库清单**：编辑 `frontend/quizzes.yaml`（列出 `id` / `title` / `source`），然后：
 ```bash
-uv run quizforge ./data/你的题库.docx --react frontend/src/data.ts   # 或从 .json
-git add frontend/src/data.ts && git commit -m "data: 更新题库" && git push
+uv run quizforge --react-frontend frontend   # 读 quizzes.yaml → 生成 frontend/src/data.ts（QUIZZES）
+git add frontend/src/data.ts frontend/quizzes.yaml && git commit -m "data: 更新题库" && git push
 # push 后 deploy.yml 自动 npm build → 部署到 Pages
 ```
+`source` 支持 `.json`（已留存、含 LLM 答案）或 `.docx/.pdf/.txt`（规则解析）。
 
 本地调试前端：`cd frontend && npm install && npm run dev`。
 
