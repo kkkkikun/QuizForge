@@ -9,6 +9,8 @@ dist/
 
 # 生成的答题网页（构建产物，可由 quizforge 重新生成）
 *.html
+# 例外：前端工程入口 index.html 是源码，必须入库
+!frontend/index.html
 
 # 前端工程构建产物与依赖
 frontend/node_modules/
