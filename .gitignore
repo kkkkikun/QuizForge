@@ -10,6 +10,10 @@ dist/
 # 生成的答题网页（构建产物，可由 quizforge 重新生成）
 *.html
 
+# 前端工程构建产物与依赖
+frontend/node_modules/
+frontend/dist/
+
 # 本地密钥（切勿提交）
 .env
 .env.*

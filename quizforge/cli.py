@@ -58,6 +58,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="同时导出题库 JSON（与 HTML 同名的 .json，便于留存/复用 LLM 结果）",
     )
     p.add_argument(
+        "--react",
+        metavar="PATH",
+        help="导出 React 前端数据到 PATH（如 frontend/src/data.ts），供 frontend/ 构建",
+    )
+    p.add_argument(
         "-V",
         "--version",
         action="version",
@@ -149,6 +154,10 @@ def main(argv: list[str] | None = None) -> int:
             json.dumps(parse.quiz_to_dict(quiz), ensure_ascii=False, indent=2),
             encoding="utf-8",
         )
+
+    if args.react:
+        from . import reactfmt
+        reactfmt.write_data_ts(quiz, args.react)
 
     n_low = sum(1 for q in quiz.questions if q.low_confidence)
     print(f"✅ 已生成 {out_path}")

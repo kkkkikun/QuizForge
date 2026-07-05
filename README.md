@@ -3,7 +3,10 @@
 > 期末选填题速刷工具：Word/PDF 复习资料 → 一键生成**单文件静态答题网页**，只保留「核对答案 + 无限重做」。
 
 [![CI](https://github.com/kkkkikun/QuizForge/actions/workflows/ci.yml/badge.svg)](https://github.com/kkkkikun/QuizForge/actions/workflows/ci.yml)
+[![Deploy](https://github.com/kkkkikun/QuizForge/actions/workflows/deploy.yml/badge.svg)](https://github.com/kkkkikun/QuizForge/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+**🌐 在线 Demo**：<https://kkkkikun.github.io/QuizForge/>（React 前端，push 自动部署）
 
 把老师发的乱糟糟的题库（Word/PDF）丢进去，QuizForge 用「规则 + LLM 兜底」解析成结构化题库，再渲染成一个**双击即开、可离线、无限重做**的自包含 HTML 答题页。
 
@@ -37,6 +40,21 @@
 ```
 
 设计详见 [`openspec/changes/quizforge-mvp/design.md`](openspec/changes/quizforge-mvp/design.md)。
+
+## 🌐 在线 Demo & 前端工程
+
+在线答题页：<https://kkkkikun.github.io/QuizForge/>（`deploy.yml` 自动构建部署）。
+
+`frontend/` 是独立的 **React + Vite + Tailwind** 子工程（源自 [database-quiz-app](https://github.com/kkkkikun/database-quiz-app)，清理并扩展了多选），从 `frontend/src/data.ts` 读取题目。
+
+**更新部署的题库数据**：
+```bash
+uv run quizforge ./data/你的题库.docx --react frontend/src/data.ts   # 或从 .json
+git add frontend/src/data.ts && git commit -m "data: 更新题库" && git push
+# push 后 deploy.yml 自动 npm build → 部署到 Pages
+```
+
+本地调试前端：`cd frontend && npm install && npm run dev`。
 
 ## 📦 安装
 
