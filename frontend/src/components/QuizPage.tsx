@@ -61,6 +61,12 @@ export default function QuizPage() {
     setUserAnswers({});
     try { localStorage.removeItem(storageKey); } catch { /* ignore */ }
   };
+  const handleClearOne = (qId: number) => {
+    const updated = { ...userAnswers };
+    delete updated[qId];
+    setUserAnswers(updated);
+    try { localStorage.setItem(storageKey, JSON.stringify(updated)); } catch { /* ignore */ }
+  };
   const handleStartPractice = (qId: number) => {
     const idx = questionsList.findIndex(q => q.id === qId);
     setCurrentIndex(idx !== -1 ? idx : 0);
@@ -101,6 +107,7 @@ export default function QuizPage() {
             userAnswers={userAnswers}
             onAnswer={handleAnswer}
             onExit={() => setActiveState('dashboard')}
+            onRedo={handleClearOne}
           />
         )}
       </main>

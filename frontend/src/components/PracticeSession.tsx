@@ -1,12 +1,13 @@
 import { useState, useEffect, useMemo, ReactNode } from 'react';
 import type { Question } from '../types';
-import { 
-  ArrowLeft, 
-  ArrowRight, 
-  CheckCircle2, 
-  XCircle, 
+import {
+  ArrowLeft,
+  ArrowRight,
+  CheckCircle2,
+  XCircle,
   BookOpen,
-  Check
+  Check,
+  RotateCcw
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -106,6 +107,7 @@ interface PracticeSessionProps {
   userAnswers: { [qId: number]: string | string[] };
   onAnswer: (qId: number, answer: string | string[]) => void;
   onExit: () => void;
+  onRedo?: (qId: number) => void;
 }
 
 export default function PracticeSession({
@@ -113,7 +115,8 @@ export default function PracticeSession({
   initialIndex,
   userAnswers,
   onAnswer,
-  onExit
+  onExit,
+  onRedo
 }: PracticeSessionProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(initialIndex);
   
@@ -243,6 +246,13 @@ export default function PracticeSession({
     if (updated.length === n && updated.every(x => x)) {
       onAnswer(qId, updated);               // 全部子题答完 → 保存
     }
+  };
+
+  // Group: 快速重做本组（清空该组答案 + 本地状态，重新作答）
+  const handleRedoGroup = () => {
+    if (isAnswered) onRedo?.(qId);
+    const gn = activeQuestion.subQuestions?.length || 0;
+    setGroupInputs(Array(gn).fill(''));
   };
 
   return (
@@ -410,6 +420,15 @@ export default function PracticeSession({
                 </div>
               );
             })}
+            {(isAnswered || groupInputs.some(x => x)) && (
+              <button
+                type="button"
+                onClick={handleRedoGroup}
+                className="w-full py-2.5 px-5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-blue-600 hover:border-blue-300 font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <RotateCcw size={13} /> 重做本组
+              </button>
+            )}
           </div>
         ) : (
           <div className="space-y-4 pt-2">
