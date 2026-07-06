@@ -16,6 +16,7 @@ class Block:
     style: str             # 样式名 / "text"
     text: str
     kind: str = "para"     # heading | para | table | image
+    highlight: str = ""    # 被高亮（如黄色）的文本，用于标记答案
 
 
 @dataclass

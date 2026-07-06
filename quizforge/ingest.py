@@ -34,6 +34,23 @@ def _table_text(table) -> str:
     return "\n".join(rows)
 
 
+def _para_highlight(para) -> str:
+    """提取段落中被高亮（如 yellow）的文本（答案标记）。"""
+    from docx.oxml.ns import qn
+
+    parts = []
+    for r in para.runs:
+        rpr = r._element.rPr
+        if rpr is None:
+            continue
+        h = rpr.find(qn("w:highlight"))
+        if h is not None:
+            val = h.get(qn("w:val"))
+            if val and val != "none":
+                parts.append(r.text)
+    return "".join(parts)
+
+
 def load_docx(path: str) -> list[Block]:
     """读取 .docx，按文档顺序输出 Block 流（段落 / 表格 / 图片占位）。"""
     from docx import Document
@@ -53,7 +70,8 @@ def load_docx(path: str) -> list[Block]:
             if has_image:
                 blocks.append(Block("docx", style, "[图片]", "image"))
             if text:
-                blocks.append(Block("docx", style, text, _para_kind(style)))
+                blocks.append(Block("docx", style, text, _para_kind(style),
+                                    highlight=_para_highlight(para)))
         elif isinstance(child, CT_Tbl):
             tbl = Table(child, doc)
             blocks.append(Block("docx", "Table", _table_text(tbl), "table"))

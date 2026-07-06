@@ -5,3 +5,6 @@ quizzes:
   - id: net
     title: 2026年重点复习题库
     source: ../data/2026年重点复习题库.json
+  - id: cet4
+    title: 大英四级速记（CET-4）
+    source: ../data/大英四.docx

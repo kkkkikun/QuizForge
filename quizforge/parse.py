@@ -15,7 +15,10 @@ from dataclasses import dataclass, field
 from .model import Block, Question, Quiz
 from .patterns import (
     ANSWER_LINE_RE,
+    ANSWER_SEQ_RE,
     BLANK_RE,
+    CET_SECTION_RE,
+    CET_SUBCONTEXT_RE,
     EXPLAIN_RE,
     OPTION_START_RE,
     PAREN_ANSWER_RE,
@@ -44,12 +47,15 @@ class ChoiceCandidate:
     section: str
     stem: str
     options: dict[str, str]
+    answer_letter: str | None = None   # 高亮标记的答案字母（CET）
 
 
 def _section_type(title: str) -> str:
     t = title.strip()
     if t in _TYPE_MAP:
         return _TYPE_MAP[t]
+    if CET_SECTION_RE.match(t):
+        return "choice"
     for k, v in _TYPE_MAP.items():
         if k in t:
             return v
@@ -60,8 +66,10 @@ def segment(blocks: list[Block]) -> list[Section]:
     """按 Heading 样式 / 章节标题文本切分节。"""
     sections: list[Section] = [Section("preamble", "", [])]
     for b in blocks:
-        is_header = b.kind == "heading" or (
-            b.kind == "para" and SECTION_HEADER_RE.match(b.text.strip())
+        is_header = (
+            b.kind == "heading"
+            or (b.kind == "para" and SECTION_HEADER_RE.match(b.text.strip()))
+            or (b.kind == "para" and CET_SECTION_RE.match(b.text.strip()))
         )
         if is_header:
             sections.append(Section(_section_type(b.text), b.text.strip(), []))
@@ -91,18 +99,25 @@ def _strip_number(text: str) -> str:
 
 
 def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
-    """在 choice 节内，以选项块为锚吸附题干，识别选择题候选。
+    """在 choice 节内识别选择题候选。
 
-    返回 (候选列表, 未匹配的题干文本列表)。连续选项块（一行多选项 / 一行一选项）
-    合并为一个选项集；其前累积的 para 作为题干。
+    - 选项块为锚吸附题干；高亮(hl=yellow)的选项 → answer_letter（CET）
+    - 子分组(Unit/News report/Passage) 与纯题号(N、) 不计入题干，单独跟踪
+    - 听力等无文字题干 → 题干合成为「Unit · Passage · 第N题」
+    返回 (候选列表, 未匹配题干文本列表)。
     """
     cands: list[ChoiceCandidate] = []
     pending: list[str] = []
+    cur_unit = None
+    cur_passage = None
+    cur_num: int | None = None
     blocks = section.blocks
     n = len(blocks)
     j = 0
     while j < n:
-        opts = _scan_options(blocks[j].text)
+        b = blocks[j]
+        t = b.text.strip()
+        opts = _scan_options(t)
         if opts:
             merged = list(opts)
             k = j + 1
@@ -112,15 +127,32 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
             options: dict[str, str] = {}
             for letter, content in merged:
                 options.setdefault(letter, content)
-            stem = _strip_number(" ".join(pending))
-            cands.append(ChoiceCandidate(section.title, stem, options))
+            hl = None
+            for bi in range(j, k):
+                if blocks[bi].highlight:
+                    bo = _scan_options(blocks[bi].text)
+                    if bo:
+                        hl = bo[0][0]
+                        break
+            stem = _strip_number(pending[-1]).strip() if pending else ""
+            if not stem:
+                ctx = " · ".join(x for x in (cur_unit, cur_passage) if x)
+                npart = f"第 {cur_num} 题" if cur_num else "未编号题"
+                stem = f"{ctx} · {npart}" if ctx else npart
+            cands.append(ChoiceCandidate(section.title, stem, options, answer_letter=hl))
             pending = []
+            cur_num = None
             j = k
         else:
-            if blocks[j].kind == "para":
-                t = blocks[j].text.strip()
-                if t:
-                    pending.append(t)
+            if CET_SUBCONTEXT_RE.match(t):
+                if t.startswith("Unit"):
+                    cur_unit, cur_passage = t, None
+                else:
+                    cur_passage = t
+            elif re.match(r"^\d+[、.]?$", t):
+                cur_num = int(re.match(r"(\d+)", t).group(1))
+            elif b.kind == "para" and t:
+                pending.append(t)
             j += 1
     return cands, pending
 
@@ -128,6 +160,46 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
 def detect_choice_questions(section: Section) -> list[ChoiceCandidate]:
     """公开接口：仅返回选择题候选（忽略 leftover 统计）。"""
     return _detect_choice(section)[0]
+
+
+def _detect_matching(section: Section) -> list[tuple[str, str]]:
+    """检测匹配题：连续「N、陈述」后跟一行答案序列(空格分隔数字/字母)。
+
+    返回 [(stem, answer_token), ...]，每条陈述对应一个答案 token。
+    """
+    out: list[tuple[str, str]] = []
+    blocks = section.blocks
+    n = len(blocks)
+    cur_unit = None
+    cur_passage = None
+    i = 0
+    while i < n:
+        t = blocks[i].text.strip()
+        if CET_SUBCONTEXT_RE.match(t):
+            if t.startswith("Unit"):
+                cur_unit, cur_passage = t, None
+            else:
+                cur_passage = t
+            i += 1
+            continue
+        if re.match(r"^\d+、", t):
+            stmts: list[str] = []
+            j = i
+            while j < n and re.match(r"^\d+、", blocks[j].text.strip()):
+                stmts.append(re.sub(r"^\d+、\s*", "", blocks[j].text.strip()))
+                j += 1
+            if j < n and ANSWER_SEQ_RE.match(blocks[j].text.strip()):
+                seq = blocks[j].text.strip().split()
+                if stmts and len(seq) >= len(stmts):
+                    ctx = " · ".join(x for x in (cur_unit, cur_passage) if x)
+                    for idx, s in enumerate(stmts):
+                        out.append(((f"{ctx} · {s}" if ctx else s), str(seq[idx])))
+                    i = j + 1
+                    continue
+            i = j
+        else:
+            i += 1
+    return out
 
 
 def parse_blocks(
@@ -177,6 +249,15 @@ def parse_blocks(
                 qid += 1
                 questions.append(choice_candidate_to_question(c, qid))
             residual.extend((t, sec.title, "knowledge") for t in leftover_texts)
+            # 匹配题：陈述 + 结尾答案序列
+            for stem, ans in _detect_matching(sec):
+                qid += 1
+                questions.append(
+                    Question(
+                        id=qid, type="blank", section=sec.title, stem=stem,
+                        options=None, answer=[ans], tolerant=True, low_confidence=False,
+                    )
+                )
             continue
         if sec.type == "blank":
             for b in sec.blocks:
@@ -367,7 +448,13 @@ def infer_choice_type(section_title: str, answer: list[str] | None) -> str:
 
 
 def choice_candidate_to_question(cand: "ChoiceCandidate", qid: int) -> Question:
-    """选择题候选 → Question：抽内联答案、清题干、推断类型、标低置信。"""
+    """选择题候选 → Question。高亮答案(CET)优先；否则抽内联答案、推断类型、标低置信。"""
+    if cand.answer_letter:
+        return Question(
+            id=qid, type="single", section=cand.section, stem=cand.stem,
+            options=dict(cand.options), answer=[cand.answer_letter],
+            low_confidence=False,
+        )
     stem, letters = extract_inline_answer(cand.stem)
     answer = letters or []
     qtype = infer_choice_type(cand.section, letters)

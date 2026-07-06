@@ -1703,5 +1703,2176 @@ export const QUIZZES: Quiz[] = [
         ]
       }
     ]
+  },
+  {
+    "id": "cet4",
+    "title": "大英四级速记（CET-4）",
+    "questions": [
+      {
+        "id": 1,
+        "type": "choice",
+        "question": "Unit 1 · News report 1 · 第 1 题",
+        "options": [
+          "A. A live broadcast",
+          "B. Design software",
+          "C. A business deal",
+          "D. A communication product"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 2,
+        "type": "choice",
+        "question": "Unit 1 · News report 1 · 第 2 题",
+        "options": [
+          "A. It has got an attractive name",
+          "B. It is available to general users",
+          "C. It runs without traditional phone lines",
+          "D. It makes large-scale meetings possible"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 3,
+        "type": "choice",
+        "question": "Unit 1 · News report 1 · 第 3 题",
+        "options": [
+          "A. To remove possible plug-ins from its software",
+          "B. To conduct business with up to 10,000 partners",
+          "C. To attract more enterprises to use Skype for Business",
+          "D. To allow meeting organizers to use most Web browsers"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 4,
+        "type": "choice",
+        "question": "Unit 1 · News report 1 · 第 4 题",
+        "options": [
+          "A. Seek out software bugs",
+          "B. Invite the audience to debate",
+          "C. See the images of the audience",
+          "D. Respond to live feedback in real time"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 5,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 1 题",
+        "options": [
+          "A. Rejecting others' invitation",
+          "B. Correcting grammar of the message",
+          "C. Giving out-of-date information periodically",
+          "D. Putting a period at the end of each sentence"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 6,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 2 题",
+        "options": [
+          "A. A slight hesitation",
+          "B. An informal refusal",
+          "C. A close relationship",
+          "D. An interest in the invitation"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 7,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 3 题",
+        "options": [
+          "A. To write emails properly",
+          "B. To convey subtle meaning",
+          "C. To deliver messages quickly",
+          "D. To imitate face-to-face communication"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 8,
+        "type": "choice",
+        "question": "Conversation",
+        "options": [
+          "A. One's ID number",
+          "B. One's occupation",
+          "C. One's political views",
+          "D. One's family background"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 9,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 2 题",
+        "options": [
+          "A. One's openness and circle of friends",
+          "B. One's love for curly fries and intelligence",
+          "C. One's religious beliefs and gender identity",
+          "D. One's age and liking for Hello Kitty products"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 10,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 3 题",
+        "options": [
+          "A. To rate customers",
+          "B. To increase their sales",
+          "C. To know more about their competitors",
+          "D. To sell users' information to companies"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 11,
+        "type": "choice",
+        "question": "Passage",
+        "options": [
+          "A. People can't get a high salary",
+          "B. People are not allowed to smoke",
+          "C. People can't contact their family or friends",
+          "D. People don't stand a chance of promotion"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 12,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 2 题",
+        "options": [
+          "A. People are separated from the public",
+          "B. People feel uncomfortable in institutions",
+          "C. People like to send emails and text messages",
+          "D. People often communicate with about six people they are closest to"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 13,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 3 题",
+        "options": [
+          "A. There was great difficulty in job hunting",
+          "B. Private life was disconnected from work",
+          "C. The time of leaving school was recorded",
+          "D. People seldom communicated with others"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 14,
+        "type": "choice",
+        "question": "Unit 1 · News report 2 · 第 4 题",
+        "options": [
+          "A. Privacy",
+          "B. Communication",
+          "C. Intimacy",
+          "D. Learning"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 15,
+        "type": "choice",
+        "question": "Unit 4 · News report 1 · 第 1 题",
+        "options": [
+          "A. An opening of a store",
+          "B. A light festival in Sydney",
+          "C. A doughnut-eating contest",
+          "D. A gathering of famous bakers"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 16,
+        "type": "choice",
+        "question": "Unit 4 · News report 1 · 第 2 题",
+        "options": [
+          "A. Glonut",
+          "B. Black Star",
+          "C. Glowing Nut",
+          "D. Glow-in-the-dark"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 17,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 1 题",
+        "options": [
+          "A. Vote on the best service of Muji",
+          "B. Comment on the service of Muji",
+          "C. Contribute ideas to Muji products",
+          "D. Commit to buying Muji products online"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 18,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 2 题",
+        "options": [
+          "A. Its online community is getting larger",
+          "B. Customers' suggestions have decreased",
+          "C. It becomes more difficult to predict customer tastes",
+          "D. The management no longer decides what to produce"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 19,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 3 题",
+        "options": [
+          "A. When an open process is started",
+          "B. After it has been sold out for some time",
+          "C. After enough customers have voted for it",
+          "D. When there are more than 300 orders for it"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 20,
+        "type": "choice",
+        "question": "Conversation",
+        "options": [
+          "A. He can't find a place to work",
+          "B. He doesn't like his present job",
+          "C. He wants to try a new lifestyle",
+          "D. He feels lonely working at home"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 21,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 2 题",
+        "options": [
+          "A. Investment in small enterprises",
+          "B. Advice on business and creativity",
+          "C. Free work spaces and office supplies",
+          "D. Meaningful and productive group work"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 22,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 3 题",
+        "options": [
+          "A. By working hard and achieving success",
+          "B. By changing their home into a Hoffice community",
+          "C. By bringing more friends to the Hoffice community",
+          "D. By contributing their personal resources to the group"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 23,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 4 题",
+        "options": [
+          "A. They announce their plans for the day",
+          "B. They work by themselves for 40 minutes",
+          "C. They ask other members about their goals",
+          "D. They seek advice from other members about their work"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 24,
+        "type": "choice",
+        "question": "Passage",
+        "options": [
+          "A. It usually won't be born from frustration",
+          "B. It is mostly not about real-world problems",
+          "C. It paves the way for companies to succeed",
+          "D. It has various forms and serves various purposes"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 25,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 2 题",
+        "options": [
+          "A. In the late 1980s",
+          "B. After the birth of the Internet",
+          "C. After the invention of ChangeGuard",
+          "D. When it started to invest in a new business"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 26,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 3 题",
+        "options": [
+          "A. It helps customers get the lowest price",
+          "B. It helps customers pay less for changing tickets",
+          "C. It saves customers $30,000 on average every year",
+          "D. It provides better service than other travel agencies"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 27,
+        "type": "choice",
+        "question": "Unit 4 · News report 2 · 第 4 题",
+        "options": [
+          "A. It is a threat to his company",
+          "B. His company has to accept it",
+          "C. It won't destroy an entire industry",
+          "D. Some companies have to abandon it"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 28,
+        "type": "choice",
+        "question": "Unit 5 · News report 1 · 第 1 题",
+        "options": [
+          "A. To help cities prepare for shocks",
+          "B. To support cities in developing tourism",
+          "C. To inspire cites to promote their strengths",
+          "D. To encourage cities to improve their environment"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 29,
+        "type": "choice",
+        "question": "Unit 5 · News report 1 · 第 2 题",
+        "options": [
+          "A. To offer an example of slower-burning stresses",
+          "B. To stress the importance of solving this problem",
+          "C. To compare this issue with environmental pollution",
+          "D. To illustrate problems related to booming populations"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 30,
+        "type": "choice",
+        "question": "Unit 5 · News report 1 · 第 3 题",
+        "options": [
+          "A. Politics and culture",
+          "B. Economy and society",
+          "C. Health and well-being",
+          "D. Leadership and strategy"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 31,
+        "type": "choice",
+        "question": "Unit 5 · News report 1 · 第 4 题",
+        "options": [
+          "A. 4",
+          "B. 12",
+          "C. 52",
+          "D. 156"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 32,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 1 题",
+        "options": [
+          "A. Raise its tourist tax",
+          "B. Promote a comfortable lifestyle",
+          "C. Attract people to hang out in the city",
+          "D. Open shopping malls for luxury items"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 33,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 2 题",
+        "options": [
+          "A. 5 percent",
+          "B. 6 percent",
+          "C. 15 percent",
+          "D. 17 percent"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 34,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 3 题",
+        "options": [
+          "A. The growing tension among locals",
+          "B. The rising price of household products",
+          "C. The increasing pressure on city resources",
+          "D. The possible damage to the local culture"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 35,
+        "type": "choice",
+        "question": "Conversation",
+        "options": [
+          "A. Awkward",
+          "B. Excited",
+          "C. Pleased",
+          "D. Indifferent"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 36,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 2 题",
+        "options": [
+          "A. Chat with his friends",
+          "B. Play with his phone",
+          "C. Do some reading",
+          "D. Observe passengers"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 37,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 3 题",
+        "options": [
+          "A. To make the wearers look cool",
+          "B. To advocate the use of public transport",
+          "C. To show the willingness to talk to strangers",
+          "D. To be easily recognized by the wearers' friends"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 38,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 4 题",
+        "options": [
+          "A. They are pressed for time",
+          "B. They are on guard for possible threats",
+          "C. They are interested in their own business",
+          "D. They don't want to invade others' privacy"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 39,
+        "type": "choice",
+        "question": "Passage",
+        "options": [
+          "A. Urban space",
+          "B. Medieval castles",
+          "C. Modern features",
+          "D. Separate monuments"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 40,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 2 题",
+        "options": [
+          "A. In the 16th century",
+          "B. In the 17th century",
+          "C. In the 18th century",
+          "D. In the 19th century"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 41,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 3 题",
+        "options": [
+          "A. It was the first city to build public parks",
+          "B. It was the first walking city in the world",
+          "C. It was the first city to introduce theaters",
+          "D. It was the first city to remove its fortifications"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 42,
+        "type": "choice",
+        "question": "Unit 5 · News report 2 · 第 4 题",
+        "options": [
+          "A. It started to become the capital of fashion",
+          "B. It was not as beautiful and exciting as it is today",
+          "C. It gave people reasons to go to their dream destination",
+          "D. It changed people's idea about what urban life was like"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 43,
+        "type": "choice",
+        "question": "Unit 6 · News report 1 · 第 1 题",
+        "options": [
+          "A. It is a must-see art event in a gallery",
+          "B. It will display several painters' paintings",
+          "C. It will present some works from the Sunflowers series",
+          "D. It is a reunion of all van Gogh's most famous paintings"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 44,
+        "type": "choice",
+        "question": "Unit 6 · News report 1 · 第 2 题",
+        "options": [
+          "A. He will host the art show",
+          "B. He will share his personal memories of one of the paintings",
+          "C. He has seen all the sunflower paintings in his parents' home",
+          "D. He thinks more highly of the Sunflowers series than Mona Lisa"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 45,
+        "type": "choice",
+        "question": "Unit 6 · News report 1 · 第 3 题",
+        "options": [
+          "A. They were painted before 1888",
+          "B. They were once reunited in an exhibition",
+          "C. They were painted in the north of France",
+          "D. They are now distributed around the world"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 46,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 1 题",
+        "options": [
+          "A. It reminds us of formulas",
+          "B. It is rarely used in our daily life",
+          "C. It can be displayed with software",
+          "D. It is only learned in high school"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 47,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 2 题",
+        "options": [
+          "A. He is an art student",
+          "B. He is an animal lover",
+          "C. He uses formulas to create artworks",
+          "D. He uses math concepts to create sculptures"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 48,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 3 题",
+        "options": [
+          "A. It is newly established",
+          "B. It is known by many people",
+          "C. It is discussed in ancient Greece",
+          "D. It is shown in one of da Vinci's works"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 49,
+        "type": "choice",
+        "question": "Conversation",
+        "options": [
+          "A. It helps a lot to take a better photo",
+          "B. It may distract others at art galleries",
+          "C. It has caused problems around the world",
+          "D. It is banned when taking photos of sculptures"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 50,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 2 题",
+        "options": [
+          "A. It is a risky decision for most museums",
+          "B. It is first enforced by the Palace of Versailles",
+          "C. It is issued mainly for the safety of the paintings",
+          "D. It is not adopted by the National Gallery in London"
+        ],
+        "answer": "B",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 51,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 3 题",
+        "options": [
+          "A. Many of them are young people",
+          "B. They contribute to the spread of art",
+          "C. They are cautious about using selfie sticks",
+          "D. They are completely engaged in social media"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 52,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 4 题",
+        "options": [
+          "A. Positive",
+          "B. Worried",
+          "C. Opposed",
+          "D. Objective"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 53,
+        "type": "choice",
+        "question": "Passage",
+        "options": [
+          "A. It is no longer as popular as before",
+          "B. It is questioned by more and more universities",
+          "C. It can't replace majors of classics or art history",
+          "D. It promotes arts in science and technology education"
+        ],
+        "answer": "C",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 54,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 2 题",
+        "options": [
+          "A. To show that a coder can hardly be a tech hero",
+          "B. To exemplify that tech elites can also be artistic",
+          "C. To emphasize that technology makes our hearts sing",
+          "D. To illustrate the importance of integrating sciences with arts"
+        ],
+        "answer": "D",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 55,
+        "type": "choice",
+        "question": "Unit 6 · News report 2 · 第 3 题",
+        "options": [
+          "A. It reveals the importance of liberal arts education",
+          "B. It aims to examine the goal of liberal arts education",
+          "C. It points to the importance of expertise in the specific major",
+          "D. It's about the relationship between employers and employees"
+        ],
+        "answer": "A",
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 56,
+        "type": "blank",
+        "question": "Evidence of the BRI’s economic benefits through World Bank research.",
+        "answer": [
+          "7"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 57,
+        "type": "blank",
+        "question": "The BRI’s role in helping developing countries overcome technological and capital shortages.",
+        "answer": [
+          "9"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 58,
+        "type": "blank",
+        "question": "The number of countries and organizations participating in the upcoming forum.",
+        "answer": [
+          "1"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 59,
+        "type": "blank",
+        "question": "The BRl’s influence on developed countries’international strategies.",
+        "answer": [
+          "10"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 60,
+        "type": "blank",
+        "question": "Examples of completed infrastructure projects and their local benefits.",
+        "answer": [
+          "7"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 61,
+        "type": "blank",
+        "question": "The BRl as a platform for peaceful coexistence and a shared future.",
+        "answer": [
+          "11"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 62,
+        "type": "blank",
+        "question": "The BRI’s impact on China's trade structure and people’s worldview.",
+        "answer": [
+          "3"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 63,
+        "type": "blank",
+        "question": "The BRI’s investment in Africa and Europe.",
+        "answer": [
+          "6"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 64,
+        "type": "blank",
+        "question": "The BRI’s long-term vision for global unity and cooperation.",
+        "answer": [
+          "12"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 65,
+        "type": "blank",
+        "question": "The BRl as an alternative to Washington Consensus for developing nations.",
+        "answer": [
+          "8"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 66,
+        "type": "blank",
+        "question": "3D technology enables viewers to interact with the masterpiece.",
+        "answer": [
+          "5"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 67,
+        "type": "blank",
+        "question": "The inventions in the Song Dynasty show a society that embraced technology and innovation.",
+        "answer": [
+          "12"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 68,
+        "type": "blank",
+        "question": "From epics, we can infer that they were produced in prosperous times, with the support of a powerful nation.",
+        "answer": [
+          "8"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 69,
+        "type": "blank",
+        "question": "Qingming Shanghe Tu depicts how people from various walks of life spent their day.",
+        "answer": [
+          "10"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 70,
+        "type": "blank",
+        "question": "With its soft power, the Song Dynasty has exerted far-reaching influence even on today's world.",
+        "answer": [
+          "15"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 71,
+        "type": "blank",
+        "question": "Many people have viewed the animated version of Qingming Shanghe Tu.",
+        "answer": [
+          "2"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 72,
+        "type": "blank",
+        "question": "The recreation of Qingming Shanghe Tu has allowed more than 1,000 characters to move in the work.",
+        "answer": [
+          "3"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 73,
+        "type": "blank",
+        "question": "Because of the scale of the work and the effort involved, the animation of Qingming Shanghe Tu is an epic.",
+        "answer": [
+          "4"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 74,
+        "type": "blank",
+        "question": "Similar to the Roman epic, the animated Qingming Shanghe Tu also shows the glory of the past age.",
+        "answer": [
+          "9"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 75,
+        "type": "blank",
+        "question": "One of the features of the ideal city is that all kinds of occupations can harmoniously coexist.",
+        "answer": [
+          "13"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 76,
+        "type": "blank",
+        "question": "Galileo’s initial sketch of Saturn mistakenly showed it with two close moons on either sido.",
+        "answer": [
+          "3"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 77,
+        "type": "blank",
+        "question": "Tho author suggests that the over-processing of Cassin’s images makes them look like artistic creations rather than real photographs.",
+        "answer": [
+          "10"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 78,
+        "type": "blank",
+        "question": "Huygons was the first astronomer to correctly identify Satum’s rings as a flat disk surrounding tho planet.",
+        "answer": [
+          "6"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 79,
+        "type": "blank",
+        "question": "The author recommends using binoculars to observe Saturn, noting that even a fuzzy view can be inspiring.",
+        "answer": [
+          "13"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 80,
+        "type": "blank",
+        "question": "A famous Cassini mosaic shows Earth as a tiny dot seen from beyond Saturn’s rings.",
+        "answer": [
+          "9"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 81,
+        "type": "blank",
+        "question": "Galileo deliborately chose which celestial objects to observe because his telescopo was limited.",
+        "answer": [
+          "1"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 82,
+        "type": "blank",
+        "question": "Scientists are trained to write objectively, avoiding emotional language in their observations.",
+        "answer": [
+          "5"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 83,
+        "type": "blank",
+        "question": "Cassin’s cameras, like any other, produce lens flare when pointed toward the sun.",
+        "answer": [
+          "11"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 84,
+        "type": "blank",
+        "question": "The Cassini mission has revealed active geological features on Saturn’s moons, Including Enceladus and Titan.",
+        "answer": [
+          "7"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 85,
+        "type": "blank",
+        "question": "Galileo did not immediately observe Saturn after inventing his telescope; nearly a year passed before heturned it toward the planet.",
+        "answer": [
+          "2"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 86,
+        "type": "blank",
+        "question": "Abusing animals may eventually lead people to treat human beings badly, as it fosters cruel habits and behavior.",
+        "answer": [
+          "9"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 87,
+        "type": "blank",
+        "question": "The pleasure one gets from certain behavior may cause one to continue to do that.",
+        "answer": [
+          "11"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 88,
+        "type": "blank",
+        "question": "Watching others behave violently does not necessarily lead to violent behavior in real life.",
+        "answer": [
+          "10"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 89,
+        "type": "blank",
+        "question": "Shouting at a robot may reveal that the person has difficulty controlling their emotions.",
+        "answer": [
+          "13"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 90,
+        "type": "blank",
+        "question": "The author believes that the real problem with violence toward robots is that it reveals a person's immoral attitude toward things.",
+        "answer": [
+          "15"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 91,
+        "type": "blank",
+        "question": "The woman kicked the robot dog because she was scared when it was moving toward her.",
+        "answer": [
+          "1"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 92,
+        "type": "blank",
+        "question": "If a robot dog could think and feel, it would be unacceptable to kick it, just like kicking a real dog.",
+        "answer": [
+          "4"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 93,
+        "type": "blank",
+        "question": "One of the reasons that we cannot kick a robot dog is that this will upset its owner.",
+        "answer": [
+          "6"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 94,
+        "type": "blank",
+        "question": "That kicking a robot dog will upset other people is not very strong evidence for not kicking the robot.",
+        "answer": [
+          "7"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 95,
+        "type": "blank",
+        "question": "The new inventions in technology may pose a challenge to our old values, and we may need to reconsider our moral principles.",
+        "answer": [
+          "15"
+        ],
+        "tags": [
+          "匹配"
+        ]
+      },
+      {
+        "id": 96,
+        "type": "choice",
+        "question": "What is the main purpose of the LHAASO project?",
+        "options": [
+          "A. To observe the night sky for tourism",
+          "B. To detect cosmic rays and study the universe's origin",
+          "C. To test the endurance of young researchers",
+          "D. To build the world's largest water tank"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 97,
+        "type": "choice",
+        "question": "When did the LHAASO become fully operational?",
+        "options": [
+          "A. In 2017",
+          "B. In 2021",
+          "C. In 2020",
+          "D. In 2022"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 98,
+        "type": "choice",
+        "question": "What challenge do the researchers face according to paragraph 5?",
+        "options": [
+          "A. They have to work in white coats in labs",
+          "B. They suffer from lack of oxygen and high physical activity",
+          "C. They have to navigate boats in complete darkness",
+          "D. They are required to publish papers in Nature"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 99,
+        "type": "choice",
+        "question": "The phrase \"steel army\" in paragraph 5 refers to the researchers' ________.",
+        "options": [
+          "A. strong determination and endurance",
+          "B. use of steel equipment",
+          "C. military background",
+          "D. large number of members"
+        ],
+        "answer": "A",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 100,
+        "type": "choice",
+        "question": "What can be inferred about the LHAASO team from the passage?",
+        "options": [
+          "A. Most members are experienced scientists over 35",
+          "B. They work indoors in comfortable conditions",
+          "C. They have made significant contributions to cosmic-ray research",
+          "D. They primarily focus on tourism development"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 101,
+        "type": "choice",
+        "question": "What role did Chinese soldiers and police play during the 1998 floods?",
+        "options": [
+          "A. They mainly provided financial support",
+          "B. They helped build dykes and rescue affected people",
+          "C. They were responsible for rebuilding houses",
+          "D. They only assisted in transportation"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 102,
+        "type": "choice",
+        "question": "What does the reconstruction after the 2008 Wenchuan earthquake demonstrate?",
+        "options": [
+          "A. The government focused only on urban areas",
+          "B. The recovery process was slow and inefficient",
+          "C. China was able to rebuild quickly and improve infrastructure",
+          "D. International organizations led the rebuilding efforts"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 103,
+        "type": "choice",
+        "question": "What was a significant change in China's emergency management system in 2018?",
+        "options": [
+          "A. The establishment of the Ministry of Emergency Management",
+          "B. The introduction of the first disaster relief law",
+          "C. The cancellation of all local rescue teams",
+          "D. The replacement of soldiers with civilian volunteers"
+        ],
+        "answer": "A",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 104,
+        "type": "choice",
+        "question": "What is the main advantage of using AI technology in emergency management?",
+        "options": [
+          "A. It replaces human rescuers entirely",
+          "B. It helps predict disasters years in advance",
+          "C. It enables real-time monitoring and early warnings",
+          "D. It is only used after a disaster occurs"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 105,
+        "type": "choice",
+        "question": "What is the fundamental philosophy behind China's disaster response efforts?",
+        "options": [
+          "A. Economic development comes first",
+          "B. Military power should be expanded",
+          "C. The people's safety and well-being are the top priority",
+          "D. International cooperation is the only solution"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 106,
+        "type": "choice",
+        "question": "What is the estimated market size of China's low-altitude economy by 2030?",
+        "options": [
+          "A. Over 500 billion yuan",
+          "B. 2 trillion yuan",
+          "C. 800 billion yuan",
+          "D. 2.3 trillion yuan"
+        ],
+        "answer": "A",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 107,
+        "type": "choice",
+        "question": "Which of the following is mentioned as an example of China's marine science breakthroughs?",
+        "options": [
+          "A. The launch of the Long March-12 carrier rocket",
+          "B. The development of \"flying cars\" in Shenzhen",
+          "C. Deep-sea manned submersibles accomplishing half of the world's manned deep-dive missions",
+          "D. The production of 12.9 million new energy vehicles"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 108,
+        "type": "choice",
+        "question": "What can be inferred from the passage about the significance of new quality productive forces?",
+        "options": [
+          "A. They primarily focus on traditional manufacturing industries",
+          "B. They have had limited impact on the global economy",
+          "C. They combine technological innovation with sustainable development to drive economic growth",
+          "D. They rely entirely on foreign technology"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 109,
+        "type": "choice",
+        "question": "The word \"underpinned\" in paragraph 9 is closest in meaning to ________.",
+        "options": [
+          "A. endangered",
+          "B. weakened",
+          "C. supported",
+          "D. ignored"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 110,
+        "type": "choice",
+        "question": "What is the main purpose of this passage?",
+        "options": [
+          "A. To introduce China's traditional industries",
+          "B. To describe how China is leading global innovation through multiple cutting-edge sectors",
+          "C. To compare different transportation methods in China",
+          "D. To explain the history of China's economic development"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 111,
+        "type": "choice",
+        "question": "What characterized the First Industrial Revolution in Britain?",
+        "options": [
+          "A. Widespread use of electricity and oil",
+          "B. Introduction of computers and the Internet",
+          "C. Application of steam engines powered by coal",
+          "D. Development of artificial intelligence systems"
+        ],
+        "answer": "C",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 112,
+        "type": "choice",
+        "question": "According to the passage, the industries of the future mainly focus on which of the following three areas?",
+        "options": [
+          "A. Digital intelligence, sustainability, and education",
+          "B. Digital intelligence, sustainability, and healthcare",
+          "C. Automation, green energy, and biotechnology",
+          "D. Manufacturing, transportation, and communication"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 113,
+        "type": "choice",
+        "question": "What is the main idea of the passage?",
+        "options": [
+          "A. The history of industrial revolutions from the 18th century to today",
+          "B. Traditional industries will be completely replaced by emerging technologies",
+          "C. Smart factories are the only future of global manufacturing",
+          "D. The passage discusses future industries and how nations should embrace them"
+        ],
+        "answer": "D",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 114,
+        "type": "choice",
+        "question": "The word \"architects\" in the last paragraph is closest in meaning to ________.",
+        "options": [
+          "A. people who build houses",
+          "B. people who design and create",
+          "C. people who watch and wait",
+          "D. people who benefit from something"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 115,
+        "type": "choice",
+        "question": "What can be inferred about the relationship between traditional and emerging industries?",
+        "options": [
+          "A. Traditional industries should be completely abandoned",
+          "B. Emerging technologies should be integrated with traditional industries for transformation and upgrading",
+          "C. Traditional industries and emerging technologies are completely unrelated",
+          "D. Smart factories have nothing to do with traditional manufacturing"
+        ],
+        "answer": "B",
+        "tags": [
+          "阅读"
+        ]
+      },
+      {
+        "id": 116,
+        "type": "choice",
+        "question": "What was the earliest use of tea?",
+        "options": [
+          "A. A daily drink",
+          "B. A medicinal drink",
+          "C. A religious offering",
+          "D. A trade commodity"
+        ],
+        "answer": "B",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 117,
+        "type": "choice",
+        "question": "Which of the following became a symbol of wealth and status when tea became popular?",
+        "options": [
+          "A. An elaborate tea set",
+          "B. High-grade tea",
+          "C. An expensive tea pot",
+          "D. Knowledge of tea culture"
+        ],
+        "answer": "A",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 118,
+        "type": "choice",
+        "question": "What does the passage say about the global tea trade?",
+        "options": [
+          "A. It helped Europeans have a comfortable and wealthy life",
+          "B. It encouraged European powers to build the tea industry",
+          "C. It made it possible for visitors to travel to the West",
+          "D. It improved economic growth and promoted cultural exchange"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 119,
+        "type": "choice",
+        "question": "How did the establishment of sea trade routes by European powers affect the tea trade?",
+        "options": [
+          "A. It greatly expanded global markets and shaped the world economy",
+          "B. It restricted the tea trade to Europe",
+          "C. It increased the demand for tea in the West",
+          "D. It shifted the focus of the tea trade from land routes to sea routes"
+        ],
+        "answer": "A",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 120,
+        "type": "choice",
+        "question": "Which aspect of tea does the passage emphasize the most?",
+        "options": [
+          "A. The different flavors of tea in the world",
+          "B. The complex web of tea trade routes",
+          "C. The economic and cultural impacts of tea",
+          "D. The modern advertising strategies for tea sales"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 121,
+        "type": "choice",
+        "question": "What does the Maritime Silk Road refer to?",
+        "options": [
+          "A. The East China Sea Silk Route",
+          "B. The traditional Silk Road",
+          "C. The trade routes opened up by Zheng He",
+          "D. Both the East China Sea Silk Route and the South China Sea Silk Route"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 122,
+        "type": "choice",
+        "question": "Which of the following was imported to China through the Maritime Silk Road?",
+        "options": [
+          "A. Indian tea",
+          "B. Various flowers",
+          "C. Stained glass",
+          "D. Western porcelain"
+        ],
+        "answer": "B",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 123,
+        "type": "choice",
+        "question": "What was the consequence of the opening of new sea-lanes?",
+        "options": [
+          "A. It made shipbuilding technology develop more slowly",
+          "B. It expanded the types of goods that could be traded",
+          "C. It expanded the scope of the Maritime Silk Road",
+          "D. It caused conflicts between different trading ports"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 124,
+        "type": "choice",
+        "question": "What led to the decline of the Maritime Silk Road?",
+        "options": [
+          "A. Wars in the Western Regions",
+          "B. The An-Shi Rebellion",
+          "C. Technological advances",
+          "D. Bans on maritime trade"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 125,
+        "type": "choice",
+        "question": "What is the passage mainly about?",
+        "options": [
+          "A. The importance of a new sea route",
+          "B. The ups and downs of some dynasties",
+          "C. The history of the Maritime Silk Road",
+          "D. The traditional Silk Road and the Maritime Silk Road"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 126,
+        "type": "choice",
+        "question": "What does the author say about art?",
+        "options": [
+          "A. It is the arrangement of items intended to arouse thoughts and emotions",
+          "B. It is anything that can be deliberately expressed in numbers",
+          "C. It is a product that is widely used with many open meanings",
+          "D. It is a process that can influence one's emotional intelligence"
+        ],
+        "answer": "A",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 127,
+        "type": "choice",
+        "question": "What is the current relationship between digital technology and art?",
+        "options": [
+          "A. Digital tools are favored by artists",
+          "B. They are actually far from each other",
+          "C. They are combined with each other",
+          "D. Art is redefining digital technology"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 128,
+        "type": "choice",
+        "question": "How can digital technology affect art?",
+        "options": [
+          "A. It has brought about more innovative areas",
+          "B. It has helped the exploration of new tools",
+          "C. It has speeded up the creative process",
+          "D. It has changed the form of human expressions"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 129,
+        "type": "choice",
+        "question": "Why are digital technologies widely used in the field of entertainment and advertising?",
+        "options": [
+          "A. To make products look more advanced",
+          "B. To create more works of art",
+          "C. To attract intended customers",
+          "D. To hide the commercial purpose of the works"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 130,
+        "type": "choice",
+        "question": "What point does the author make about \"digital art\"?",
+        "options": [
+          "A. It has never been considered contemporary art",
+          "B. It aims to disseminate and share the existing technology",
+          "C. It may be applied in expanding the community",
+          "D. It is a very complex matter in a broader sense"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 131,
+        "type": "choice",
+        "question": "What was the inner part of an atom like according to the classical model?",
+        "options": [
+          "A. It was like a small sun",
+          "B. It was like a small universe",
+          "C. It was like many small stars",
+          "D. It was like a small solar system"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 132,
+        "type": "choice",
+        "question": "What does the author say about Niels Bohr?",
+        "options": [
+          "A. He was a great painter",
+          "B. He liked drawing cubes",
+          "C. He was an intellectual historian",
+          "D. He might have been a fan of cubism"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 133,
+        "type": "choice",
+        "question": "What did Niels Bohr think of electrons?",
+        "options": [
+          "A. Electrons should be described with poetic words",
+          "B. Electrons took the form of the classical model",
+          "C. The electron world was like a cubist world",
+          "D. Electrons were visible when you stared at them"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 134,
+        "type": "choice",
+        "question": "Who claimed that electrons might have properties of particles and waves?",
+        "options": [
+          "A. Picasso",
+          "B. Niels Bohr",
+          "C. De Broglie",
+          "D. Arthur Miller"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 135,
+        "type": "choice",
+        "question": "What do we learn from the passage?",
+        "options": [
+          "A. Artists should learn from science",
+          "B. Many scientists are fascinated by artworks",
+          "C. Art and science must be combined in physics",
+          "D. Artworks might have inspired the development of science"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 136,
+        "type": "choice",
+        "question": "What is the main reason that Mars is the most-studied planet in the solar system, apart from the Earth?",
+        "options": [
+          "A. Mars is the closest planet to the Earth in Biosphere 2",
+          "B. People hope that Mars may support or have supported life",
+          "C. People believe that Mars is the only planet worth exploring",
+          "D. Mars is easy to reach with current technology and rocketry"
+        ],
+        "answer": "B",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 137,
+        "type": "choice",
+        "question": "Why should those wishing to investigate Mars tread lightly?",
+        "options": [
+          "A. Because of the disruption of the sterile ecosystem on Mars",
+          "B. Because of the existence of lowly bacteria on Mars",
+          "C. Because of the contamination by earthly bugs during the investigation",
+          "D. Because of moral and scientific considerations associated with the possible existence of Martians"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 138,
+        "type": "choice",
+        "question": "What is the current situation regarding rules for dealing with contamination risks?",
+        "options": [
+          "A. The Outer Space Treaty of 1967 provides detailed guidelines",
+          "B. The Outer Space Treaty of 1967 sets up formal and global rules",
+          "C. More countries have come up with their own formal rules",
+          "D. Individual space agencies have their own rules"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 139,
+        "type": "choice",
+        "question": "What does the passage say about Mars exploration?",
+        "options": [
+          "A. The exploration of Mars is a long-term project and requires global efforts",
+          "B. More countries are cooperating with each other in the exploration of Mars",
+          "C. International cooperation can reduce the cost of the exploration of Mars",
+          "D. International cooperation can accelerate the exploration of Mars"
+        ],
+        "answer": "A",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 140,
+        "type": "choice",
+        "question": "What does the author imply about the search for life on Mars?",
+        "options": [
+          "A. It aims to find a new home for humans",
+          "B. It is a complex and multi-faceted endeavor",
+          "C. It should be halted due to the difficulties and risks",
+          "D. It costs too much because of the lack of technology"
+        ],
+        "answer": "B",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 141,
+        "type": "choice",
+        "question": "How many countries had human spaceflight capability at the end of 2020?",
+        "options": [
+          "A. About 40 countries",
+          "B. Only three countries",
+          "C. More than 20 countries",
+          "D. 10 developed countries"
+        ],
+        "answer": "B",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 142,
+        "type": "choice",
+        "question": "Why is human spaceflight considered expensive?",
+        "options": [
+          "A. It requires a large number of launchers and astronauts",
+          "B. Providing support systems and ensuring safety require a lot of money",
+          "C. Providing support systems requires plenty of costly equipment",
+          "D. The crash and breakup of a spacecraft may cause extra costs"
+        ],
+        "answer": "B",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 143,
+        "type": "choice",
+        "question": "What is the opinion of those who are against human spaceflight?",
+        "options": [
+          "A. It is too dangerous for astronauts to do experiments in space",
+          "B. Human space missions are a waste of time and money",
+          "C. Robots can do equally well or better with lower costs in space missions",
+          "D. The human presence in space produces no scientific results"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 144,
+        "type": "choice",
+        "question": "What do supporters say about the role of humans in space missions?",
+        "options": [
+          "A. Astronauts will explore and settle down on other locations in the solar system",
+          "B. Astronauts act as role models for individuals with the ambition to fly in space",
+          "C. Humans are more intelligent than robots and can achieve greater scientific results",
+          "D. Humans have unmatched intelligence, flexibility and reliability in space missions"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 145,
+        "type": "choice",
+        "question": "What can be learned about human spaceflight from the passage?",
+        "options": [
+          "A. It is a highly risky field with only a few countries interested",
+          "B. The benefits of sending humans into space outweigh the risks and the costs",
+          "C. People hold different views regarding human presence in space missions",
+          "D. Human spaceflight has only a negative impact due to its high risks and costs"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 146,
+        "type": "choice",
+        "question": "development?",
+        "options": [
+          "A. The advantages of these technologies are underestimated",
+          "B. Children do not benefit from these assistive technologies",
+          "C. The aim of using these technologies has sometimes changed",
+          "D. There are negative impacts of these technologies on children"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 147,
+        "type": "choice",
+        "question": "Which has a negative impact on children's ability to cultivate social emotions?",
+        "options": [
+          "A. Children seldom play games with parents",
+          "B. Children do not have enough empathy",
+          "C. Children seldom socialize with others in group settings",
+          "D. Children are taught in a traditional learning setting"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 148,
+        "type": "choice",
+        "question": "Which is a reason for the violation of children's privacy?",
+        "options": [
+          "A. Some smart devices used by children cause data leaks",
+          "B. Irresponsible parents like showing off themselves on social media",
+          "C. Children's personal information is shared online without parental consent",
+          "D. Children are not old enough to protect their own privacy"
+        ],
+        "answer": "A",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 149,
+        "type": "choice",
+        "question": "What was the project in Los Angeles County?",
+        "options": [
+          "A. It used algorithms to identify children in abusive environments",
+          "B. It used an algorithmic tool to create a series of moral standards",
+          "C. It used an algorithmic tool to help children get out of dilemmas",
+          "D. It used algorithms to provide recommendations for abused children"
+        ],
+        "answer": "A",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 150,
+        "type": "choice",
+        "question": "What does the author imply about the use of algorithms?",
+        "options": [
+          "A. People will be free of all the possible risks with algorithmic tools",
+          "B. It is necessary to take action in advance according to predictive analytics",
+          "C. Algorithms would accurately help identify some problems in advance",
+          "D. In some cases it is difficult to judge whether we should take action based on algorithms"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 151,
+        "type": "choice",
+        "question": "What is the alignment problem of AI according to the passage?",
+        "options": [
+          "A. The concern that AI will choose to avoid unintended harmful actions",
+          "B. The concern that AI will not pursue a worthwhile goal as instructed",
+          "C. The concern that AI will become self-aware and have harmful intentions",
+          "D. The concern that AI will possibly escape human control and harm humans"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 152,
+        "type": "choice",
+        "question": "What is the main cause of the alignment problem of AI?",
+        "options": [
+          "A. The inability to build an AI that can avoid all the problems humans foresee",
+          "B. AI's inability to take human feelings into account when performing tasks",
+          "C. AI's inability to avoid interference from external factors",
+          "D. The inability to accurately and comprehensively define human purposes for AI"
+        ],
+        "answer": "D",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 153,
+        "type": "choice",
+        "question": "Why might it be hard to turn off a powerful AI?",
+        "options": [
+          "A. Because it can set its own goal and pursue it",
+          "B. Because it has no system for being switched off",
+          "C. Because it will try to prevent itself from being turned off",
+          "D. Because it will change the system and choose to resist"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 154,
+        "type": "choice",
+        "question": "What makes the proper control of AI urgent?",
+        "options": [
+          "A. AI has already begun to harm humans",
+          "B. The rapid development of AI increases the risks",
+          "C. AI has become too powerful to control",
+          "D. The intelligence of AI has exceeded that of humans"
+        ],
+        "answer": "B",
+        "tags": [
+          "综合训练"
+        ]
+      },
+      {
+        "id": 155,
+        "type": "choice",
+        "question": "What benefits could transformative AI bring if we manage to avoid its risks?",
+        "options": [
+          "A. Better job opportunities",
+          "B. Further development of technology",
+          "C. Progress in solving major problems",
+          "D. Accelerated scientific discovery"
+        ],
+        "answer": "C",
+        "tags": [
+          "综合训练"
+        ]
+      }
+    ]
   }
 ];

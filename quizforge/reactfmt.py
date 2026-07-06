@@ -145,10 +145,12 @@ def _load_quiz(src: str) -> Quiz:
 
 
 def build_react_quizzes(manifest_path: str) -> list[dict]:
-    """读 manifest，逐个加载源题库 → React Quiz 列表。"""
+    """读 manifest，逐个加载源题库 → React Quiz 列表。清单 title 覆盖文档标题。"""
     base = os.path.dirname(os.path.abspath(manifest_path))
     out: list[dict] = []
     for e in load_manifest(manifest_path):
-        src = os.path.join(base, e["source"])
-        out.append(to_react_quiz(_load_quiz(src), qid=e.get("id")))
+        quiz = _load_quiz(os.path.join(base, e["source"]))
+        if e.get("title"):
+            quiz.title = e["title"]
+        out.append(to_react_quiz(quiz, qid=e.get("id")))
     return out
