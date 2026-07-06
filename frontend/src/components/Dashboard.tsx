@@ -12,10 +12,14 @@ interface DashboardProps {
   onFilterChange: (mode: 'all' | 'choice' | 'blank') => void;
 }
 
-const isOptionsType = (t: string) => t === 'choice' || t === 'multiple';
+const isOptionsType = (t: string) => t === 'choice' || t === 'multiple' || t === 'group';
 
 function isCorrect(q: Question, uAns: string | string[] | undefined): boolean {
   if (uAns === undefined) return false;
+  if (q.type === 'group') {
+    if (!Array.isArray(uAns)) return false;
+    return (q.subQuestions || []).every((s, i) => uAns[i] === s.answer);
+  }
   if (q.type === 'choice') return uAns === q.answer;
   if (q.type === 'multiple') {
     const std = q.answer as string[];
@@ -27,7 +31,7 @@ function isCorrect(q: Question, uAns: string | string[] | undefined): boolean {
   return stdList.every((std, idx) => checkBlankAnswer(userList[idx] || '', std));
 }
 
-const typeLabel = (t: string) => (t === 'choice' ? '单选' : t === 'multiple' ? '多选' : '填空');
+const typeLabel = (t: string) => (t === 'choice' ? '单选' : t === 'multiple' ? '多选' : t === 'group' ? '组题' : '填空');
 
 export default function Dashboard({
   questions, userAnswers, onStartPractice, onClearAnswers, filterMode, onFilterChange,

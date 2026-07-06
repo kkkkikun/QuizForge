@@ -35,7 +35,7 @@ export default function QuizPage() {
   }, [storageKey]);
 
   const questionsList = useMemo(() => {
-    if (filterMode === 'choice') return QUESTIONS.filter(q => q.type === 'choice' || q.type === 'multiple');
+    if (filterMode === 'choice') return QUESTIONS.filter(q => q.type === 'choice' || q.type === 'multiple' || q.type === 'group');
     if (filterMode === 'blank') return QUESTIONS.filter(q => q.type === 'blank');
     return QUESTIONS;
     // eslint-disable-next-line react-hooks/exhaustive-deps

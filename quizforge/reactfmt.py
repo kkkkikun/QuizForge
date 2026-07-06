@@ -14,7 +14,7 @@ from .model import Question, Quiz
 
 # QuizForge 填空空位标记（___ / ＿＿＿ / （ ） / ( ) / 〔〕）
 _BLANK_MARK = re.compile(r"_{2,}|＿{2,}|[（(]\s*[)）]|〔\s*〕]")
-_TYPE_MAP = {"single": "choice", "multiple": "multiple", "blank": "blank"}
+_TYPE_MAP = {"single": "choice", "multiple": "multiple", "blank": "blank", "group": "group"}
 
 
 def _inject_blanks(stem: str, answers: list[str]) -> str:
@@ -70,6 +70,19 @@ def to_react_questions(quiz: Quiz) -> list[dict]:
     for q in quiz.questions:
         rtype = _TYPE_MAP.get(q.type, "choice")
         item: dict = {"id": q.id, "type": rtype}
+        if rtype == "group":
+            item["question"] = q.stem
+            item["subQuestions"] = [
+                {
+                    "question": s.stem,
+                    "options": [f"{k}. {v}" for k, v in sorted((s.options or {}).items())],
+                    "answer": (s.answer[0] if s.answer else ""),
+                }
+                for s in q.sub_questions
+            ]
+            item["tags"] = _tags(q)
+            out.append(item)
+            continue
         if rtype == "blank":
             ans = _blank_answers(q)
             item["question"] = _inject_blanks(q.stem, ans)

@@ -48,6 +48,7 @@ class ChoiceCandidate:
     stem: str
     options: dict[str, str]
     answer_letter: str | None = None   # 高亮标记的答案字母（CET）
+    group: str | None = None           # 子分组上下文（Unit·Passage），有则归组
 
 
 def _section_type(title: str) -> str:
@@ -111,6 +112,7 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
     cur_unit = None
     cur_passage = None
     cur_num: int | None = None
+    current_group: str | None = None
     blocks = section.blocks
     n = len(blocks)
     j = 0
@@ -134,12 +136,19 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
                     if bo:
                         hl = bo[0][0]
                         break
-            stem = _strip_number(pending[-1]).strip() if pending else ""
-            if not stem:
-                ctx = " · ".join(x for x in (cur_unit, cur_passage) if x)
+            real_stem = _strip_number(pending[-1]).strip() if pending else ""
+            ctx = " · ".join(x for x in (cur_unit, cur_passage) if x)
+            if ctx:
+                # CET 听力等：子分组上下文 → 组名=ctx
                 npart = f"第 {cur_num} 题" if cur_num else "未编号题"
-                stem = f"{ctx} · {npart}" if ctx else npart
-            cands.append(ChoiceCandidate(section.title, stem, options, answer_letter=hl))
+                stem = real_stem if real_stem else npart
+                current_group = ctx
+            else:
+                stem = real_stem
+                # 段落中断：题前累积 ≥2 段非选项文本（文章正文）→ 开新组，组名取首段（段落标题）
+                if len(pending) >= 2:
+                    current_group = pending[0][:30]
+            cands.append(ChoiceCandidate(section.title, stem, options, answer_letter=hl, group=current_group))
             pending = []
             cur_num = None
             j = k
@@ -249,9 +258,28 @@ def parse_blocks(
 
         if sec.type == "choice":
             cands, leftover_texts = _detect_choice(sec)
-            for c in cands:
-                qid += 1
-                questions.append(choice_candidate_to_question(c, qid))
+            # 有 group 的候选按连续同组聚合成 group 题；无 group 的独立
+            i = 0
+            nc = len(cands)
+            while i < nc:
+                c = cands[i]
+                if c.group:
+                    gk = c.group
+                    qid += 1
+                    gid = qid
+                    subs: list[Question] = []
+                    while i < nc and cands[i].group == gk:
+                        qid += 1
+                        subs.append(choice_candidate_to_question(cands[i], qid))
+                        i += 1
+                    questions.append(
+                        Question(id=gid, type="group", section=sec.title,
+                                 stem=gk, sub_questions=subs)
+                    )
+                else:
+                    qid += 1
+                    questions.append(choice_candidate_to_question(c, qid))
+                    i += 1
             residual.extend((t, sec.title, "knowledge") for t in leftover_texts)
             # 匹配题：陈述 + 结尾答案序列
             for stem, ans in _detect_matching(sec):
@@ -555,6 +583,8 @@ def _guess_title(source_file: str) -> str:
 
 def validate_question(q: Question) -> str | None:
     """结构校验：合规返回 None，否则返回原因字符串。"""
+    if q.type == "group":
+        return None if q.sub_questions else "空组题"
     if not q.stem or len(q.stem.strip()) < 2:
         return "题干为空或过短"
     if q.type in ("single", "multiple"):

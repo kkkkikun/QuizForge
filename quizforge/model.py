@@ -32,6 +32,7 @@ class Question:
     low_confidence: bool = False
     note: str | None = None                                # 如「本题含图，已省略」
     source: str = "rule"                                   # rule | llm（结构化来源）
+    sub_questions: list = field(default_factory=list)      # group 题型的子题列表
 
 
 @dataclass

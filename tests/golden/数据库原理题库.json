@@ -20,7 +20,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 2,
@@ -40,7 +41,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 3,
@@ -60,7 +62,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 4,
@@ -80,7 +83,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 5,
@@ -100,7 +104,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 6,
@@ -120,7 +125,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 7,
@@ -140,7 +146,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 8,
@@ -160,7 +167,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 9,
@@ -180,7 +188,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 10,
@@ -200,7 +209,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 11,
@@ -220,7 +230,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 12,
@@ -240,7 +251,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 13,
@@ -260,7 +272,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 14,
@@ -280,7 +293,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 15,
@@ -300,7 +314,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 16,
@@ -320,7 +335,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 17,
@@ -340,7 +356,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 18,
@@ -360,7 +377,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 19,
@@ -380,7 +398,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 20,
@@ -400,7 +419,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 21,
@@ -420,7 +440,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 22,
@@ -440,7 +461,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 23,
@@ -460,7 +482,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 24,
@@ -480,7 +503,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 25,
@@ -500,7 +524,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 26,
@@ -520,7 +545,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 27,
@@ -540,7 +566,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 28,
@@ -560,7 +587,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 29,
@@ -580,7 +608,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 30,
@@ -600,7 +629,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 31,
@@ -620,7 +650,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 32,
@@ -640,7 +671,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 33,
@@ -660,7 +692,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 34,
@@ -680,7 +713,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 35,
@@ -700,7 +734,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 36,
@@ -720,7 +755,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 37,
@@ -740,7 +776,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 38,
@@ -760,7 +797,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 39,
@@ -780,7 +818,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 40,
@@ -800,7 +839,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 41,
@@ -820,7 +860,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 42,
@@ -840,7 +881,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 43,
@@ -860,7 +902,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 44,
@@ -880,7 +923,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 45,
@@ -900,7 +944,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 46,
@@ -920,7 +965,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 47,
@@ -940,7 +986,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     },
     {
       "id": 48,
@@ -960,7 +1007,8 @@
       "tolerant": false,
       "low_confidence": false,
       "note": null,
-      "source": "rule"
+      "source": "rule",
+      "sub_questions": []
     }
   ],
   "ignored_summary": {

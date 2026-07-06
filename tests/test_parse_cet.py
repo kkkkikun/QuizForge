@@ -5,7 +5,7 @@ from quizforge.parse import parse_blocks
 
 
 def test_cet_highlight_answer_and_context():
-    """听力：高亮选项=答案；题干合成「Unit · News report · 第N题」。"""
+    """听力：同一 News report 的题归组；高亮选项=答案；子题干=第N题。"""
     blocks = [
         Block("docx", "Normal", "听力", "heading"),
         Block("docx", "Normal", "Unit 1", "para"),
@@ -18,12 +18,33 @@ def test_cet_highlight_answer_and_context():
     ]
     quiz = parse_blocks(blocks, source_file="cet.docx")
     assert len(quiz.questions) == 1
-    q = quiz.questions[0]
-    assert q.section == "听力"
-    assert q.type == "single"
-    assert q.answer == ["B"]
-    assert not q.low_confidence
-    assert "Unit 1" in q.stem and "News report 1" in q.stem and "第 1 题" in q.stem
+    g = quiz.questions[0]
+    assert g.type == "group"
+    assert g.section == "听力"
+    assert g.stem == "Unit 1 · News report 1"
+    assert len(g.sub_questions) == 1
+    sub = g.sub_questions[0]
+    assert sub.answer == ["B"]
+    assert sub.stem == "第 1 题"
+    assert not sub.low_confidence
+
+
+def test_cet_choice_grouped_multi():
+    """同一 News report 的多题聚合成一个 group（一组一屏）。"""
+    blocks = [Block("docx", "Normal", "听力", "heading"),
+              Block("docx", "Normal", "Unit 1", "para"),
+              Block("docx", "Normal", "News report 1", "para")]
+    for n in (1, 2):
+        blocks.append(Block("docx", "Normal", f"{n}、", "para"))
+        for L in "ABCD":
+            blocks.append(Block("docx", "Normal", f"{L}、opt{L}", "para",
+                                highlight=(f"{L}、opt{L}") if L == "B" else ""))
+    quiz = parse_blocks(blocks, source_file="cet.docx")
+    assert len(quiz.questions) == 1
+    g = quiz.questions[0]
+    assert g.type == "group" and len(g.sub_questions) == 2
+    assert [s.stem for s in g.sub_questions] == ["第 1 题", "第 2 题"]
+    assert all(s.answer == ["B"] for s in g.sub_questions)
 
 
 def test_cet_matching_statements_with_answer_seq():

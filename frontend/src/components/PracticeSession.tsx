@@ -123,6 +123,9 @@ export default function PracticeSession({
   // Multi-select temporary values
   const [multiInputs, setMultiInputs] = useState<string[]>([]);
 
+  // Group temporary values（每子题的已选字母）
+  const [groupInputs, setGroupInputs] = useState<string[]>([]);
+
   // Active question details
   const activeQuestion = questionsList[currentIndex];
   const totalQuestions = questionsList.length;
@@ -153,6 +156,9 @@ export default function PracticeSession({
       }
     } else if (activeQuestion.type === 'multiple') {
       setMultiInputs(isAnswered ? (Array.isArray(savedAnswer) ? [...savedAnswer] : [savedAnswer]) : []);
+    } else if (activeQuestion.type === 'group') {
+      const gn = activeQuestion.subQuestions?.length || 0;
+      setGroupInputs(isAnswered && Array.isArray(savedAnswer) ? [...savedAnswer] : Array(gn).fill(''));
     }
   }, [currentIndex, activeQuestion, isAnswered, savedAnswer, blankCount]);
 
@@ -178,6 +184,9 @@ export default function PracticeSession({
       const std = activeQuestion.answer as string[];
       const user = Array.isArray(savedAnswer) ? savedAnswer : [savedAnswer];
       return std.length === user.length && std.every(a => user.includes(a));
+    } else if (activeQuestion.type === 'group') {
+      if (!isAnswered || !Array.isArray(savedAnswer)) return false;
+      return (activeQuestion.subQuestions || []).every((s, i) => savedAnswer[i] === s.answer);
     } else {
       const standardList = Array.isArray(activeQuestion.answer) 
         ? activeQuestion.answer 
@@ -223,6 +232,19 @@ export default function PracticeSession({
     onAnswer(qId, multiInputs);
   };
 
+  // Group: 点选某子题的选项（点选即锁该子题；全部答完则保存整组）
+  const handleGroupPick = (sIdx: number, letter: string) => {
+    if (isAnswered) return;
+    if (groupInputs[sIdx]) return;          // 该子题已锁
+    const updated = [...groupInputs];
+    updated[sIdx] = letter;
+    setGroupInputs(updated);
+    const n = activeQuestion.subQuestions?.length || 0;
+    if (updated.length === n && updated.every(x => x)) {
+      onAnswer(qId, updated);               // 全部子题答完 → 保存
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto space-y-6 py-2">
       {/* Top Header Controls */}
@@ -244,7 +266,7 @@ export default function PracticeSession({
         {/* Question Flag / Status */}
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
-            {activeQuestion.type === 'choice' ? '单选题' : activeQuestion.type === 'multiple' ? '多选题' : '核心填空题'}
+            {activeQuestion.type === 'choice' ? '单选题' : activeQuestion.type === 'multiple' ? '多选题' : activeQuestion.type === 'group' ? '组题' : '核心填空题'}
           </span>
           
           {isAnswered && (
@@ -355,6 +377,39 @@ export default function PracticeSession({
                 核对答案并查看解析
               </button>
             )}
+          </div>
+        ) : activeQuestion.type === 'group' ? (
+          <div className="space-y-5 pt-2">
+            {activeQuestion.subQuestions?.map((sub, sIdx) => {
+              const sel = isAnswered ? (savedAnswer as string[])[sIdx] : (groupInputs[sIdx] || '');
+              const locked = sel !== '';
+              return (
+                <div key={sIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
+                  <p className="text-sm font-bold text-slate-800">{sIdx + 1}. {sub.question}</p>
+                  <div className="grid grid-cols-1 gap-2">
+                    {sub.options.map(opt => {
+                      const letter = opt.charAt(0);
+                      const isSel = sel === letter;
+                      const isCorr = sub.answer === letter;
+                      let style = 'border-slate-200 bg-white hover:border-blue-300 text-slate-700';
+                      if (locked) {
+                        if (isCorr) style = 'border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold';
+                        else if (isSel) style = 'border-2 border-rose-500 bg-rose-50 text-rose-950 font-bold';
+                        else style = 'border-slate-100 bg-slate-50/50 text-slate-400 opacity-60';
+                      }
+                      return (
+                        <button key={letter} type="button" disabled={locked}
+                          onClick={() => handleGroupPick(sIdx, letter)}
+                          className={`text-left p-3 rounded-xl border text-sm transition-all flex items-center gap-3 ${locked ? '' : 'cursor-pointer'} ${style}`}>
+                          <span className="w-6 h-6 shrink-0 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">{letter}</span>
+                          <span>{opt}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <div className="space-y-4 pt-2">

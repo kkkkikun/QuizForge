@@ -93,6 +93,21 @@ def test_to_react_quiz_id_from_source_slug():
     assert rq["id"] == "数据库原理题库"
 
 
+def test_to_react_group():
+    """group 题 → React {type:group, subQuestions:[...]}。"""
+    g = Question(1, "group", stem="Unit 1 · News report 1",
+                 sub_questions=[
+                     Question(2, "single", stem="第 1 题", options={"A": "x", "B": "y"}, answer=["B"]),
+                     Question(3, "single", stem="第 2 题", options={"A": "x", "B": "y"}, answer=["A"]),
+                 ])
+    r = to_react_questions(_quiz(g))[0]
+    assert r["type"] == "group"
+    assert r["question"] == "Unit 1 · News report 1"
+    assert len(r["subQuestions"]) == 2
+    assert r["subQuestions"][0]["answer"] == "B"
+    assert r["subQuestions"][0]["options"] == ["A. x", "B. y"]
+
+
 def test_write_quizzes_ts(tmp_path):
     quizzes = [
         to_react_quiz(Quiz(title="DB", source_file="db", questions=[]), "db"),
