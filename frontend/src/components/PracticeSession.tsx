@@ -17,6 +17,9 @@ export function checkBlankAnswer(userInput: string, correctAnswer: string): bool
   const correct = correctAnswer.trim().toLowerCase().replace(/['"“”‘’]/g, '');
   
   if (user === correct) return true;
+
+  // 容忍空格差异（如匹配题 "7 9 1..." vs "791..."）
+  if (user.replace(/\s+/g, '') === correct.replace(/\s+/g, '')) return true;
   
   // Strip common redundant suffixes for high-tolerance matches
   const cleanUser = user.replace(/(阶段|系统|模型|约束|结构|文件|触发器|约束)/g, '');
@@ -258,7 +261,7 @@ export default function PracticeSession({
         </div>
 
         {/* Stem */}
-        <h2 className="text-base md:text-lg font-bold text-slate-900 leading-relaxed font-sans">
+        <h2 className="text-base md:text-lg font-bold text-slate-900 leading-relaxed font-sans whitespace-pre-line">
           {renderQuestionStem(activeQuestion.question, activeQuestion.type, isAnswered)}
         </h2>
 

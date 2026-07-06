@@ -163,15 +163,17 @@ def detect_choice_questions(section: Section) -> list[ChoiceCandidate]:
 
 
 def _detect_matching(section: Section) -> list[tuple[str, str]]:
-    """检测匹配题：连续「N、陈述」后跟一行答案序列(空格分隔数字/字母)。
+    """检测匹配题：一篇文章 + 连续「N、陈述」+ 结尾答案序列 → **一整道题**。
 
-    返回 [(stem, answer_token), ...]，每条陈述对应一个答案 token。
+    题面 = 文章 + 全部陈述；答案 = 完整数字串（空格分隔）。
+    返回 [(stem, answer_string), ...]，每篇文章一道题。
     """
     out: list[tuple[str, str]] = []
     blocks = section.blocks
     n = len(blocks)
     cur_unit = None
     cur_passage = None
+    passage_buf: list[str] = []   # 累积文章正文
     i = 0
     while i < n:
         t = blocks[i].text.strip()
@@ -180,24 +182,26 @@ def _detect_matching(section: Section) -> list[tuple[str, str]]:
                 cur_unit, cur_passage = t, None
             else:
                 cur_passage = t
+            passage_buf = []
             i += 1
             continue
         if re.match(r"^\d+、", t):
             stmts: list[str] = []
             j = i
             while j < n and re.match(r"^\d+、", blocks[j].text.strip()):
-                stmts.append(re.sub(r"^\d+、\s*", "", blocks[j].text.strip()))
+                stmts.append(blocks[j].text.strip())
                 j += 1
             if j < n and ANSWER_SEQ_RE.match(blocks[j].text.strip()):
                 seq = blocks[j].text.strip().split()
                 if stmts and len(seq) >= len(stmts):
-                    ctx = " · ".join(x for x in (cur_unit, cur_passage) if x)
-                    for idx, s in enumerate(stmts):
-                        out.append(((f"{ctx} · {s}" if ctx else s), str(seq[idx])))
+                    face = "\n".join(passage_buf + [""] + stmts).strip()
+                    out.append((face, " ".join(seq)))
+                    passage_buf = []
                     i = j + 1
                     continue
             i = j
         else:
+            passage_buf.append(t)
             i += 1
     return out
 
