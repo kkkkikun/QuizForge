@@ -72,6 +72,7 @@ def to_react_questions(quiz: Quiz) -> list[dict]:
         item: dict = {"id": q.id, "type": rtype}
         if rtype == "group":
             item["question"] = q.stem
+            item["answer"] = ""                # group 无单一答案（前端用 subQuestions），占位满足类型
             item["subQuestions"] = [
                 {
                     "question": s.stem,

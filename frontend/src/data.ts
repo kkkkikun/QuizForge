@@ -1712,6 +1712,7 @@ export const QUIZZES: Quiz[] = [
         "id": 1,
         "type": "group",
         "question": "Unit 1 · News report 1",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -1762,6 +1763,7 @@ export const QUIZZES: Quiz[] = [
         "id": 6,
         "type": "group",
         "question": "Unit 1 · News report 2",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -1872,6 +1874,7 @@ export const QUIZZES: Quiz[] = [
         "id": 17,
         "type": "group",
         "question": "Unit 4 · News report 1",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -1902,6 +1905,7 @@ export const QUIZZES: Quiz[] = [
         "id": 20,
         "type": "group",
         "question": "Unit 4 · News report 2",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -2022,6 +2026,7 @@ export const QUIZZES: Quiz[] = [
         "id": 32,
         "type": "group",
         "question": "Unit 5 · News report 1",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -2072,6 +2077,7 @@ export const QUIZZES: Quiz[] = [
         "id": 37,
         "type": "group",
         "question": "Unit 5 · News report 2",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -2192,6 +2198,7 @@ export const QUIZZES: Quiz[] = [
         "id": 49,
         "type": "group",
         "question": "Unit 6 · News report 1",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -2232,6 +2239,7 @@ export const QUIZZES: Quiz[] = [
         "id": 53,
         "type": "group",
         "question": "Unit 6 · News report 2",
+        "answer": "",
         "subQuestions": [
           {
             "question": "第 1 题",
@@ -2386,6 +2394,7 @@ export const QUIZZES: Quiz[] = [
         "id": 68,
         "type": "group",
         "question": "理解当代中国",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What is the main purpose of the LHAASO project?",
@@ -2446,6 +2455,7 @@ export const QUIZZES: Quiz[] = [
         "id": 74,
         "type": "group",
         "question": "For whom",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What role did Chinese soldiers and police play during the 1998 floods?",
@@ -2506,6 +2516,7 @@ export const QUIZZES: Quiz[] = [
         "id": 80,
         "type": "group",
         "question": "China's new wave of innovation",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What is the estimated market size of China's low-altitude economy by 2030?",
@@ -2566,6 +2577,7 @@ export const QUIZZES: Quiz[] = [
         "id": 86,
         "type": "group",
         "question": "The tide of change: Embracing ",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What characterized the First Industrial Revolution in Britain?",
@@ -2626,6 +2638,7 @@ export const QUIZZES: Quiz[] = [
         "id": 92,
         "type": "group",
         "question": "Tea's remarkable journey began",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What was the earliest use of tea?",
@@ -2686,6 +2699,7 @@ export const QUIZZES: Quiz[] = [
         "id": 98,
         "type": "group",
         "question": "The \"Silk Road of the Sea\" (or",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What does the Maritime Silk Road refer to?",
@@ -2746,6 +2760,7 @@ export const QUIZZES: Quiz[] = [
         "id": 104,
         "type": "group",
         "question": "The word \"digital\" refers to d",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What does the author say about art?",
@@ -2806,6 +2821,7 @@ export const QUIZZES: Quiz[] = [
         "id": 110,
         "type": "group",
         "question": "To answer our most fundamental",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What was the inner part of an atom like according to the classical model?",
@@ -2866,6 +2882,7 @@ export const QUIZZES: Quiz[] = [
         "id": 116,
         "type": "group",
         "question": "The Earth aside, Mars is the m",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What is the main reason that Mars is the most-studied planet in the solar system, apart from the Earth?",
@@ -2926,6 +2943,7 @@ export const QUIZZES: Quiz[] = [
         "id": 122,
         "type": "group",
         "question": "By the end of the second decad",
+        "answer": "",
         "subQuestions": [
           {
             "question": "How many countries had human spaceflight capability at the end of 2020?",
@@ -2986,6 +3004,7 @@ export const QUIZZES: Quiz[] = [
         "id": 128,
         "type": "group",
         "question": "Despite their advantages, tech",
+        "answer": "",
         "subQuestions": [
           {
             "question": "development?",
@@ -3046,6 +3065,7 @@ export const QUIZZES: Quiz[] = [
         "id": 134,
         "type": "group",
         "question": "The alignment problem of AI is",
+        "answer": "",
         "subQuestions": [
           {
             "question": "What is the alignment problem of AI according to the passage?",
