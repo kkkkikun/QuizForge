@@ -1,0 +1,24 @@
+schema: spec-driven
+
+context: |
+  QuizForge：期末选填题速刷工具。Word/PDF/TXT →（规则 + LLM 兜底 + 滤噪）→ 题库 JSON
+  → 单文件 HTML / React 前端（GitHub Pages）。
+
+  Tech stack:
+    - 后端：Python 3.10+（uv），python-docx / pdfplumber / openai / anthropic / python-dotenv / pyyaml
+    - 前端：frontend/ 子工程，React 19 + Vite + Tailwind v4，部署 GitHub Pages
+    - 测试：pytest + golden 快照；frontend tsc + vite build
+  数据契约：Quiz JSON（层间解耦的唯一中间表示）
+  语言：文档与产出物用简体中文；代码标识符用英文。
+  提交规范：不加 Co-Authored-By、不设共同创作者。
+
+rules:
+  proposal:
+    - 含回滚方案、影响范围、为什么做 / 做什么 / 不做什么
+  specs:
+    - 用 WHEN/THEN 描述行为
+    - 变更用 Delta Specs（ADDED/MODIFIED/REMOVED）
+  design:
+    - 复杂流程配图；标注关键依赖与备选方案
+  tasks:
+    - 每任务可独立验证；标注依赖与验收标准
