@@ -1129,7 +1129,7 @@ wheels = [
 ]
 
 [[package]]
-name = "quizforge"
+name = "quizforge-cli"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [

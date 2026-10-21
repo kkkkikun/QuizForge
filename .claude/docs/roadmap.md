@@ -111,7 +111,7 @@ M0–M2 完成、M3 有初步泛化后启动。
   - 与 CLI 同语义：校验关卡 error 拒出 HTML（可下载 JSON 走 CLI `--review`）、0 题出诊断报告、LLM 不参与（BYOK 策略）
   - **vitest + npm pyodide 真实集成测试**（node 环境）：大英四.docx → 32 题与 Python 侧一致 / txt / 0 题诊断 3 例；浏览器端 chrome-headless-shell 实拍验证渲染
   - PDF 不支持（页面提示用 CLI）；Pyodide 引擎走 CDN（首访需联网，之后浏览器缓存）
-- [x] **方案 B（就绪待发布）：PyPI**——包元数据/classifiers/urls 补全；sdist 瘦身（3.1MB→31KB，排除 data/frontend 等）；`publish.yml`（手动触发或 v* 标签，OIDC trusted publishing）；`uv build` 验证通过。**首次发布需用户在 PyPI 侧配置 publisher 后打 tag**
+- [x] **方案 B（✅ 已发布 2026-10-21）：PyPI**——分发名 `quizforge-cli`（`quizforge` 被他人占用；导入包/命令名不变），v0.1.0 经 OIDC trusted publishing 上线并实装验证：<https://pypi.org/project/quizforge-cli/>
 - [x] 明确不做：自建后端转换服务
 
 **验收**：陌生人不上 GitHub、不装 Python，打开网页上传自己的 docx 就能拿到题库网页——已达成（Pyodide 集成测试 + 实拍验证；线上真实设备使用随推广观察）。

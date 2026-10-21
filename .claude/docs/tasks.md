@@ -9,9 +9,8 @@
 ## 剩余为真实世界动作（非代码）
 
 - [ ] M4 推广：找 5–10 位同学试用收文档 → 每份走 `scripts/add_quiz.py` 流水线（M3 验收 2/3 待补）
-- [ ] PyPI 首次发布：PyPI 侧配置 publisher（kkkkikun/QuizForge + publish.yml）→ `git tag v0.1.0 && git push --tags`
 - [ ] thermal 题库答案人工核对（全为 LLM 推理，源文档无答案）
-- [ ] 真机复核：移动端主流操作 + Lighthouse（M1 遗留）
+- [ ] 真机手感随手过一遍（滑题/底部栏/组题；Lighthouse 已复核通过）
 
 ### 遗留（小项）
 

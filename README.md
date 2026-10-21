@@ -103,7 +103,7 @@ uv run python scripts/add_quiz.py 同学的计网复习.docx --id network --titl
 pip install quizforge-cli   # 或 uv tool install quizforge-cli；安装后命令为 quizforge
 ```
 
-> 注：PyPI 分发名 `quizforge` 已被他人占用，故用 `quizforge-cli`（导入包名/命令名不变）。发布前可 `pip install git+https://github.com/kkkkikun/QuizForge`。
+> 已发布 PyPI：<https://pypi.org/project/quizforge-cli/>。分发名 `quizforge` 已被他人占用，故用 `quizforge-cli`（导入包名/命令名不变）。
 
 ## ⚠️ 已知限制
 
