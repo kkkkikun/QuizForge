@@ -15,7 +15,7 @@
 | 里程碑 | 主题 | 状态 | 完成时间 |
 |--------|------|------|----------|
 | M0 | 还债 + 数据质量关卡 | ✅ 已完成 | 2026-10-21 |
-| M1 | 移动端答题体验 | 未开始 | |
+| M1 | 移动端答题体验 | ✅ 代码完成（真机/Lighthouse 验收待做） | 2026-10-21 |
 | M2 | 站点可运营化 | 未开始 | |
 | M3 | 解析泛化（可持续穿插） | 未开始 | |
 | M4 | 推广启动 | 未开始 | |
@@ -44,17 +44,18 @@ M0 还债+质量关卡 → M1 移动端体验 → M2 运营化+反馈通道 → 
 
 **验收结果**：pytest 126 全绿 + `npm run lint`（strict）/`build` 通过；重新生成 data.ts——cet4 28 组无巨型组、组名完整、重复题清零，剩余 3 条 warning 均为已知源文档缺陷（2 处匹配答案序号重复、1 处 2 选项题）。
 
-## M1：移动端答题体验（3–4 周）
+## M1：移动端答题体验（3–4 周）✅ 2026-10-21（真机/Lighthouse 验收待做）
 
 同学用手机刷题是核心场景，前端投入的大头。
 
-- [ ] **测试基建先行**：vitest + @testing-library/react + jsdom；先覆盖纯逻辑（`checkBlankAnswer` 容错判分、group 判分、localStorage 持久化、进度统计），再覆盖组件交互
-- [ ] **PracticeSession 拆分**：565 行单文件按题型拆为 `ChoiceQuestion` / `MultipleQuestion` / `BlankQuestion` / `GroupQuestion` 组件
-- [ ] **移动端优先重设计**：触控目标 ≥44px、题号网格与答题卡片小屏布局、滑动切题手势、底部操作栏；桌面自动适配
-- [ ] **PWA 支持**：manifest + service worker 预缓存——"添加到主屏幕"后离线可用，传播加分项
-- [ ] **接入 eslint**（当前仅 tsc）
+- [x] **测试基建先行**：vitest(jsdom) + @testing-library/react + jest-dom；覆盖 `checkBlankAnswer` 12 场景、`gradeQuestion` 统一判分 7 场景、`renderQuestionStem` 空位渲染、GroupQuestion 点选锁/整组保存/重做交互
+- [x] **PracticeSession 拆分**：判分逻辑抽为 `src/lib/grading.ts`（答题页与统计页共用口径，消除 Dashboard 重复实现）；`question/{Choice,Multiple,Blank,Group}Question` 组件；PracticeSession 只留编排（565 行 → ~230 行）
+- [x] **移动端优先重设计**：底部 sticky 操作栏（44px 触控目标 + `env(safe-area-inset-bottom)` 安全区）、答题卡横滑切题手势（≥60px 且横向占优，输入框内不触发）、筛选 tab/返回按钮触控目标加大、viewport-fit=cover
+- [x] **PWA 支持**：vite-plugin-pwa（autoUpdate）+ Pillow 生成 192/512/maskable 图标；「添加到主屏幕」后离线刷题
+- [x] **接入 eslint**（flat config：typescript-eslint + react-hooks v7 + react-refresh）；`lint = tsc strict + eslint`，并顺手消除了 QuizPage effect 内 setState（改 key 重挂载 + 惰性初始化）
+- [x] 加分项：ci.yml 新增 frontend job（lint + vitest + build）
 
-**验收**：真机 + DevTools 移动仿真主流操作流畅；核心逻辑测试覆盖达标；Lighthouse 移动端可用性 ≥90。
+**验收**：pytest 126 全绿 + `npm run lint`（strict+eslint）零报错 + 24 前端测试全过 + build 含 PWA 预缓存。**待办**：真机过一遍主流操作、Lighthouse 移动端可用性 ≥90 复核。
 
 ## M2：站点可运营化（2–3 周）
 

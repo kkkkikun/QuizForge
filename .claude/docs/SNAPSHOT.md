@@ -30,15 +30,16 @@ QuizForge/
 | 层 | 技术 |
 |----|------|
 | 后端 | Python 3.10+ (uv)；python-docx / pdfplumber / openai / anthropic / pyyaml |
-| 前端 | React 19 + Vite + Tailwind v4 + react-router-dom |
-| 测试 | pytest（含 golden）；frontend tsc + vite build |
+| 前端 | React 19 + Vite + Tailwind v4 + react-router-dom + PWA（vite-plugin-pwa）|
+| 前端质量 | tsc strict + eslint + vitest(jsdom, 24 测试) |
+| 测试 | pytest（含 golden）；frontend lint/test/build 进 CI |
 | 部署 | GitHub Pages（deploy.yml，404.html 回退） |
 
 ## Git 状态
 
 - 分支：`master`
 - 远程：`origin` → https://github.com/kkkkikun/QuizForge
-- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 重做本组 → 推广路线图确立 + M0 还债/校验关卡（见 `roadmap.md`）
+- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 重做本组 → 推广路线图确立 + M0 还债/校验关卡 + M1 移动端体验/测试基建/PWA（见 `roadmap.md`）
 
 ## 关键契约
 
