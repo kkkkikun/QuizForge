@@ -1,0 +1,32 @@
+name: 题库纠错
+description: 题目、答案或解析有误（站点内「报告题目问题」按钮会自动预填本表单）
+title: "[题库纠错] "
+labels: ["题库纠错"]
+body:
+  - type: input
+    id: quiz_id
+    attributes:
+      label: 题库 ID
+      description: 站点 URL 中的题库标识，例如 db / net / cet4
+    validations:
+      required: true
+  - type: input
+    id: question_id
+    attributes:
+      label: 题目 ID
+    validations:
+      required: true
+  - type: textarea
+    id: stem
+    attributes:
+      label: 题干摘要
+      description: 供快速定位（自动填入，可改）
+    validations:
+      required: false
+  - type: textarea
+    id: detail
+    attributes:
+      label: 问题描述
+      description: 哪里不对？答案错误 / 选项缺失 / 题干乱码 / 图片缺失…请尽量给出正确内容
+    validations:
+      required: true

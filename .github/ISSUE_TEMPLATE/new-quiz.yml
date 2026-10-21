@@ -1,0 +1,19 @@
+name: 新题库请求
+description: 想要新的复习资料上线成题库
+title: "[新题库] "
+labels: ["新题库"]
+body:
+  - type: input
+    id: quiz_name
+    attributes:
+      label: 资料名称
+      description: 课程 / 考试名称，例如「计算机网络期末」
+    validations:
+      required: true
+  - type: textarea
+    id: detail
+    attributes:
+      label: 说明
+      description: 文档格式（Word / PDF）？大概多少题？文档从哪里能拿到（会发到哪）？
+    validations:
+      required: true

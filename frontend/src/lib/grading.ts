@@ -1,4 +1,4 @@
-import type { Question } from '../types';
+import type { AnswerMap, Question } from '../types';
 
 // 判分逻辑（纯函数）：PracticeSession 与 Dashboard 共用，保证统计与答题页口径一致。
 
@@ -81,3 +81,8 @@ export function gradeQuestion(q: Question, saved: string | string[] | undefined)
 
 export const isOptionsType = (t: string): boolean =>
   t === 'choice' || t === 'multiple' || t === 'group';
+
+// 错题本：已作答且判错的题（由答题记录实时推导，无需额外存储）
+export function collectWrongQuestions(questions: Question[], answers: AnswerMap): Question[] {
+  return questions.filter(q => answers[q.id] !== undefined && !gradeQuestion(q, answers[q.id]));
+}

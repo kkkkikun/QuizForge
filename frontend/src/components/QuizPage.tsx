@@ -1,12 +1,11 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { QUIZZES } from '../data';
-import type { Question } from '../types';
+import type { AnswerMap, FilterMode, Question } from '../types';
+import { collectWrongQuestions } from '../lib/grading';
 import Dashboard from './Dashboard';
 import PracticeSession from './PracticeSession';
 import { BookOpen } from 'lucide-react';
-
-type AnswerMap = { [qId: number]: string | string[] };
 
 // 进入题库时从 localStorage 恢复答题记录（惰性初始化；切题库靠 key 重挂载重新执行）
 function loadAnswers(storageKey: string): AnswerMap {
@@ -24,8 +23,10 @@ export default function QuizPage() {
   const quiz = QUIZZES.find(q => q.id === id);
 
   const [activeState, setActiveState] = useState<'dashboard' | 'session'>('dashboard');
-  const [filterMode, setFilterMode] = useState<'all' | 'choice' | 'blank'>('all');
+  const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [currentIndex, setCurrentIndex] = useState(0);
+  // 练习列表在进入答题时快照：刷题中作答变化不会改变本次列表（错题卷重做答对后尤其重要）
+  const [questionsList, setQuestionsList] = useState<Question[]>([]);
   const [userAnswers, setUserAnswers] = useState<AnswerMap>(() =>
     loadAnswers(quiz ? `quizforge-answers-${quiz.id}` : '')
   );
@@ -37,12 +38,12 @@ export default function QuizPage() {
     if (quiz) document.title = quiz.title;
   }, [quiz]);
 
-  const questionsList = useMemo(() => {
-    if (filterMode === 'choice') return QUESTIONS.filter(q => q.type === 'choice' || q.type === 'multiple' || q.type === 'group');
-    if (filterMode === 'blank') return QUESTIONS.filter(q => q.type === 'blank');
+  const computeList = (mode: FilterMode): Question[] => {
+    if (mode === 'choice') return QUESTIONS.filter(q => q.type === 'choice' || q.type === 'multiple' || q.type === 'group');
+    if (mode === 'blank') return QUESTIONS.filter(q => q.type === 'blank');
+    if (mode === 'wrong') return collectWrongQuestions(QUESTIONS, userAnswers);
     return QUESTIONS;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quiz, filterMode]);
+  };
 
   if (!quiz) {
     return (
@@ -71,7 +72,9 @@ export default function QuizPage() {
     try { localStorage.setItem(storageKey, JSON.stringify(updated)); } catch { /* ignore */ }
   };
   const handleStartPractice = (qId: number) => {
-    const idx = questionsList.findIndex(q => q.id === qId);
+    const list = computeList(filterMode);
+    const idx = list.findIndex(q => q.id === qId);
+    setQuestionsList(list);
     setCurrentIndex(idx !== -1 ? idx : 0);
     setActiveState('session');
   };
@@ -108,6 +111,8 @@ export default function QuizPage() {
             questionsList={questionsList}
             initialIndex={currentIndex}
             userAnswers={userAnswers}
+            quizId={quiz.id}
+            quizTitle={quiz.title}
             onAnswer={handleAnswer}
             onExit={() => setActiveState('dashboard')}
             onRedo={handleClearOne}

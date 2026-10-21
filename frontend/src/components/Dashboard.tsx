@@ -1,21 +1,24 @@
 import { useMemo } from 'react';
-import type { Question } from '../types';
-import { gradeQuestion, isOptionsType } from '../lib/grading';
+import type { AnswerMap, FilterMode, Question } from '../types';
+import { collectWrongQuestions, gradeQuestion, isOptionsType } from '../lib/grading';
 import { BookOpen, ArrowRight, RotateCcw } from 'lucide-react';
 
 interface DashboardProps {
   questions: Question[];
-  userAnswers: { [qId: number]: string | string[] };
+  userAnswers: AnswerMap;
   onStartPractice: (qId: number) => void;
   onClearAnswers: () => void;
-  filterMode: 'all' | 'choice' | 'blank';
-  onFilterChange: (mode: 'all' | 'choice' | 'blank') => void;
+  filterMode: FilterMode;
+  onFilterChange: (mode: FilterMode) => void;
 }
 
 const isCorrect = (q: Question, uAns: string | string[] | undefined): boolean =>
   gradeQuestion(q, uAns);
 
 const typeLabel = (t: string) => (t === 'choice' ? '单选' : t === 'multiple' ? '多选' : t === 'group' ? '组题' : '填空');
+
+const progressLabel = (mode: FilterMode) =>
+  mode === 'all' ? '复习总进度' : mode === 'choice' ? '选择复习进度' : mode === 'blank' ? '填空复习进度' : '错题重刷进度';
 
 export default function Dashboard({
   questions, userAnswers, onStartPractice, onClearAnswers, filterMode, onFilterChange,
@@ -24,13 +27,20 @@ export default function Dashboard({
     all: questions.length,
     choice: questions.filter(q => isOptionsType(q.type)).length,
     blank: questions.filter(q => q.type === 'blank').length,
-  }), [questions]);
+    wrong: collectWrongQuestions(questions, userAnswers).length,
+  }), [questions, userAnswers]);
+
+  const wrongIds = useMemo(
+    () => new Set(collectWrongQuestions(questions, userAnswers).map(q => q.id)),
+    [questions, userAnswers]
+  );
 
   const targetSet = useMemo(() => {
     if (filterMode === 'choice') return questions.filter(q => isOptionsType(q.type));
     if (filterMode === 'blank') return questions.filter(q => q.type === 'blank');
+    if (filterMode === 'wrong') return questions.filter(q => wrongIds.has(q.id));
     return questions;
-  }, [questions, filterMode]);
+  }, [questions, filterMode, wrongIds]);
 
   const stats = useMemo(() => {
     let answered = 0, correct = 0;
@@ -56,8 +66,9 @@ export default function Dashboard({
     const withIdx = questions.map((q, idx) => ({ q, originalIdx: idx }));
     if (filterMode === 'choice') return withIdx.filter(it => isOptionsType(it.q.type));
     if (filterMode === 'blank') return withIdx.filter(it => it.q.type === 'blank');
+    if (filterMode === 'wrong') return withIdx.filter(it => wrongIds.has(it.q.id));
     return withIdx;
-  }, [questions, filterMode]);
+  }, [questions, filterMode, wrongIds]);
 
   return (
     <div className="max-w-4xl mx-auto space-y-8 py-4">
@@ -68,7 +79,7 @@ export default function Dashboard({
           <p className="text-sm font-bold text-slate-800">按题型筛选，分卷练习：</p>
         </div>
         <div className="flex bg-slate-100 p-1 rounded-xl w-full sm:w-auto border border-slate-200 shrink-0">
-          {([['all', `全部 (${counts.all})`], ['choice', `选择 (${counts.choice})`], ['blank', `填空 (${counts.blank})`]] as const).map(([mode, label]) => (
+          {([['all', `全部 (${counts.all})`], ['choice', `选择 (${counts.choice})`], ['blank', `填空 (${counts.blank})`], ['wrong', `错题 (${counts.wrong})`]] as const).map(([mode, label]) => (
             <button
               key={mode}
               onClick={() => onFilterChange(mode)}
@@ -86,9 +97,9 @@ export default function Dashboard({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm space-y-2 flex flex-col justify-between">
           <div>
-            <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">
-              {filterMode === 'all' ? '复习总进度' : filterMode === 'choice' ? '选择复习进度' : '填空复习进度'}
-            </p>
+          <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">
+            {progressLabel(filterMode)}
+          </p>
             <p className="text-2xl font-bold text-slate-800">{stats.answered} <span className="text-xs text-slate-400">/ {stats.total} 题</span></p>
           </div>
           <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden mt-1">

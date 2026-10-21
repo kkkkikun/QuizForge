@@ -1,5 +1,11 @@
 export type QuestionType = 'choice' | 'multiple' | 'blank' | 'group';
 
+// 练习筛选模式：全部 / 选择 / 填空 / 错题
+export type FilterMode = 'all' | 'choice' | 'blank' | 'wrong';
+
+// 答题记录：题目 id → 用户答案（单选为字母，多选/填空/组题为数组）
+export type AnswerMap = { [qId: number]: string | string[] };
+
 export interface SubQuestion {
   question: string;
   options: string[];

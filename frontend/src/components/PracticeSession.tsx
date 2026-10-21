@@ -2,12 +2,14 @@ import { useState, useRef, useMemo } from 'react';
 import type { Question } from '../types';
 import { gradeQuestion } from '../lib/grading';
 import { renderQuestionStem } from '../lib/stem';
+import { buildQuestionIssueUrl } from '../lib/issue';
 import {
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
   XCircle,
   BookOpen,
+  Flag,
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import ChoiceQuestion from './question/ChoiceQuestion';
@@ -19,6 +21,8 @@ interface PracticeSessionProps {
   questionsList: Question[];
   initialIndex: number;
   userAnswers: { [qId: number]: string | string[] };
+  quizId: string;
+  quizTitle: string;
   onAnswer: (qId: number, answer: string | string[]) => void;
   onExit: () => void;
   onRedo?: (qId: number) => void;
@@ -31,6 +35,8 @@ export default function PracticeSession({
   questionsList,
   initialIndex,
   userAnswers,
+  quizId,
+  quizTitle,
   onAnswer,
   onExit,
   onRedo
@@ -202,6 +208,15 @@ export default function PracticeSession({
             </div>
           </motion.div>
         )}
+        {/* 报告题目问题（预填 GitHub Issue） */}
+        <a
+          href={buildQuestionIssueUrl(quizId, quizTitle, activeQuestion)}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-slate-400 hover:text-rose-500 transition-colors self-start px-2 py-1.5 -mx-2"
+        >
+          <Flag size={12} /> 这道题有问题？报告给我们
+        </a>
       </div>
 
       {/* 底部操作栏：sticky 拇指可达 + iOS 安全区适配 */}

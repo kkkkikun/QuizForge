@@ -1,4 +1,4 @@
-import { checkBlankAnswer, gradeQuestion, isOptionsType } from './grading';
+import { checkBlankAnswer, collectWrongQuestions, gradeQuestion, isOptionsType } from './grading';
 import type { Question } from '../types';
 
 const single: Question = {
@@ -63,5 +63,13 @@ describe('gradeQuestion 统一判分', () => {
     expect(isOptionsType('choice')).toBe(true);
     expect(isOptionsType('group')).toBe(true);
     expect(isOptionsType('blank')).toBe(false);
+  });
+
+  it('collectWrongQuestions 只收答错的题（未答/答对不算）', () => {
+    const all = [single, multi, blank, group];
+    const answers = { 1: 'A', 2: ['A', 'C'], 3: ['内模式'] }; // 1 错 2 对 3 错 4 未答
+    const wrong = collectWrongQuestions(all, answers);
+    expect(wrong.map(q => q.id)).toEqual([1, 3]);
+    expect(collectWrongQuestions(all, {})).toEqual([]);
   });
 });
