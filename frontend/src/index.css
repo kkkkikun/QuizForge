@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@400;500;600;700;800&display=swap');
+/* 字体改在 index.html 异步加载（preconnect + print 切换），避免 CSS @import 阻塞渲染 */
 @import "tailwindcss";
 
 @theme {
