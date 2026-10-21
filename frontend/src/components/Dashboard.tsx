@@ -72,7 +72,7 @@ export default function Dashboard({
             <button
               key={mode}
               onClick={() => onFilterChange(mode)}
-              className={`px-4 py-2 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+              className={`px-4 py-2.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 filterMode === mode ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-800'
               }`}
             >
@@ -111,7 +111,7 @@ export default function Dashboard({
           {isStarted && (
             <button
               onClick={() => { if (confirm('确认清空本题库的答题记录吗？')) onClearAnswers(); }}
-              className="text-xs text-slate-400 hover:text-rose-600 transition-colors flex items-center gap-1 py-1"
+              className="text-xs text-slate-400 hover:text-rose-600 transition-colors flex items-center gap-1 py-1.5 px-2 -mx-2"
             >
               <RotateCcw size={12} /> 清空记录
             </button>

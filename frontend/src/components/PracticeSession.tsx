@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactNode } from 'react';
+import { useState, useRef, useMemo, ReactNode } from 'react';
 import type { Question } from '../types';
 import { gradeQuestion } from '../lib/grading';
 import {
@@ -66,10 +66,33 @@ export default function PracticeSession({
   onRedo
 }: PracticeSessionProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(initialIndex);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   // Active question details（questionsList 可能为空：如本题库无填空题却切到「填空」卷）
   const activeQuestion = questionsList[currentIndex];
   const totalQuestions = questionsList.length;
+
+  // 横向滑动手势切题（输入框内起手的滑动不触发）
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest('input, textarea')) {
+      touchStart.current = null;
+      return;
+    }
+    const t = e.touches[0];
+    touchStart.current = { x: t.clientX, y: t.clientY };
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const start = touchStart.current;
+    touchStart.current = null;
+    if (!start) return;
+    const t = e.changedTouches[0];
+    const dx = t.clientX - start.x;
+    const dy = t.clientY - start.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0 && currentIndex < totalQuestions - 1) setCurrentIndex(currentIndex + 1);
+    if (dx > 0 && currentIndex > 0) setCurrentIndex(currentIndex - 1);
+  };
 
   // Has the user answered the current question?
   const qId = activeQuestion?.id ?? -1;
@@ -103,7 +126,7 @@ export default function PracticeSession({
       <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
         <button
           onClick={onExit}
-          className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-50"
+          className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors px-3 min-h-11 rounded-lg hover:bg-slate-50"
         >
           <ArrowLeft size={16} /> 返回主页
         </button>
@@ -113,8 +136,12 @@ export default function PracticeSession({
         </span>
       </div>
 
-      {/* Primary Question Slide Box */}
-      <div className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-6">
+      {/* Primary Question Slide Box（支持横向滑动切题） */}
+      <div
+        className="bg-white rounded-3xl p-6 md:p-8 border border-slate-200 shadow-sm space-y-6"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
         {/* Question Flag / Status */}
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
@@ -208,35 +235,37 @@ export default function PracticeSession({
         )}
       </div>
 
-      {/* Row Navigation Controls */}
-      <div className="flex items-center justify-between gap-4">
-        <button
-          onClick={() => setCurrentIndex(currentIndex - 1)}
-          disabled={currentIndex === 0}
-          className={`py-3 px-5 rounded-xl font-semibold text-xs border transition-all flex items-center gap-1 ${
-            currentIndex === 0
-              ? 'opacity-40 cursor-not-allowed border-none text-slate-300'
-              : 'border-slate-200 text-slate-700 bg-white hover:bg-slate-50 cursor-pointer'
-          }`}
-        >
-          <ArrowLeft size={14} /> 上一题
-        </button>
+      {/* 底部操作栏：sticky 拇指可达 + iOS 安全区适配 */}
+      <div className="sticky bottom-0 z-20 -mx-2 px-2 pt-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] bg-gradient-to-t from-slate-50 via-slate-50/95 to-transparent">
+        <div className="bg-white/95 backdrop-blur border border-slate-200 rounded-2xl shadow-lg shadow-slate-900/5 p-2 flex items-center gap-2">
+          <button
+            onClick={() => setCurrentIndex(currentIndex - 1)}
+            disabled={currentIndex === 0}
+            className="min-h-11 min-w-20 px-4 rounded-xl font-semibold text-sm border transition-all flex items-center justify-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed border-slate-200 text-slate-700 bg-white hover:bg-slate-50 cursor-pointer"
+          >
+            <ArrowLeft size={16} /> 上一题
+          </button>
 
-        {currentIndex < totalQuestions - 1 ? (
-          <button
-            onClick={() => setCurrentIndex(currentIndex + 1)}
-            className="py-3 px-5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold text-xs rounded-xl transition-all flex items-center gap-1 cursor-pointer"
-          >
-            下一题 <ArrowRight size={14} />
-          </button>
-        ) : (
-          <button
-            onClick={onExit}
-            className="py-3 px-6 bg-slate-50 text-slate-950 border border-slate-300 hover:bg-slate-100 font-bold text-xs rounded-xl transition-all cursor-pointer"
-          >
-            完成并返回主页
-          </button>
-        )}
+          <span className="flex-1 text-center text-xs font-bold font-mono text-slate-400 whitespace-nowrap">
+            {currentIndex + 1} / {totalQuestions}
+          </span>
+
+          {currentIndex < totalQuestions - 1 ? (
+            <button
+              onClick={() => setCurrentIndex(currentIndex + 1)}
+              className="min-h-11 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer shrink-0"
+            >
+              下一题 <ArrowRight size={16} />
+            </button>
+          ) : (
+            <button
+              onClick={onExit}
+              className="min-h-11 px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer shrink-0"
+            >
+              完成并返回
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );
