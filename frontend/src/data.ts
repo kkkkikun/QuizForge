@@ -1017,21 +1017,6 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 20,
-        "type": "choice",
-        "question": "在eNSP中查看mac-address的信息时，命令是（ ）。",
-        "options": [
-          "A. display mac-address命令",
-          "B. area命令",
-          "C. ospf enable命令",
-          "D. interface命令"
-        ],
-        "answer": "A",
-        "tags": [
-          "选择题"
-        ]
-      },
-      {
         "id": 21,
         "type": "choice",
         "question": "计算机网络最核心的功能是（ ）。",
@@ -1659,17 +1644,6 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 67,
-        "type": "blank",
-        "question": "在华为eNSP中，保存当前设备配置的命令是[save]。",
-        "answer": [
-          "save"
-        ],
-        "tags": [
-          "填空题"
-        ]
-      },
-      {
         "id": 68,
         "type": "blank",
         "question": "防火墙按照实现技术可划分为包过滤防火墙、[状态检测]防火墙和应用层代理防火墙三大类。",
@@ -1794,9 +1768,20 @@ export const QUIZZES: Quiz[] = [
               "D. To imitate face-to-face communication"
             ],
             "answer": "B"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 10,
+        "type": "group",
+        "question": "Unit 1 · Conversation",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Conversation",
+            "question": "第 1 题",
             "options": [
               "A. One's ID number",
               "B. One's occupation",
@@ -1824,9 +1809,20 @@ export const QUIZZES: Quiz[] = [
               "D. To sell users' information to companies"
             ],
             "answer": "B"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 14,
+        "type": "group",
+        "question": "Unit 1 · Passage",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Passage",
+            "question": "第 1 题",
             "options": [
               "A. People can't get a high salary",
               "B. People are not allowed to smoke",
@@ -1871,7 +1867,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 17,
+        "id": 19,
         "type": "group",
         "question": "Unit 4 · News report 1",
         "answer": "",
@@ -1902,7 +1898,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 20,
+        "id": 22,
         "type": "group",
         "question": "Unit 4 · News report 2",
         "answer": "",
@@ -1936,9 +1932,20 @@ export const QUIZZES: Quiz[] = [
               "D. When there are more than 300 orders for it"
             ],
             "answer": "D"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 26,
+        "type": "group",
+        "question": "Unit 4 · Conversation",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Conversation",
+            "question": "第 1 题",
             "options": [
               "A. He can't find a place to work",
               "B. He doesn't like his present job",
@@ -1976,9 +1983,20 @@ export const QUIZZES: Quiz[] = [
               "D. They seek advice from other members about their work"
             ],
             "answer": "A"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 31,
+        "type": "group",
+        "question": "Unit 4 · Passage",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Passage",
+            "question": "第 1 题",
             "options": [
               "A. It usually won't be born from frustration",
               "B. It is mostly not about real-world problems",
@@ -2023,7 +2041,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 32,
+        "id": 36,
         "type": "group",
         "question": "Unit 5 · News report 1",
         "answer": "",
@@ -2074,7 +2092,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 37,
+        "id": 41,
         "type": "group",
         "question": "Unit 5 · News report 2",
         "answer": "",
@@ -2108,9 +2126,20 @@ export const QUIZZES: Quiz[] = [
               "D. The possible damage to the local culture"
             ],
             "answer": "C"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 45,
+        "type": "group",
+        "question": "Unit 5 · Conversation",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Conversation",
+            "question": "第 1 题",
             "options": [
               "A. Awkward",
               "B. Excited",
@@ -2148,9 +2177,20 @@ export const QUIZZES: Quiz[] = [
               "D. They don't want to invade others' privacy"
             ],
             "answer": "B"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 50,
+        "type": "group",
+        "question": "Unit 5 · Passage",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Passage",
+            "question": "第 1 题",
             "options": [
               "A. Urban space",
               "B. Medieval castles",
@@ -2195,7 +2235,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 49,
+        "id": 55,
         "type": "group",
         "question": "Unit 6 · News report 1",
         "answer": "",
@@ -2236,7 +2276,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 53,
+        "id": 59,
         "type": "group",
         "question": "Unit 6 · News report 2",
         "answer": "",
@@ -2270,9 +2310,20 @@ export const QUIZZES: Quiz[] = [
               "D. It is shown in one of da Vinci's works"
             ],
             "answer": "D"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 63,
+        "type": "group",
+        "question": "Unit 6 · Conversation",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Conversation",
+            "question": "第 1 题",
             "options": [
               "A. It helps a lot to take a better photo",
               "B. It may distract others at art galleries",
@@ -2310,9 +2361,20 @@ export const QUIZZES: Quiz[] = [
               "D. Objective"
             ],
             "answer": "D"
-          },
+          }
+        ],
+        "tags": [
+          "听力"
+        ]
+      },
+      {
+        "id": 68,
+        "type": "group",
+        "question": "Unit 6 · Passage",
+        "answer": "",
+        "subQuestions": [
           {
-            "question": "Passage",
+            "question": "第 1 题",
             "options": [
               "A. It is no longer as popular as before",
               "B. It is questioned by more and more universities",
@@ -2347,7 +2409,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 64,
+        "id": 72,
         "type": "blank",
         "question": "Ten years of the Belt and Road Initiative\n1 It's been 10 years since the Belt and Road Initiative (BRI) was launched in 2013. And later this month, China will host the third Belt and Road Forum for International Cooperation, marking an important milestone of the initiative. The forum is to be attended by representatives from 151 countries and 41 international organizations.\n2 Journalists and scholars from around the world have been reflecting on the 10 years of the BRI. It is generally agreed that the last decade has demonstrated that the initiative is a broad and prosperous way for China and the world to share opportunities and seek common development.\n3 The BRI is a long-term, transnational, and systematic global initiative of the 21st century that has a clear path for implementation. Over the past 10 years, the BRI has improved China's international trade structure, which had previously been overly reliant on other countries, and gradually promoted the rebalancing of China's economic focus. It has also reshaped the perspective of the Chinese people, fostering, among them, a more complete world view.\n4 To take a wider perspective, it can be argued that the changes the BRI has brought to the world are even more valuable than the changes it has brought to China. In fact, while the BRI promotes the rebalancing of China's economic and trade structure, it has also helped foster a new type of international relations and brought about changes in the world.\n5 In terms of real development, the initiative has significantly improved people's overall well-being, especially in the countries participating in the BRI. For these countries, their interconnectedness with China has also been significantly boosted. As of now, more than 150 countries and 30 international organizations have signed BRI cooperation agreements with China, yielding a range of signature projects and impactful, albeit small-scale, projects.\n6 In Africa, China has participated in the construction of more than 6,000 km of railways, 6,000 km of roads, and multiple major infrastructure projects such as ports, airports, power stations, schools, and hospitals. Europe stands as another prime investment destination for the BRI. In just a decade, the China–Europe Railway Express, a flagship project reaching more than 200 cities across 25 European countries and regions, has shipped goods valued at over $340 billion. In the past 10 years, China's annual outbound investment has remained at a high level, with more funds flowing into BRI partner countries.\n7 According to a 2019 World Bank study, the BRI is expected to add real income gains of between 1.2 and 3.4 percent for countries along the route. A significant number of projects – including the Mombasa–Nairobi Standard Gauge Railway, the China–Laos Railway, and the Jakarta–Bandung High-Speed Railway – are completed and operational, and are already bringing great benefit to the local communities.\n8 The BRI has provided an alternative development model for developing countries. In the past, developing nations often regarded the Washington Consensus as the only point of reference for their development path. However, it is much more likely that the Chinese economic experience, with a focus on prioritizing infrastructure, would be more applicable to up-and-coming countries. The achievements of the last 10 years of the BRI make this point even more salient for these nations.\n9 More importantly, China's capacity for infrastructure production and its successes in trade investment, accompanied by an operation framework that ranges from planning and design to financing and operation, have enabled developing countries that have been trapped by a lack of technology and capital to catch up. Ten years of the Belt and Road cooperation have encouraged developing countries to strive for a better future, thereby improving the balance and fairness of the international community in technology and trade.\n10 Ten years of the BRI have also enabled developed countries to adjust and reflect on their own international strategies. They are now making a greater effort to work more closely with developing countries. Potentially, the benefits of this effort will echo the ultimate goal of the BRI – mutual development for all mankind.\n11 In retrospect, the last 10 years of the BRI have proven that the rise of China can happen in a spirit of cooperation rather than competition. The Belt and Road cooperation, characterized by the guiding principle of \"planning together, building together, and benefiting together,\" transcends distinctions between civilizations, cultures, social systems, and stages of development. It has forged a new avenue for interactions among nations and set up a fresh framework for international cooperation. To put it another way, the BRI has proven to be an outstanding platform for global cooperation, and an important global public good that promotes peaceful coexistence and a shared future.\n12 It is foreseeable that the BRI will stand as a testament to global unity and shared progress. It will continue to be a beacon of collaborative efforts, fostering mutual understanding and prosperity among the diverse nations involved. As this vision materializes, the world may witness a new era of cooperation, where the BRI plays a pivotal role in shaping a more interconnected and harmonious global community.\n\n1、Evidence of the BRI’s economic benefits through World Bank research.\n2、The BRI’s role in helping developing countries overcome technological and capital shortages.\n3、The number of countries and organizations participating in the upcoming forum.\n4、The BRl’s influence on developed countries’international strategies.\n5、Examples of completed infrastructure projects and their local benefits.\n6、The BRl as a platform for peaceful coexistence and a shared future.\n7、The BRI’s impact on China's trade structure and people’s worldview.\n8、The BRI’s investment in Africa and Europe.\n9、The BRI’s long-term vision for global unity and cooperation.\n10、The BRl as an alternative to Washington Consensus for developing nations.",
         "answer": [
@@ -2358,7 +2420,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 65,
+        "id": 73,
         "type": "blank",
         "question": "The new old river: Qingming Shanghe Tu as epic\n1 Can you step in the same river twice? According to Greek philosopher Heraclitus, it is an impossible task. However, he did not reckon with the creativity and ingenuity of Chinese artists in the 21st century.\n2 The moving masterpiece of Qingming Shanghe Tu, which was titled A Moving Masterpiece: The Song Dynasty as Living Art, was the main attraction at the China Pavilion during the Shanghai World Expo 2010, where it drew record crowds. This digital marvel has already traveled to several cities where it has been viewed by over 10 million people.\n3 The recreation of the Song Dynasty (960—1279) Qingming Shanghe Tu, or Life Along the Bian River at the Pure Brightness Festival, is an animated scroll of epic proportions, standing 110 meters in length and 6 meters in height. Enormously ambitious, it took two years and 2,000 people to create, resulting in 1,068 characters that move in a four-minute loop, depicting a city as it transits from day to night.\n4 This rendition of Zhang Zeduan's masterpiece deliberately links the China of today to the China of a previous golden age, the Northern Song Dynasty. Not only is the epic nature of the work evident in its scale, but also in the sheer effort expended.\n5 The animated masterpiece is also technologically ambitious, encompassing both time and space, employing both sight and sound, and even extending into the third dimension by engaging the viewer through an interactive river of light which flows alongside the scroll. It is a spectacular fusion of ancient art and modern technology, and a new immersion experience. Whereas previous iterations of Qingming Shanghe Tu have been admiring copies of the work, this recreation is a more perfect fulfillment of the original, bringing it to new heights.\n6 The original painting depicted a utopian cityscape that scholars have failed to pinpoint on any map. It was meant to represent a timeless city based on Bianjing, then the capital of the Song Dynasty – a vision of an ideal city. The artists in this recreation project have gone one step further and included the fourth dimension of time. Originally, they even intended the animation to loop through the four seasons in order to present a timeless cycle.\n7 It is in times of surging national confidence and prosperity that epic works are commissioned and produced.\n8 Epic has always been a genre tied to nationhood. Monumental epics necessarily require the prosperity, infrastructure, and patronage system of a confident power to produce, and this often means they are commissioned by a sovereign or nation. Their appearance usually marks a cultural and economic renaissance, heralding a new golden age.\n9 The national epic of Rome, the Aeneid, was commissioned to celebrate the golden age of the Roman Empire under the reign of Augustus Caesar. It traces the trials and tribulations of the founding father of Rome, Aeneas. Similarly, the new Qingming Shanghe Tu also depicts the past. It harks back to an earlier golden age of China, the Northern Song Dynasty.\n10 But, while the epic of Augustan Rome traces the journey of a single man, Qingming Shanghe Tu is a comprehensive picture of the society in Bianjing, offering a fascinating cross-section of it. The focus on the city is significant, as are the ideas behind the recreation.\n11 How can a modern city achieve its ideals? The recreation of Bianjing is a place where city and country are in harmony, the languid village coexisting on the right side of the scroll with the booming city on the left. Nature and urban life are inextricably linked through the carrying of coal by donkeys. Conflicts – such as the boat nearly crashing into the bridge – are resolved by everyone pitching in.\n12 Technology and innovation are embraced – the Song Dynasty saw the invention of movable type, the compass, gunpowder, paper money, night markets, and professional storytelling, as well as a bloom of high art and culture – all this in an architecturally advanced, well-governed, orderly, and prosperous state.\n13 The ideal city is characterized by orderly and harmonious flow, just like the river the painting is named for – with an entrepreneurial and upward-moving spirit, scientific and cultural advancement, harmony between the diverse occupations and nationalities, and openness to international trade and ideas.\n14 This is found not just in the animation itself, but also in the process of the recreation. A diverse group of Chinese artists came together to cooperate on A Moving Masterpiece: The Song Dynasty as Living Art. The team infused new life through a technology first prefigured in Egyptian wall drawings, then perfected in America first with the rotoscope, and then brought to its artistic height and commercial success in animation studios.\n15 Unlike Augustan Rome, the Song Dynasty that inspired Qingming Shanghe Tu exerted a different kind of power. Rather than relying on military force and conquest, the Song Dynasty exercised a kind of far-reaching soft power. Its entrepreneurs and scholars invented technologies still in use today, technologies that enabled widespread education, encouraged trade and travel, inspired artistic excellence, and not only tolerated but also encouraged diversity and openness.\n\n1、3D technology enables viewers to interact with the masterpiece.\n2、The inventions in the Song Dynasty show a society that embraced technology and innovation.\n3、From epics, we can infer that they were produced in prosperous times, with the support of a powerful nation.\n4、Qingming Shanghe Tu depicts how people from various walks of life spent their day.\n5、With its soft power, the Song Dynasty has exerted far-reaching influence even on today's world.\n6、Many people have viewed the animated version of Qingming Shanghe Tu.\n7、The recreation of Qingming Shanghe Tu has allowed more than 1,000 characters to move in the work.\n8、Because of the scale of the work and the effort involved, the animation of Qingming Shanghe Tu is an epic.\n9、Similar to the Roman epic, the animated Qingming Shanghe Tu also shows the glory of the past age.\n10、One of the features of the ideal city is that all kinds of occupations can harmoniously coexist.",
         "answer": [
@@ -2369,7 +2431,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 66,
+        "id": 74,
         "type": "blank",
         "question": "From Galileo to Cassini\n1 In 1609, Galileo introduced to the world his new invention, the astronomical telescope. It opened up new opportunities to explore a territory that all prior generations had regarded as familiar – the night sky. In short order, he was making major discoveries. But the sky is very big, and Galileo's telescope was very small. He had to choose his targets carefully.\n2 In that context, Saturn was nothing special, the least of the known planets, just a bright point in a black sky. A year elapsed before he finally peered at Saturn for the first time in 1610.\n3 Galileo immediately realized that this was something new and different, but he was unable to make sense of the view in his tiny eyepiece. He described Saturn as \"triune\" in form, mistaking Saturn and its rings for a planet straddled by two close moons. They resemble Mickey Mouse ears in his sketch.\n4 Anyone who has ever looked through a telescope will remember their first view of Saturn. Galileo's other early discoveries retain their allure: the mountains of the moon, Venus as a waxing and waning crescent, and Jupiter with its four little companion moons. But we have seen other mountains, other crescents, and other moons. The rings of Saturn remain something different, something truly unearthly.\n5 Galileo's notes and sketches survive from that night in 1610. They capture his thoughts but probably not his emotions. We scientists are taught to write dispassionately and preferably in the passive voice. \"The planet was observed ...,\" not \"What the ... is this‽\" The interrobang never appears in the scientific literature.\n6 It took the world's astronomers another half-century to figure out exactly what they all were seeing. In 1659, Dutch astronomer Christiaan Huygens was the first to describe Saturn's rings as a flat, circular disk, and the concept of a ringed planet first entered the human imagination.\n7 Today, I think we have become a bit spoiled. NASA's Cassini spacecraft has been orbiting Saturn since July 2004. Every day, it sends back remarkable new data describing the planet and its retinue of rings and moons. It has revealed plumes of dust venting from cracks in the surface of the moon Enceladus. It has shown us sunlight glinting off the smooth surface of a lake on Titan. We have seen the flashes of meteorites hitting the rings. With Saturn's new-found familiarity, we sometimes forget to be amazed.\n8 Let me revisit one of the most famous images from the Cassini mission. It was taken a few years ago as Cassini flew through the shadow of Saturn. The view is stunning. A thin fringe of sunlight encircles an otherwise dark planet. The rings, lit from behind, show startling colors and contrast. Surrounding it all is the faint bluish glow of the fine dust ejected by Enceladus. The picture is a mosaic of smaller images, painstakingly assembled by Cassini's imaging scientists. It is flawless.\n9 On the left side of the mosaic, just above the rings, is a little dot. In the picture, it is nothing special, just a bright pixel in a black sky. But we know better. This is planet Earth, seen from the far side of the rings of Saturn. In 1610, Galileo pointed his hand-made telescope out from the Earth to see Saturn for the first time. About 400 years later, we have a telescope of our own, far more sophisticated but still built by hand, out at Saturn, looking back.\n10 I sometimes wonder if the flawlessness is the problem. When Cassini's images are processed to digital perfection, we unconsciously begin to regard them as the creations of some mad artist, not photographs from a real camera orbiting a real planet.\n11 As an amateur photographer, I know what happens when I point my camera toward the sun. I get lens flare, those circles of light that appear in so many of our snapshots from the beach or the ballpark. Too much sunlight bounces around inside the optics, following paths that the lens-makers did not intend, and leaving behind extraneous circles of light on the sensor or film.\n12 Cassini's cameras are no different, and many of the images from Saturn's shadow show these familiar patterns of lens flare and saturation. These tiles were left out when the mosaic was assembled. However, they reveal a different truth, one not about Saturn but about the camera. It is imperfect. It was built by human hands.\n13 Once in a while, it will be easy to repeat Galileo's experiment. Shortly after sunset, look toward the west, and you might see three planets in a line. The brightest is Venus. Above it and to the left is Mars, distinctly reddish but much fainter. And just beyond that, Saturn. Check them out. Any pair of binoculars has lenses far superior to the ones in Galileo's invention. But be warned – what you see will not resemble the latest releases from the Cassini mission. If you are very lucky, you might make out Saturn's rings. Or maybe you will just see Mickey's ears. Or maybe just a fuzzy dot. But, no matter, because you will be seeing it with your own eyes. That alone ought to be enough to inspire an interrobang or two.\n\n1、Galileo’s initial sketch of Saturn mistakenly showed it with two close moons on either sido.\n2、Tho author suggests that the over-processing of Cassin’s images makes them look like artistic creations rather than real photographs.\n3、Huygons was the first astronomer to correctly identify Satum’s rings as a flat disk surrounding tho planet.\n4、The author recommends using binoculars to observe Saturn, noting that even a fuzzy view can be inspiring.\n5、A famous Cassini mosaic shows Earth as a tiny dot seen from beyond Saturn’s rings.\n6、Galileo deliborately chose which celestial objects to observe because his telescopo was limited.\n7、Scientists are trained to write objectively, avoiding emotional language in their observations.\n8、Cassin’s cameras, like any other, produce lens flare when pointed toward the sun.\n9、The Cassini mission has revealed active geological features on Saturn’s moons, Including Enceladus and Titan.\n10、Galileo did not immediately observe Saturn after inventing his telescope; nearly a year passed before heturned it toward the planet.",
         "answer": [
@@ -2380,7 +2442,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 67,
+        "id": 75,
         "type": "blank",
         "question": "Is it OK to kick a robot dog?\n1 Last Saturday night, a young woman out on the town in Brisbane saw a dog- shaped robot trotting toward her. Out of panic, she gave it a solid kick in the head.\n2 After all, who hasn't thought about lashing out at \"intelligent\" technologies, given their tendency often to frustrate us as much as they serve us? Even if one disapproves of the young woman's action, one cannot be 100 percent sure that they would not do the same were they in the woman's situation.\n3 More and more people today intuitively feel that violence toward robots is immoral. However, as some research has shown, the ethics of kicking a robot dog are more complicated than might be expected.\n4 Were robots ever to become sentient – capable of thinking and feeling – then it would be just as beyond the pale to kick a robot dog as it would be to kick a real dog, or perhaps even a human being. Of course, the robots we have today are just machines, and cannot \"feel\" per se, so some may argue that causing the robot to suffer cannot be a good reason to criticize people who kick them.\n5 Moreover, we still don't know what makes us conscious and have no idea about how to produce sentience in a robot. Therefore, for the foreseeable future, we don't need to worry about making robots suffer.\n6 However, one obvious reason to criticize those who act violently toward robots is that the robots are often the property of another person, who may well be dismayed when their robot is damaged. This fails to distinguish damaging robots from damaging cars or bicycles, and cannot rationalize why we might feel disturbed when we encounter someone abusing a robot they own.\n7 The fact that other people would feel upset when they see someone kicking a robot dog gives people some incentive not to do it, albeit not a very powerful one. After all, anything one does could upset someone, including some things that are clearly the right thing to do.\n8 Some philosophers have argued that violence toward robots is wrong because it makes it more likely that the perpetrator, or perhaps witnesses, will behave violently toward entities that can suffer. They argue that abuse of robots may, in turn, lower the barriers to abuse of humans and animals.\n9 This line of argument, which has also been rolled out to criticize \"violent\" video games, was actually originated by the 18th-century German philosopher, Immanuel Kant, to explain why (he thought) cruelty to animals was wrong. Kant worried that people who abused animals would develop \"cruel habits,\" and that these habits would consequently cause them to behave badly toward human beings. How we treat robots that represent people and animals might therefore have implications for how we treat the things they represent.\n10 It's hard not to feel the appeal of this line of thought. After all, the advertising industry is built on the idea that getting people to associate representations of things or actions with pleasure can change their behavior. Therefore, it is feasible to assume that someone who derives pleasure from kicking a robot dog may be more likely to kick a real dog in the future.\n11 The problem with this argument is that it often doesn't bear out in real life when we look at the evidence. We know that adults who enjoy watching violent action movies are not necessarily more likely to imitate violence in real life.\n12 An alternative line of criticism of violence toward robots focuses on what our treatment of robots expresses here and now, rather than on how it might determine our behavior in the future.\n13 How we treat robots may say something about how we feel about the things that the robots represent. It may also say something about us. To see this, imagine you meet someone who always yells at robots whenever angry. This pattern of behavior may tell us that this person has some problems in emotional management. Or, imagine that you find your friend leaving a robot unattended. It would be hard not to think that this said something about how they would treat their own belongings or even children.\n14 It doesn't matter whether these actions make the people who perform them more likely to behave badly in the future. The actions express attitudes that are morally inappropriate in themselves. As Aristotle argued in the Nicomachean Ethics, one way to decide how we should act is to ask: \"What sort of person would do that?\"\n15 When we think about the ethics of our treatment of robots, we should think about the sort of people it reveals us to be. So, when kicking a robot dog, we may also be kicking away our civil behavior and decency. This might be a reason to control our tempers even in our relations with machines. That is also why technological inventions, while innovating our way of life, also pose challenges to our traditional values, providing us with a new perspective toward who we are and where we should go in the new era.\n\n1、Abusing animals may eventually lead people to treat human beings badly, as it fosters cruel habits and behavior.\n2、The pleasure one gets from certain behavior may cause one to continue to do that.\n3、Watching others behave violently does not necessarily lead to violent behavior in real life.\n4、Shouting at a robot may reveal that the person has difficulty controlling their emotions.\n5、The author believes that the real problem with violence toward robots is that it reveals a person's immoral attitude toward things.\n6、The woman kicked the robot dog because she was scared when it was moving toward her.\n7、If a robot dog could think and feel, it would be unacceptable to kick it, just like kicking a real dog.\n8、One of the reasons that we cannot kick a robot dog is that this will upset its owner.\n9、That kicking a robot dog will upset other people is not very strong evidence for not kicking the robot.\n10、The new inventions in technology may pose a challenge to our old values, and we may need to reconsider our moral principles.",
         "answer": [
@@ -2391,9 +2453,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 68,
+        "id": 76,
         "type": "group",
-        "question": "理解当代中国",
+        "question": "Stargazers at 4,410 meters",
         "answer": "",
         "subQuestions": [
           {
@@ -2452,7 +2514,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 74,
+        "id": 82,
         "type": "group",
         "question": "For whom",
         "answer": "",
@@ -2513,7 +2575,7 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 80,
+        "id": 88,
         "type": "group",
         "question": "China's new wave of innovation",
         "answer": "",
@@ -2574,9 +2636,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 86,
+        "id": 94,
         "type": "group",
-        "question": "The tide of change: Embracing ",
+        "question": "The tide of change: Embracing the industries of the future",
         "answer": "",
         "subQuestions": [
           {
@@ -2635,9 +2697,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 92,
+        "id": 100,
         "type": "group",
-        "question": "Tea's remarkable journey began",
+        "question": "Tea's remarkable journey began…",
         "answer": "",
         "subQuestions": [
           {
@@ -2696,9 +2758,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 98,
+        "id": 106,
         "type": "group",
-        "question": "The \"Silk Road of the Sea\" (or",
+        "question": "The \"Silk Road of the Sea\" (or…",
         "answer": "",
         "subQuestions": [
           {
@@ -2757,9 +2819,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 104,
+        "id": 112,
         "type": "group",
-        "question": "The word \"digital\" refers to d",
+        "question": "The word \"digital\" refers to…",
         "answer": "",
         "subQuestions": [
           {
@@ -2818,9 +2880,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 110,
+        "id": 118,
         "type": "group",
-        "question": "To answer our most fundamental",
+        "question": "To answer our most fundamental…",
         "answer": "",
         "subQuestions": [
           {
@@ -2879,9 +2941,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 116,
+        "id": 124,
         "type": "group",
-        "question": "The Earth aside, Mars is the m",
+        "question": "The Earth aside, Mars is the…",
         "answer": "",
         "subQuestions": [
           {
@@ -2940,9 +3002,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 122,
+        "id": 130,
         "type": "group",
-        "question": "By the end of the second decad",
+        "question": "By the end of the second…",
         "answer": "",
         "subQuestions": [
           {
@@ -3001,9 +3063,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 128,
+        "id": 136,
         "type": "group",
-        "question": "Despite their advantages, tech",
+        "question": "Despite their advantages…",
         "answer": "",
         "subQuestions": [
           {
@@ -3062,9 +3124,9 @@ export const QUIZZES: Quiz[] = [
         ]
       },
       {
-        "id": 134,
+        "id": 142,
         "type": "group",
-        "question": "The alignment problem of AI is",
+        "question": "The alignment problem of AI is…",
         "answer": "",
         "subQuestions": [
           {

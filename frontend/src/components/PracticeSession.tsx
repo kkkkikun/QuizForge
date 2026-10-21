@@ -129,10 +129,10 @@ export default function PracticeSession({
   // Group temporary values（每子题的已选字母）
   const [groupInputs, setGroupInputs] = useState<string[]>([]);
 
-  // Active question details
+  // Active question details（questionsList 可能为空：如本题库无填空题却切到「填空」卷）
   const activeQuestion = questionsList[currentIndex];
   const totalQuestions = questionsList.length;
-  const qId = activeQuestion.id;
+  const qId = activeQuestion?.id ?? -1;
 
   // Has the user answered the current question?
   const savedAnswer = userAnswers[qId];
@@ -140,13 +140,14 @@ export default function PracticeSession({
 
   // Calculate blank count
   const blankCount = useMemo(() => {
-    if (activeQuestion.type !== 'blank') return 0;
+    if (!activeQuestion || activeQuestion.type !== 'blank') return 0;
     const standardAns = activeQuestion.answer;
     return Array.isArray(standardAns) ? standardAns.length : 1;
   }, [activeQuestion]);
 
   // Sync inputs when current question changes
   useEffect(() => {
+    if (!activeQuestion) return;
     if (activeQuestion.type === 'blank') {
       if (isAnswered) {
         if (Array.isArray(savedAnswer)) {
@@ -179,7 +180,7 @@ export default function PracticeSession({
 
   // Grade helper for active question
   const isCorrectActiveQuestion = useMemo(() => {
-    if (!isAnswered) return false;
+    if (!isAnswered || !activeQuestion) return false;
     
     if (activeQuestion.type === 'choice') {
       return savedAnswer === activeQuestion.answer;
@@ -251,9 +252,26 @@ export default function PracticeSession({
   // Group: 快速重做本组（清空该组答案 + 本地状态，重新作答）
   const handleRedoGroup = () => {
     if (isAnswered) onRedo?.(qId);
-    const gn = activeQuestion.subQuestions?.length || 0;
+    const gn = activeQuestion?.subQuestions?.length || 0;
     setGroupInputs(Array(gn).fill(''));
   };
+
+  // 空卷兜底（筛选模式下无题）：避免 activeQuestion 未定义时白屏
+  if (!activeQuestion) {
+    return (
+      <div className="max-w-2xl mx-auto space-y-6 py-2">
+        <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm text-center space-y-4">
+          <p className="text-sm text-slate-600">本题库在该练习模式下没有题目。</p>
+          <button
+            onClick={onExit}
+            className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer"
+          >
+            返回主页
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 py-2">
@@ -553,7 +571,7 @@ export default function PracticeSession({
         ) : (
           <button
             onClick={onExit}
-            className="py-3 px-6 bg-slate-905 text-slate-950 border border-slate-300 hover:bg-slate-100 font-bold text-xs rounded-xl transition-all cursor-pointer"
+            className="py-3 px-6 bg-slate-50 text-slate-950 border border-slate-300 hover:bg-slate-100 font-bold text-xs rounded-xl transition-all cursor-pointer"
           >
             完成并返回主页
           </button>

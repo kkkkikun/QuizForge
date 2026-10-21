@@ -119,7 +119,8 @@ export default function Dashboard({
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-center items-center md:items-end gap-3">
           <button
             onClick={() => onStartPractice(stats.firstUnansweredQId)}
-            className="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
+            disabled={stats.total === 0}
+            className="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             {isStarted ? '继续刷题' : '开始练习'} <ArrowRight size={16} />
           </button>

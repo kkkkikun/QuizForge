@@ -22,31 +22,3 @@ export interface Quiz {
   title: string;
   questions: Question[];
 }
-
-export interface QuizSession {
-  sessionId: string;
-  startTime: number;
-  endTime?: number;
-  type: 'choice' | 'blank' | 'mixed';
-  questions: Question[];
-  userAnswers: { [questionId: string]: string | string[] }; // user answers indexed by question id (as string)
-  score: number;
-  isCompleted: boolean;
-  scoringHistory?: { questionId: number; isCorrect: boolean }[];
-}
-
-export interface WrongQuestionItem {
-  questionId: number;
-  type: QuestionType;
-  wrongCount: number;
-  lastAttemptTime: number;
-  userAnswer: string | string[];
-}
-
-export interface UserStats {
-  totalPracticeCount: number; // overall questions answered counter
-  totalCorrectCount: number;
-  sessionsCompletedCount: number;
-  choiceProgress: number; // how many total distinct choices practiced
-  blankProgress: number;  // how many total distinct blanks practiced
-}
