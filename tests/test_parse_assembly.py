@@ -96,3 +96,22 @@ def test_assembly_drops_unrenderable_llm_questions():
            if q.type in ("single", "multiple") and (not q.options or len(q.options) < 2)]
     assert not bad, "无选项的选择题不应流入 Quiz"
     assert quiz.ignored_summary.get("invalid", 0) >= 1, "废题应计入 ignored_summary"
+
+
+def test_dict_roundtrip_preserves_group():
+    """契约往返：quiz_to_dict → dict_to_quiz 必须保留 group 的 sub_questions。"""
+    from quizforge.model import Question, Quiz
+    from quizforge.parse import dict_to_quiz, quiz_to_dict
+
+    g = Question(id=1, type="group", stem="Unit 1 · News report 1", sub_questions=[
+        Question(id=2, type="single", stem="第 1 题",
+                 options={"A": "x", "B": "y", "C": "z", "D": "w"}, answer=["A"]),
+        Question(id=3, type="single", stem="第 2 题",
+                 options={"A": "x", "B": "y", "C": "z", "D": "w"}, answer=["B"]),
+    ])
+    restored = dict_to_quiz(quiz_to_dict(Quiz(questions=[g])))
+    rg = restored.questions[0]
+    assert rg.type == "group"
+    assert len(rg.sub_questions) == 2
+    assert rg.sub_questions[0].stem == "第 1 题"
+    assert rg.sub_questions[1].answer == ["B"]

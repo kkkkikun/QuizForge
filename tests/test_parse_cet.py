@@ -99,6 +99,12 @@ def _option_block(answer="A"):
     ]
 
 
+def _reading_q(num, stem_text):
+    return [
+        Block("docx", "Normal", f"{num}. {stem_text}", "para"),
+    ] + _option_block()
+
+
 def test_cet_bare_subcontext_titles_separate_groups():
     """裸 Conversation/Passage 标题（无编号）也必须更新上下文，切断前一组的粘连带。"""
     blocks = [
@@ -122,7 +128,7 @@ def test_cet_bare_subcontext_titles_separate_groups():
 
 
 def test_group_named_by_title_line():
-    """题前短标题行 → 组名取标题整行，不截断。"""
+    """题前短标题行 → 组名取标题整行，不截断（≥2 题成组）。"""
     title = "The tide of change: Embracing the industries of the future"
     blocks = [
         Block("docx", "Normal", "阅读", "heading"),
@@ -133,12 +139,14 @@ def test_group_named_by_title_line():
         Block("docx", "Normal",
               "2 Progress continued with the Second Industrial Revolution in the late 19th century.",
               "para"),
-        Block("docx", "Normal", "1. What does the passage mainly talk about?", "para"),
-    ] + _option_block()
+    ]
+    blocks += _reading_q(1, "What does the passage mainly talk about?")
+    blocks += _reading_q(2, "Which industry came first according to the passage?")
     quiz = parse_blocks(blocks, source_file="cet.docx")
     g = quiz.questions[0]
     assert g.type == "group"
     assert g.stem == title
+    assert len(g.sub_questions) == 2
 
 
 def test_group_name_prefers_title_over_leading_header():
@@ -151,10 +159,13 @@ def test_group_name_prefers_title_over_leading_header():
               "1 In Daocheng County, Garze Tibetan Autonomous Prefecture, the LHAASO project "
               "observes cosmic rays at high altitude.",
               "para"),
-        Block("docx", "Normal", "1. What is the main purpose of the project?", "para"),
-    ] + _option_block()
+    ]
+    blocks += _reading_q(1, "What is the main purpose of the project?")
+    blocks += _reading_q(2, "Where is the LHAASO project located?")
     quiz = parse_blocks(blocks, source_file="cet.docx")
-    assert quiz.questions[0].stem == "Stargazers at 4,410 meters"
+    g = quiz.questions[0]
+    assert g.type == "group"
+    assert g.stem == "Stargazers at 4,410 meters"
 
 
 def test_group_name_word_boundary_truncation():
@@ -169,7 +180,10 @@ def test_group_name_word_boundary_truncation():
               "In the Han Dynasty, tea drinking became widespread in the court and among "
               "common people alike.",
               "para"),
-        Block("docx", "Normal", "1. What was the earliest use of tea?", "para"),
-    ] + _option_block()
+    ]
+    blocks += _reading_q(1, "What was the earliest use of tea?")
+    blocks += _reading_q(2, "When did tea drinking become widespread?")
     quiz = parse_blocks(blocks, source_file="cet.docx")
-    assert quiz.questions[0].stem == "Tea's remarkable journey began…"
+    g = quiz.questions[0]
+    assert g.type == "group"
+    assert g.stem == "Tea's remarkable journey began…"

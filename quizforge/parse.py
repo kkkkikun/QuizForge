@@ -50,6 +50,7 @@ class ChoiceCandidate:
     options: dict[str, str]
     answer_letter: str | None = None   # 高亮标记的答案字母（CET）
     group: str | None = None           # 子分组上下文（Unit·Passage），有则归组
+    group_ctx: bool = False            # True=CET 显式上下文组；False=回退段落组（受 ≥2 门槛）
     num: int | None = None             # 文档中的题号（答案 key 区映射用）
 
 
@@ -141,6 +142,7 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
     cur_passage = None
     cur_num: int | None = None
     current_group: str | None = None
+    current_group_ctx = False
     blocks = section.blocks
     n = len(blocks)
     j = 0
@@ -154,6 +156,17 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
             while k < n and _scan_options(blocks[k].text):
                 merged.extend(_scan_options(blocks[k].text))
                 k += 1
+            # PPT 转换修复：首选项非 A 时，首个选项块标记前的残留文本——
+            # 短（≤40）是丢失标签的 A 选项内容；长则是与选项同块的内联题干
+            inline_stem = ""
+            if merged[0][0] != "A":
+                first_markers = list(OPTION_START_RE.finditer(blocks[j].text))
+                if first_markers:
+                    pre = blocks[j].text[: first_markers[0].start()].strip().rstrip("。，,；.")
+                    if 0 < len(pre) <= 40:
+                        merged.insert(0, ("A", pre))
+                    elif len(pre) > 40:
+                        inline_stem = pre
             options: dict[str, str] = {}
             for letter, content in merged:
                 options.setdefault(letter, content)
@@ -164,8 +177,9 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
                     if bo:
                         hl = bo[0][0]
                         break
-            real_stem = _strip_number(pending[-1]).strip() if pending else ""
-            mnum = re.match(r"\s*(\d+)", pending[-1]) if pending else None
+            real_stem_raw = pending[-1] if pending else inline_stem
+            real_stem = _strip_number(real_stem_raw).strip() if real_stem_raw else ""
+            mnum = re.match(r"\s*(\d+)", real_stem_raw) if real_stem_raw else None
             num = int(mnum.group(1)) if mnum else None
             ctx = " · ".join(x for x in (cur_unit, cur_passage) if x)
             if ctx:
@@ -173,13 +187,15 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
                 npart = f"第 {cur_num} 题" if cur_num else "未编号题"
                 stem = real_stem if real_stem else npart
                 current_group = ctx
+                current_group_ctx = True
             else:
                 stem = real_stem or (f"第 {cur_num} 题" if cur_num else "")
                 # 段落中断：题前累积 ≥2 段非选项文本（文章正文）→ 开新组，组名取标题行
                 if len(pending) >= 2:
                     current_group = _pick_group_name(pending[:-1])
-            cands.append(ChoiceCandidate(section.title, stem, options,
-                                         answer_letter=hl, group=current_group, num=num))
+                    current_group_ctx = False
+            cands.append(ChoiceCandidate(section.title, stem, options, answer_letter=hl,
+                                         group=current_group, group_ctx=current_group_ctx, num=num))
             pending = []
             cur_num = None
             j = k
@@ -300,24 +316,31 @@ def parse_blocks(
             continue
         if sec.type == "choice":
             cands, leftover_texts = _detect_choice(sec)
-            # 有 group 的候选按连续同组聚合成 group 题；无 group 的独立
+            # 有 group 的候选按连续同组聚合成 group 题（≥2 道才成组，孤立候选解散为普通题）
             i = 0
             nc = len(cands)
             while i < nc:
                 c = cands[i]
                 if c.group:
                     gk = c.group
-                    qid += 1
-                    gid = qid
-                    subs: list[Question] = []
-                    while i < nc and cands[i].group == gk:
+                    j2 = i
+                    while j2 < nc and cands[j2].group == gk:
+                        j2 += 1
+                    if j2 - i >= 2 or c.group_ctx:
                         qid += 1
-                        subs.append(choice_candidate_to_question(cands[i], qid))
-                        i += 1
-                    questions.append(
-                        Question(id=gid, type="group", section=sec.title,
-                                 stem=gk, sub_questions=subs)
-                    )
+                        gid = qid
+                        subs: list[Question] = []
+                        for kk in range(i, j2):
+                            qid += 1
+                            subs.append(choice_candidate_to_question(cands[kk], qid))
+                        questions.append(
+                            Question(id=gid, type="group", section=sec.title,
+                                     stem=gk, sub_questions=subs)
+                        )
+                    else:
+                        qid += 1
+                        questions.append(choice_candidate_to_question(cands[i], qid))
+                    i = j2
                 else:
                     qid += 1
                     questions.append(choice_candidate_to_question(c, qid))
@@ -369,6 +392,10 @@ def parse_blocks(
         for q in questions:
             if q.source == "rule" and q.low_confidence:
                 _llm_refine(q, llm)
+            if q.type == "group":
+                for s in q.sub_questions:
+                    if s.low_confidence:
+                        _llm_refine(s, llm)
         # 2) 残留兜底：逐块 adjudicate（是题→入库 source=llm，否则计噪声）
         for text, section, cat in residual:
             d = llm.adjudicate(text)
@@ -716,6 +743,17 @@ def dict_to_quiz(d: dict) -> Quiz:
     """quiz_to_dict 的逆：dict → Quiz（用于从已留存的 JSON 重新渲染）。"""
     qs = []
     for qd in d.get("questions", []):
+        subs = [
+            Question(
+                id=sd.get("id", 0),
+                type=sd.get("type", "single"),
+                section=qd.get("section", ""),
+                stem=sd.get("stem", ""),
+                options=sd.get("options"),
+                answer=list(sd.get("answer") or []),
+            )
+            for sd in qd.get("sub_questions") or []
+        ]
         qs.append(
             Question(
                 id=qd.get("id", 0),
@@ -729,6 +767,7 @@ def dict_to_quiz(d: dict) -> Quiz:
                 low_confidence=bool(qd.get("low_confidence", False)),
                 note=qd.get("note"),
                 source=qd.get("source", "rule"),
+                sub_questions=subs,
                 num=qd.get("num"),
             )
         )
