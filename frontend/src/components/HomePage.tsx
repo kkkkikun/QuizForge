@@ -18,7 +18,12 @@ export default function HomePage() {
       <main className="flex-grow px-4 md:px-6 py-10 max-w-4xl mx-auto w-full">
         <div className="mb-8">
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">选择题库</h1>
-          <p className="text-slate-500 text-sm mt-1">共 {QUIZZES.length} 个题库，点击进入刷题。进度按题库分别保存在本机。</p>
+          <p className="text-slate-500 text-sm mt-1">
+            共 {QUIZZES.length} 个题库，点击进入刷题。进度按题库分别保存在本机。
+            <Link to="/convert" className="text-blue-600 font-semibold hover:underline ml-1">
+              手上有资料？在线转成题库 →
+            </Link>
+          </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {QUIZZES.map(q => {

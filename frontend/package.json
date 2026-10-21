@@ -37,6 +37,7 @@
     "eslint-plugin-react-refresh": "^0.5.7",
     "globals": "^17.13.0",
     "jsdom": "^29.1.1",
+    "pyodide": "^314.0.7",
     "tailwindcss": "^4.1.14",
     "typescript": "~5.8.2",
     "typescript-eslint": "^8.72.0",
