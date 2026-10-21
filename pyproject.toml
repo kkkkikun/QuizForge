@@ -1,9 +1,23 @@
 [project]
 name = "quizforge"
 version = "0.1.0"
-description = "期末选填题速刷：Word/PDF → 单文件静态答题网页"
+description = "期末选填题速刷：Word/PDF/TXT → 单文件静态答题网页（规则解析 + LLM 可选兜底）"
 readme = "README.md"
 requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "kkkkikun" }]
+keywords = ["quiz", "docx", "pdf", "education", "exam", "chinese"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Education",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Chinese (Simplified)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Education :: Testing",
+]
 dependencies = [
     "python-docx>=1.1",
     "pdfplumber>=0.11",
@@ -12,6 +26,11 @@ dependencies = [
     "python-dotenv>=1.0",
     "pyyaml>=6.0.3",
 ]
+
+[project.urls]
+Homepage = "https://github.com/kkkkikun/QuizForge"
+Documentation = "https://github.com/kkkkikun/QuizForge#readme"
+Issues = "https://github.com/kkkkikun/QuizForge/issues"
 
 [project.scripts]
 quizforge = "quizforge.cli:main"
@@ -25,6 +44,12 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["quizforge"]
+
+[tool.hatch.build.targets.sdist]
+exclude = [
+    ".claude", ".github", ".zcode", "openspec", "frontend", "data", "docs",
+    "scripts", "tests", "dist", "node_modules", "uv.lock", ".env*", ".git*",
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
