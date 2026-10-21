@@ -1,6 +1,6 @@
 # SNAPSHOT — QuizForge 项目状态
 
-> 最近更新：2026-07-06
+> 最近更新：2026-10-21
 
 ## 项目结构
 
@@ -9,10 +9,11 @@ QuizForge/
 ├── quizforge/              # Python 核心
 │   ├── cli.py              # CLI 入口（--react / --react-frontend / --json / --review）
 │   ├── ingest.py           # 摄取 docx/pdf/txt → Block（含 highlight）
-│   ├── parse.py            # 规则+LLM 解析 → Quiz（分节/选项/答案/滤噪/分组/匹配）
+│   ├── parse.py            # 规则+LLM 解析 → Quiz（分节/选项/答案/滤噪/分组/匹配/去重/废题丢弃）
 │   ├── llm.py              # LLM 兜底（OpenAI 系 + Anthropic，双 provider）
+│   ├── validate.py         # 发布校验关卡（error 拒绝生成 / warning 提示）
 │   ├── render.py           # 单文件 vanilla HTML 渲染（离线次选）
-│   ├── reactfmt.py         # Quiz JSON → React data.ts（含 group/匹配）
+│   ├── reactfmt.py         # Quiz JSON → React data.ts（含 group/匹配；写出前过校验关卡）
 │   ├── model.py            # Block / Question / Quiz 数据类
 │   └── patterns.py         # 共享正则
 ├── frontend/               # React19+Vite+Tailwind 子工程（部署 Pages）
@@ -37,7 +38,7 @@ QuizForge/
 
 - 分支：`master`
 - 远程：`origin` → https://github.com/kkkkikun/QuizForge
-- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 重做本组
+- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 重做本组 → 推广路线图确立 + M0 还债/校验关卡（见 `roadmap.md`）
 
 ## 关键契约
 

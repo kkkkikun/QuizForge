@@ -39,6 +39,7 @@ openspec/    specs/（5 domain）+ changes/（mvp / react-frontend-pages）
 
 | 文档 | 用途 |
 |------|------|
+| `.claude/docs/roadmap.md` | 推广路线图（M0–M5 里程碑/任务/验收/状态跟踪） |
 | `.claude/docs/SNAPSHOT.md` | 项目状态快照（结构/技术栈/git） |
 | `.claude/docs/tasks.md` | 全局任务（进行中/待办/阻塞） |
 
