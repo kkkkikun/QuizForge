@@ -1,4 +1,4 @@
-import { renderQuestionStem } from './PracticeSession';
+import { renderQuestionStem } from '../lib/stem';
 import { checkBlankAnswer } from '../lib/grading';
 import { render, screen } from '@testing-library/react';
 

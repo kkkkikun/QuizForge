@@ -6,6 +6,19 @@ import Dashboard from './Dashboard';
 import PracticeSession from './PracticeSession';
 import { BookOpen } from 'lucide-react';
 
+type AnswerMap = { [qId: number]: string | string[] };
+
+// 进入题库时从 localStorage 恢复答题记录（惰性初始化；切题库靠 key 重挂载重新执行）
+function loadAnswers(storageKey: string): AnswerMap {
+  if (!storageKey) return {};
+  try {
+    const cached = localStorage.getItem(storageKey);
+    return cached ? JSON.parse(cached) : {};
+  } catch {
+    return {};
+  }
+}
+
 export default function QuizPage() {
   const { id } = useParams<{ id: string }>();
   const quiz = QUIZZES.find(q => q.id === id);
@@ -13,26 +26,16 @@ export default function QuizPage() {
   const [activeState, setActiveState] = useState<'dashboard' | 'session'>('dashboard');
   const [filterMode, setFilterMode] = useState<'all' | 'choice' | 'blank'>('all');
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<{ [qId: number]: string | string[] }>({});
+  const [userAnswers, setUserAnswers] = useState<AnswerMap>(() =>
+    loadAnswers(quiz ? `quizforge-answers-${quiz.id}` : '')
+  );
 
   const QUESTIONS: Question[] = quiz?.questions ?? [];
   const storageKey = quiz ? `quizforge-answers-${quiz.id}` : '';
 
   useEffect(() => {
     if (quiz) document.title = quiz.title;
-    setActiveState('dashboard');
-    setCurrentIndex(0);
   }, [quiz]);
-
-  useEffect(() => {
-    if (!storageKey) return;
-    try {
-      const cached = localStorage.getItem(storageKey);
-      setUserAnswers(cached ? JSON.parse(cached) : {});
-    } catch {
-      setUserAnswers({});
-    }
-  }, [storageKey]);
 
   const questionsList = useMemo(() => {
     if (filterMode === 'choice') return QUESTIONS.filter(q => q.type === 'choice' || q.type === 'multiple' || q.type === 'group');

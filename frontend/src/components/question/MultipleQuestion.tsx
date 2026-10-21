@@ -5,12 +5,11 @@ interface MultipleQuestionProps {
   question: Question;
   isAnswered: boolean;
   savedAnswer: string | string[] | undefined;
-  isCorrect: boolean;
   onAnswer: (v: string[]) => void;
 }
 
 // 多选：勾选暂存 + 提交核对；答后按标准答案高亮
-export default function MultipleQuestion({ question, isAnswered, savedAnswer, isCorrect, onAnswer }: MultipleQuestionProps) {
+export default function MultipleQuestion({ question, isAnswered, savedAnswer, onAnswer }: MultipleQuestionProps) {
   const [multiInputs, setMultiInputs] = useState<string[]>([]);
   const stdSet = new Set(question.answer as string[]);
 

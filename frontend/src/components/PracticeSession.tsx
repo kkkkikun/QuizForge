@@ -1,6 +1,7 @@
-import { useState, useRef, useMemo, ReactNode } from 'react';
+import { useState, useRef, useMemo } from 'react';
 import type { Question } from '../types';
 import { gradeQuestion } from '../lib/grading';
+import { renderQuestionStem } from '../lib/stem';
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,37 +14,6 @@ import ChoiceQuestion from './question/ChoiceQuestion';
 import MultipleQuestion from './question/MultipleQuestion';
 import BlankQuestion from './question/BlankQuestion';
 import GroupQuestion from './question/GroupQuestion';
-
-// Dynamically hides the bracket answers in fill-in-the-blank question texts
-export function renderQuestionStem(question: string, type: string, isAnswered: boolean): ReactNode {
-  if (type !== 'blank') {
-    return question;
-  }
-  const parts = question.split(/\[(.*?)\]/g);
-  return (
-    <>
-      {parts.map((part, index) => {
-        if (index % 2 === 1) {
-          // This is the answer inside the bracket
-          if (isAnswered) {
-            return (
-              <span key={index} className="px-2 py-0.5 mx-1 bg-emerald-100 border border-emerald-300 text-emerald-800 font-bold rounded font-mono inline-block text-xs">
-                {part.trim()}
-              </span>
-            );
-          } else {
-            return (
-              <span key={index} className="inline-block px-3 py-0.5 mx-1 font-bold border-b-2 border-dashed border-blue-500 text-blue-600 bg-blue-50/20 text-xs rounded-sm min-w-[70px] text-center">
-                (  )
-              </span>
-            );
-          }
-        }
-        return part;
-      })}
-    </>
-  );
-}
 
 interface PracticeSessionProps {
   questionsList: Question[];
@@ -182,7 +152,6 @@ export default function PracticeSession({
             question={activeQuestion}
             isAnswered={isAnswered}
             savedAnswer={savedAnswer}
-            isCorrect={isCorrect}
             onAnswer={(v) => onAnswer(qId, v)}
           />
         ) : activeQuestion.type === 'group' ? (
