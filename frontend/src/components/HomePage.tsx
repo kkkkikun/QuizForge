@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { QUIZZES } from '../data';
+import { isOptionsType } from '../lib/grading';
 import { BookOpen, ArrowRight, FileQuestion } from 'lucide-react';
 
 export default function HomePage() {
@@ -21,7 +22,7 @@ export default function HomePage() {
         </div>
         <div className="grid gap-4 md:grid-cols-2">
           {QUIZZES.map(q => {
-            const choice = q.questions.filter(x => x.type === 'choice' || x.type === 'multiple').length;
+            const choice = q.questions.filter(x => isOptionsType(x.type)).length;
             const blank = q.questions.filter(x => x.type === 'blank').length;
             return (
               <Link

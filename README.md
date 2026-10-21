@@ -1,198 +1,124 @@
 # QuizForge
 
-> 期末选填题速刷工具：Word/PDF 复习资料 → 一键生成**单文件静态答题网页**，只保留「核对答案 + 无限重做」。
+> 期末选填题速刷：把复习资料变成**能刷题的网页**——只保留「核对答案 + 无限重做」。
 
 [![CI](https://github.com/kkkkikun/QuizForge/actions/workflows/ci.yml/badge.svg)](https://github.com/kkkkikun/QuizForge/actions/workflows/ci.yml)
 [![Deploy](https://github.com/kkkkikun/QuizForge/actions/workflows/deploy.yml/badge.svg)](https://github.com/kkkkikun/QuizForge/actions/workflows/deploy.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**🌐 在线 Demo**：<https://kkkkikun.github.io/QuizForge/>（React 前端，push 自动部署）
+**🌐 在线刷题**：<https://kkkkikun.github.io/QuizForge/>
+**🔬 在线转换（浏览器内，Beta）**：<https://kkkkikun.github.io/QuizForge/convert>
 
-把老师发的乱糟糟的题库（Word/PDF）丢进去，QuizForge 用「规则 + LLM 兜底」解析成结构化题库，再渲染成一个**双击即开、可离线、无限重做**的自包含 HTML 答题页。
+![QuizForge 题库首页](docs/screenshot-home.png)
+
+<p align="center">
+  <img src="docs/screenshot-mobile.png" width="270" alt="移动端答题页（底部操作栏 + 滑动切题）" />
+  <img src="docs/screenshot-dashboard.png" width="420" alt="题库面板（进度/正确率/错题导航网格）" />
+</p>
 
 ---
 
-## ✨ 特性
+## 🙋 我是来刷题的（使用者）
 
-- **多格式输入**：`.docx` / `.pdf` / `.txt`；也支持从已导出的 `.json` 直接重渲染
-- **鲁棒解析**：规则优先——不依赖题号、选项按 `A./B./C./D.` 跨行/Tab 切分、答案多策略抽取、自动滤掉大题/知识点/解析/图片
-- **LLM 增强（可选）**：兼容 OpenAI 系（DeepSeek / OpenAI / 中转）与 Anthropic Claude；规则判不定的残留块交 LLM 兜底，低置信题自动补答案
-- **正确性把关**：结构校验 + 来源标记（规则/LLM）+ `--review` 人工逐题核对
-- **答题引擎**：单选 / 多选 / 填空、提交计分、乱序、localStorage 进度记忆、无限重做
-- **单文件自包含**：题库 JSON 内嵌，零依赖、零后端，拷贝给同学直接开
+1. 打开上面的**在线刷题**链接，选择题库卡片进入
+2. 单选点选即判，多选/填空提交核对；答错的题进「错题」卷可反复重刷
+3. 手机上体验最好：可以左右滑切题、加到主屏幕离线刷（PWA）
+4. 进度只存在**你自己的设备**上，不注册、不上传、无统计（[隐私说明](https://kkkkikun.github.io/QuizForge/about)）
 
-## 📸 预览
+**发现题目有错？** 刷题页每道题下方有「这道题有问题？」按钮，点开就是预填好的反馈表单。
+**想要新题库？** [提一个 Issue](https://github.com/kkkkikun/QuizForge/issues/new?template=new-quiz.yml)（或把 Word/PDF 复习资料发给站长）。
 
-> 前端仍在打磨，截图稍后补上。
+**手上有资料、想立刻自己转？** 用上面的**在线转换**：选一个 `.docx`/`.txt`，在**你自己的浏览器里**解析成题库网页下载——文件全程不上传（纯前端，离线可用）。也可以用下面的命令行版本。
 
-<!-- 截图占位：前端定稿后把图片放到 docs/screenshot.png，并取消下面这行注释 -->
-<!-- ![QuizForge 答题页](docs/screenshot.png) -->
+---
 
-## 🔧 工作原理
+## 🔧 我想自己跑（命令行 / 开发者）
 
 三段管线，层间用「题库 JSON」数据契约解耦：
 
 ```
- .docx/.pdf/.txt  ──▶  摄取  ──▶  Block 流  ──▶  解析  ──▶  Quiz JSON  ──▶  渲染  ──▶  单文件 HTML
-                     python-docx     规则优先            题库 JSON 内嵌
-                     pdfplumber      + LLM 兜底          原生 JS 答题引擎
-                                     + 滤噪
+ .docx/.pdf/.txt  ──▶  摄取  ──▶  Block 流  ──▶  解析  ──▶  Quiz JSON  ──▶  渲染  ──▶  单文件 HTML / React 站
+                     python-docx     规则优先                     题库 JSON 内嵌      React 多题库（Pages）
+                     pdfplumber      + LLM 兜底（可选）
+                                     + 滤噪 + 答案区映射
 ```
 
-设计详见 [`openspec/changes/quizforge-mvp/design.md`](openspec/changes/quizforge-mvp/design.md)。
-
-## 🌐 在线 Demo & 前端工程
-
-在线答题页：<https://kkkkikun.github.io/QuizForge/>（`deploy.yml` 自动构建部署）。
-
-`frontend/` 是独立的 **React + Vite + Tailwind** 子工程（源自 [database-quiz-app](https://github.com/kkkkikun/database-quiz-app)，清理并扩展了多选与多题库），首页列题库卡片，每题库独立 URL（`/quiz/:id`），进度按题库分别保存在本机。
-
-**多题库清单**：编辑 `frontend/quizzes.yaml`（列出 `id` / `title` / `source`），然后：
-```bash
-uv run quizforge --react-frontend frontend   # 读 quizzes.yaml → 生成 frontend/src/data.ts（QUIZZES）
-git add frontend/src/data.ts frontend/quizzes.yaml && git commit -m "data: 更新题库" && git push
-# push 后 deploy.yml 自动 npm build → 部署到 Pages
-```
-`source` 支持 `.json`（已留存、含 LLM 答案）或 `.docx/.pdf/.txt`（规则解析）。
-
-**新题库一条龙**（复制文档 → 登记 → 生成 → 给出提交命令）：
-```bash
-uv run python scripts/add_quiz.py 同学的计网复习.docx --id network --title 计算机网络期末
-```
-生成经过发布校验关卡（`quizforge/validate.py`：error 拒绝生成）；失败会给出撤销命令。
-
-本地调试前端：`cd frontend && npm install && npm run dev`。
-
-## 📦 安装
-
-需要 Python ≥ 3.10，推荐用 [uv](https://docs.astral.sh/uv/)：
+需要 Python ≥ 3.10，推荐 [uv](https://docs.astral.sh/uv/)：
 
 ```bash
-git clone <your-repo-url> && cd QuizForge
+git clone https://github.com/kkkkikun/QuizForge && cd QuizForge
 uv sync
-```
 
-## 🚀 快速开始
-
-```bash
-# ① 纯规则解析（无需任何 key），生成同名 HTML
+# 纯规则解析（无需任何 API key），生成双击即开的单文件 HTML
 uv run quizforge ./data/数据库原理题库.docx
 
-# ② 想让 LLM 补答案/兜底：先配 .env，再带 --json 留存结果
-cp .env.example .env            # 填入你的 key
+# LLM 增强（可选）：.env 填 key 后，给规则判不定的题补答案
 uv run quizforge ./data/2026年重点复习题库.docx --json --max-llm 70
+
+# 解析出问题？打印文档结构诊断（分节/候选/滤噪）
+uv run quizforge 怪文档.docx --diagnose
+
+# 跑测试（含真实样本回归门禁 + 发布校验关卡）
+uv run pytest
 ```
 
-生成的 `.html` **双击即开**；带 `--json` 还会输出同名 `.json` 题库文件。
-
-## 🔑 LLM 配置（可选增强）
-
-LLM 是**可选**的——不配也能跑（纯规则 + 标记存疑）。要启用，复制 `.env.example` 为 `.env` 填入 key（`.env` 已 gitignore，切勿提交）。
-
-**Provider 自动判定**：显式 `LLM_PROVIDER` > 设了 `ANTHROPIC_API_KEY` 走 Claude > 其它 key 走 OpenAI 系。
-
-| Provider | 需配置 |
-|----------|--------|
-| DeepSeek（默认） | `LLM_API_KEY` + `LLM_BASE_URL=https://api.deepseek.com` + `LLM_MODEL=deepseek-chat` |
-| OpenAI | `LLM_API_KEY` + `LLM_BASE_URL=https://api.openai.com/v1` + `LLM_MODEL=gpt-4o-mini` |
-| Anthropic Claude | `LLM_PROVIDER=anthropic` + `ANTHROPIC_API_KEY` + `LLM_MODEL=claude-haiku-4-5-20251001` |
-
-## 📜 命令行参考
-
-```bash
-quizforge <input> [options]
-```
+### 命令行参考
 
 | 选项 | 说明 |
 |------|------|
-| `input` | 输入：`.docx`/`.pdf`/`.txt`（解析）或 `.json`（从已存题库重渲染，跳过解析/LLM） |
-| `-o, --output <path>` | 输出 HTML 路径（默认 `<input>.html`） |
-| `--no-llm` | 强制纯规则，不调 LLM |
-| `--llm-parse` | 整篇交 LLM 结构化（规则搞不动的怪文档；产出默认标存疑） |
-| `--max-llm <N>` | LLM 调用次数上限（控成本） |
-| `--review` | 生成前逐题核对存疑题（`y`确认 / `a`改答案 / `s`跳过 / `d`删除 / `q`结束） |
-| `--diagnose` | 打印文档结构诊断（分节/候选/滤噪），排查解析问题 |
-| `--json` | 同时导出题库 JSON（与 HTML 同名 `.json`） |
-| `--shuffle` / `--no-shuffle` | 是否乱序（默认乱序） |
-| `-V, --version` | 版本 |
+| `input` | `.docx`/`.pdf`/`.txt`（解析）或 `.json`（从已存题库重渲染） |
+| `-o, --output` | 输出 HTML 路径 |
+| `--no-llm` / `--max-llm <N>` | 强制纯规则 / LLM 调用上限 |
+| `--llm-parse` | 整篇交 LLM 结构化（怪文档兜底，产出标存疑） |
+| `--review` | 逐题核对存疑题（`y`确认 / `a`改答案 / `s`跳过 / `d`删除） |
+| `--diagnose` | 打印文档结构诊断 |
+| `--json` | 同时导出题库 JSON |
+| `--react-frontend <DIR>` | 多题库模式：读 `<DIR>/quizzes.yaml` 生成 `src/data.ts` |
 
-## 🧩 题库 JSON 数据契约
-
-```json
-{
-  "title": "数据库原理题库",
-  "source_file": "数据库原理题库.docx",
-  "questions": [
-    {"id": 1, "type": "single", "section": "单选题", "stem": "数据库技术的核心是",
-     "options": {"A": "数据", "B": "数据库管理系统", "C": "操作系统", "D": "应用程序"},
-     "answer": ["B"], "accepted": [], "tolerant": false,
-     "low_confidence": false, "note": null, "source": "rule"}
-  ],
-  "ignored_summary": {"fill": 30}
-}
-```
-
-- `type`：`single` / `multiple` / `blank`
-- `answer` 恒为数组；填空 `options=null`，`accepted` 为备选可接受答案，`tolerant` 开容错匹配
-- `source`：`rule`（规则解析）或 `llm`（LLM 产出，默认标存疑）
-- `low_confidence`：HTML 显示 ⚠️，可用 `--review` 人工核对
-
-## 🛡 解析模式与正确性把关
-
-**模式**：默认「规则优先 + LLM 兜底」（DB/NET 这类常规排版零影响）；`--llm-parse` 则整篇交 LLM。
-
-**三道关**：
-1. **结构校验**（自动）：题干非空、选项 ≥ 2 且键合法、答案 ⊆ 选项、题型已知——不合规 → ⚠️
-2. **来源标记**（自动）：LLM 产出一律默认存疑，卡片显示 `LLM` 徽标
-3. **人工核对**（`--review`）：只对存疑题逐题过，不必整本看
-
-## 📁 项目结构
-
-```
-quizforge/        源码
-  cli.py          命令行入口
-  ingest.py       摄取：docx/pdf/txt → Block 流
-  parse.py        解析：规则 + LLM → Quiz JSON（数据契约）
-  llm.py          LLM 兜底：OpenAI 系 + Anthropic
-  render.py       渲染：Quiz JSON → 单文件 HTML + JS 引擎
-  model.py        数据模型：Block / Question / Quiz
-  patterns.py     共享正则
-tests/            单测 + golden 快照（data/*.docx 为真实回归样本）
-data/             真实样本
-openspec/         变更管理（proposal / design / tasks / specs）
-```
-
-## 🛠 开发
+### 把自己的题库挂到站点
 
 ```bash
-uv sync                                  # 装依赖（含 dev：pytest、fpdf2）
-uv run pytest                            # 全量测试
-uv run pytest tests/test_parse_segment.py -q   # 单模块
+# 一条龙：复制文档入 data/ → 登记 quizzes.yaml → 生成 data.ts（过校验关卡）→ 给出提交命令
+uv run python scripts/add_quiz.py 同学的计网复习.docx --id network --title 计算机网络期末
 ```
 
-约定：TDD（先测后码）；两份 `data/*.docx` 是回归基线（干净 + 脏）；改解析逻辑导致 golden 快照需更新时，删 `tests/golden/*.json` 重跑即可重新生成。
+前端（React 19 + Vite + Tailwind v4 + PWA）是独立子工程：`cd frontend && npm install && npm run dev`。
 
-## ⚠️ 局限 / 已知问题
+### 质量把关（三道关）
 
-- 题目图片/图表：MVP 不抽取（占位丢弃）
-- 扫描版 PDF（纯图片）：不支持，需先 OCR
-- LLM 答案为其推理结果（文档无答案 key 时）；标准 CS 事实可靠，冷门/有争议题可能偏差
-- 前端答题引擎已过 `node --check` 与结构断言，浏览器交互建议实机确认
+1. **结构校验**（自动）：题干/选项/答案合法性，不合规标存疑 ⚠️
+2. **发布校验关卡**（自动，`quizforge/validate.py`）：重复题、答案越界、空组等 error 级问题**拒绝生成**（CLI 退出码 4）
+3. **人工核对**（`--review`）：只过存疑题
+
+### 开发约定
+
+- **TDD**：先测后码；`data/*.docx` 是回归基线，新文档入库即自动受检（`tests/test_validate.py` 扫 `data/` 全量）
+- **数据契约**：Quiz JSON 是层间唯一中间表示（`openspec/changes/quizforge-mvp/design.md §3.2`）
+- 文档体系：`CLAUDE.md`（索引）→ `.claude/docs/`（roadmap / SNAPSHOT / tasks）→ `openspec/specs/`
+- 提交规范：不加 `Co-Authored-By`
+
+## 📦 作为 Python 包安装（Beta）
+
+```bash
+pip install quizforge   # 或 uv tool install quizforge
+```
+
+> 注：PyPI 发布进行中；发布前可 `pip install git+https://github.com/kkkkikun/QuizForge`。
+
+## ⚠️ 已知限制
+
+- 题目图片/图表不抽取（占位丢弃）；扫描版 PDF 需先 OCR
+- LLM 答案是其推理结果（文档无答案 key 时）；标准课程知识可靠，冷门题可能偏差
+- 在线转换（浏览器版）目前支持 `.docx`/`.txt`，PDF 请用命令行版
 
 ## 🗺 路线图
 
-- [ ] 图片/图表抽取（base64 内嵌）
-- [ ] 扫描版 PDF OCR
-- [x] jsdom 前端运行时单测（vitest + testing-library）
-- [x] 答案 key 区映射（文末「参考答案」按题号回填，免 LLM）
-- [x] 解析失败诊断（0 题时输出分节/候选/滤噪报告；`--diagnose` 随时可用）
-
-完整推广路线见 [.claude/docs/roadmap.md](.claude/docs/roadmap.md)。
+- [x] jsdom/vitest 前端测试、移动端优先 + PWA、错题本与反馈通道
+- [x] 答案 key 区映射（文末「参考答案」按题号回填，免 LLM）；解析诊断 `--diagnose`
+- [x] 浏览器端在线转换（Pyodide，纯规则，文件不上传）
+- [ ] 图片抽取、扫描 PDF OCR、十五选十（待格式样本）
+- 完整推广路线见 [.claude/docs/roadmap.md](.claude/docs/roadmap.md)
 
 ## 🤝 贡献
 
-欢迎 Issue / PR。较大改动建议走 OpenSpec 变更流程（见 `openspec/changes/`）。
-
-## 📄 许可证
-
-MIT，详见 [LICENSE](LICENSE)。
+欢迎 Issue / PR。较大改动走 OpenSpec 变更流程（`openspec/`）。MIT 协议。
