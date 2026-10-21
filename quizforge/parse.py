@@ -14,6 +14,7 @@ from dataclasses import dataclass, field
 
 from .model import Block, Question, Quiz
 from .patterns import (
+    ANSWER_KEY_RE,
     ANSWER_LINE_RE,
     ANSWER_SEQ_RE,
     BLANK_RE,
@@ -49,12 +50,15 @@ class ChoiceCandidate:
     options: dict[str, str]
     answer_letter: str | None = None   # 高亮标记的答案字母（CET）
     group: str | None = None           # 子分组上下文（Unit·Passage），有则归组
+    num: int | None = None             # 文档中的题号（答案 key 区映射用）
 
 
 def _section_type(title: str) -> str:
     t = title.strip()
     if t in _TYPE_MAP:
         return _TYPE_MAP[t]
+    if ANSWER_KEY_RE.match(t):
+        return "answer_key"
     if CET_SECTION_RE.match(t):
         return "choice"
     for k, v in _TYPE_MAP.items():
@@ -71,6 +75,7 @@ def segment(blocks: list[Block]) -> list[Section]:
             b.kind == "heading"
             or (b.kind == "para" and SECTION_HEADER_RE.match(b.text.strip()))
             or (b.kind == "para" and CET_SECTION_RE.match(b.text.strip()))
+            or (b.kind == "para" and ANSWER_KEY_RE.match(b.text.strip()))
         )
         if is_header:
             sections.append(Section(_section_type(b.text), b.text.strip(), []))
@@ -160,6 +165,8 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
                         hl = bo[0][0]
                         break
             real_stem = _strip_number(pending[-1]).strip() if pending else ""
+            mnum = re.match(r"\s*(\d+)", pending[-1]) if pending else None
+            num = int(mnum.group(1)) if mnum else None
             ctx = " · ".join(x for x in (cur_unit, cur_passage) if x)
             if ctx:
                 # CET 听力等：子分组上下文 → 组名=ctx
@@ -171,7 +178,8 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
                 # 段落中断：题前累积 ≥2 段非选项文本（文章正文）→ 开新组，组名取标题行
                 if len(pending) >= 2:
                     current_group = _pick_group_name(pending[:-1])
-            cands.append(ChoiceCandidate(section.title, stem, options, answer_letter=hl, group=current_group))
+            cands.append(ChoiceCandidate(section.title, stem, options,
+                                         answer_letter=hl, group=current_group, num=num))
             pending = []
             cur_num = None
             j = k
@@ -261,6 +269,7 @@ def parse_blocks(
     title = ""
     questions: list[Question] = []
     residual: list[tuple[str, str, str]] = []  # (text, section, 归类) 规则未成题的残留
+    key_map: dict[int, str] = {}               # 答案 key 区：题号 → 答案
     qid = 0
 
     for sec in sections:
@@ -286,6 +295,9 @@ def parse_blocks(
                 questions.append(_dict_to_question(d, qid, sec.title))
             continue
 
+        if sec.type == "answer_key":
+            key_map.update(parse_answer_key(sec.blocks))
+            continue
         if sec.type == "choice":
             cands, leftover_texts = _detect_choice(sec)
             # 有 group 的候选按连续同组聚合成 group 题；无 group 的独立
@@ -330,11 +342,13 @@ def parse_blocks(
                     continue
                 if BLANK_RE.search(t) and not _scan_options(t):
                     qid += 1
+                    mnum = re.match(r"\s*(\d+)", t)
                     questions.append(
                         Question(
                             id=qid, type="blank", section=sec.title,
                             stem=_strip_number(t), options=None, answer=[],
                             tolerant=True, low_confidence=True,
+                            num=int(mnum.group(1)) if mnum else None,
                         )
                     )
                 else:
@@ -345,6 +359,10 @@ def parse_blocks(
             (b.text, sec.title, "knowledge")
             for b in sec.blocks if b.kind == "para" and b.text.strip()
         )
+
+    # 答案 key 区回填（确定性来源，优先于 LLM 兜底）
+    if key_map:
+        apply_answer_key(questions, key_map)
 
     if llm is not None and not llm_parse:
         # 1) 优先：给规则产出的低置信题补答案（保证已有题先拿到答案）
@@ -510,6 +528,73 @@ def extract_answer_line(text: str) -> list[str] | None:
     return list(m.group(1)) if m else None
 
 
+# ---------------- 答案 key 区（文档末尾独立答案区）----------------
+
+# 区间字母序列：1-5 BCADC / 6—10 AB
+_KEY_RANGE_RE = re.compile(r"^\s*(\d{1,3})\s*[-—~～]\s*(\d{1,3})\s*([A-D]{1,4}(?:\s*[A-D]{1,4})*)\s*$")
+# 题号-字母对：1.B / 2、AC / 3．D（一行可连排多对）
+_KEY_PAIR_RE = re.compile(r"(\d{1,3})\s*[.、．)）:：]?\s*([A-D]{1,4})(?![A-D])")
+# 题号-文本值：17. 拥塞控制（填空答案）
+_KEY_TEXT_RE = re.compile(r"^\s*(\d{1,3})\s*[.、．)）:：]\s*(\S.*)$")
+
+
+def parse_answer_key(blocks: list[Block]) -> dict[int, str]:
+    """答案 key 区内容 → {题号: 答案}。字母值为选择/多选，文本值为填空。"""
+    key: dict[int, str] = {}
+    for b in blocks:
+        t = b.text.strip()
+        if not t:
+            continue
+        m = _KEY_RANGE_RE.match(t)
+        if m:
+            start, end = int(m.group(1)), int(m.group(2))
+            letters = re.sub(r"\s+", "", m.group(3))
+            if start <= end and end - start + 1 == len(letters):
+                for i, ch in enumerate(letters):
+                    key[start + i] = ch
+            continue  # 区间形无论成败都不再按题号对解析（避免截断区间误读）
+        pairs = _KEY_PAIR_RE.findall(t)
+        if pairs:
+            for num_s, val in pairs:
+                key.setdefault(int(num_s), val)
+            continue
+        m = _KEY_TEXT_RE.match(t)
+        if m:
+            key.setdefault(int(m.group(1)), m.group(2).strip())
+    return key
+
+
+def apply_answer_key(questions: list[Question], key_map: dict[int, str]) -> int:
+    """按题号把答案 key 回填到无答案的题；返回回填题数。
+
+    确定性文档来源（与高亮同级别），回填后提升置信。
+    选择题答案不在选项中时不回填（维持存疑，交 LLM/人工）。
+    """
+    applied = 0
+    for q in questions:
+        if q.answer or q.num is None:
+            continue
+        val = key_map.get(q.num)
+        if not val:
+            continue
+        if q.type in ("single", "multiple"):
+            letters = list(val)
+            if not set(letters) <= set(q.options or {}):
+                continue
+            q.answer = letters
+            if len(letters) > 1:
+                q.type = "multiple"
+            q.low_confidence = False
+            q.note = None
+            applied += 1
+        elif q.type == "blank":
+            q.answer = [val]
+            q.low_confidence = False
+            q.note = None
+            applied += 1
+    return applied
+
+
 def infer_choice_type(section_title: str, answer: list[str] | None) -> str:
     """推断选择题类型：多选题标题或答案>1 → multiple，否则 single。"""
     if "多选" in section_title:
@@ -525,7 +610,7 @@ def choice_candidate_to_question(cand: "ChoiceCandidate", qid: int) -> Question:
         return Question(
             id=qid, type="single", section=cand.section, stem=cand.stem,
             options=dict(cand.options), answer=[cand.answer_letter],
-            low_confidence=False,
+            low_confidence=False, num=cand.num,
         )
     stem, letters = extract_inline_answer(cand.stem)
     answer = letters or []
@@ -539,6 +624,7 @@ def choice_candidate_to_question(cand: "ChoiceCandidate", qid: int) -> Question:
         options=dict(cand.options),
         answer=answer,
         low_confidence=low,
+        num=cand.num,
     )
 
 
@@ -573,6 +659,29 @@ def filter_blocks(blocks: list[Block]) -> tuple[list[Block], dict[str, int]]:
         else:
             kept.append(b)
     return kept, ignored
+
+
+def diagnose_blocks(blocks: list[Block]) -> str:
+    """解析诊断：结构识别报告（0 题或题量异常时帮用户定位文档形态问题）。"""
+    kept, ignored = filter_blocks(blocks)
+    sections = segment(kept)
+    lines = [f"识别到 {len(sections)} 个章节："]
+    total_cands = 0
+    for s in sections:
+        note = ""
+        if s.type == "choice":
+            cands, _ = _detect_choice(s)
+            total_cands += len(cands)
+            note = f"，识别选择题 {len(cands)} 道"
+        lines.append(f"  · [{s.type}] {s.title!r}（{len(s.blocks)} 块{note}）")
+    noise = "、".join(f"{k}×{v}" for k, v in ignored.items()) or "无"
+    lines.append(f"滤噪：{noise}")
+    if total_cands == 0:
+        lines.append(
+            "未识别到选择题候选。支持的文档形态：题干 + A./B./C./D. 选项；"
+            "答案可为内联 (B)、「答案：B」、黄色高亮或文末「参考答案」区。"
+        )
+    return "\n".join(lines)
 
 
 # ---------------- 组装辅助 ----------------
@@ -620,6 +729,7 @@ def dict_to_quiz(d: dict) -> Quiz:
                 low_confidence=bool(qd.get("low_confidence", False)),
                 note=qd.get("note"),
                 source=qd.get("source", "rule"),
+                num=qd.get("num"),
             )
         )
     return Quiz(

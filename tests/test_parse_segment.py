@@ -24,6 +24,23 @@ def test_scan_options_no_false_positive():
     assert P._scan_options("下面关于B树的描述，C语言中(B)") == []
 
 
+def test_diagnose_blocks_reports_structure():
+    """诊断输出：分节清单 + 选择题候选数 + 滤噪统计；0 候选时给形态提示。"""
+    blocks = [
+        P.Block("docx", "Heading 1", "单选题", "heading"),
+        P.Block("docx", "Normal", "1. 数据库技术的核心是", "para"),
+        *[P.Block("docx", "Normal", f"{L}、选项{L}", "para") for L in "ABCD"],
+        P.Block("docx", "Normal", "解析：略", "para"),  # 会被滤噪
+    ]
+    text = P.diagnose_blocks(blocks)
+    assert "[choice] '单选题'" in text
+    assert "识别选择题 1 道" in text
+    assert "滤噪" in text and "explanation×1" in text
+
+    empty = P.diagnose_blocks([P.Block("docx", "Normal", "随便一段文字", "para")])
+    assert "未识别到选择题候选" in empty
+
+
 def test_segment_db():
     blocks = load_docx(str(DB))
     sections = P.segment(blocks)

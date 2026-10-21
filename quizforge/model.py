@@ -33,6 +33,7 @@ class Question:
     note: str | None = None                                # 如「本题含图，已省略」
     source: str = "rule"                                   # rule | llm（结构化来源）
     sub_questions: list = field(default_factory=list)      # group 题型的子题列表
+    num: int | None = None                                 # 文档中的题号（答案 key 区映射用）
 
 
 @dataclass

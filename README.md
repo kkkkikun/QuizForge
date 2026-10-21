@@ -111,6 +111,7 @@ quizforge <input> [options]
 | `--llm-parse` | 整篇交 LLM 结构化（规则搞不动的怪文档；产出默认标存疑） |
 | `--max-llm <N>` | LLM 调用次数上限（控成本） |
 | `--review` | 生成前逐题核对存疑题（`y`确认 / `a`改答案 / `s`跳过 / `d`删除 / `q`结束） |
+| `--diagnose` | 打印文档结构诊断（分节/候选/滤噪），排查解析问题 |
 | `--json` | 同时导出题库 JSON（与 HTML 同名 `.json`） |
 | `--shuffle` / `--no-shuffle` | 是否乱序（默认乱序） |
 | `-V, --version` | 版本 |
@@ -182,8 +183,11 @@ uv run pytest tests/test_parse_segment.py -q   # 单模块
 
 - [ ] 图片/图表抽取（base64 内嵌）
 - [ ] 扫描版 PDF OCR
-- [ ] jsdom 前端运行时单测
-- [ ] 答案 key 区映射（让非内联答案文档免 LLM）
+- [x] jsdom 前端运行时单测（vitest + testing-library）
+- [x] 答案 key 区映射（文末「参考答案」按题号回填，免 LLM）
+- [x] 解析失败诊断（0 题时输出分节/候选/滤噪报告；`--diagnose` 随时可用）
+
+完整推广路线见 [.claude/docs/roadmap.md](.claude/docs/roadmap.md)。
 
 ## 🤝 贡献
 

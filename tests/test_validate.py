@@ -80,21 +80,30 @@ def test_warning_matching_answer_duplicate_tokens():
     assert any("重复" in i.message for i in issues)
 
 
-def test_real_data_gates_no_errors():
-    """CI 门禁：三个真实题库经真实管线（解析/加载+去重）后不得有 ERROR。"""
+def _all_real_quizzes():
+    """data/ 下全部真实样本（docx 规则解析 / json 加载+去重）→ [(名称, Quiz)]。"""
     from quizforge.ingest import load_docx
     from quizforge.parse import dedup_questions, dict_to_quiz, parse_blocks
 
-    db = parse_blocks(load_docx(str(DATA / "数据库原理题库.docx")), source_file="db.docx")
-    cet = parse_blocks(load_docx(str(DATA / "大英四.docx")), source_file="cet.docx")
-    net_data = json.loads((DATA / "2026年重点复习题库.json").read_text(encoding="utf-8"))
-    net = dict_to_quiz(net_data)
-    net.questions, _ = dedup_questions(net.questions)
+    quizzes = []
+    for p in sorted(DATA.glob("*.docx")):
+        quizzes.append((p.name, parse_blocks(load_docx(str(p)), source_file=p.name)))
+    for p in sorted(DATA.glob("*.json")):
+        data = json.loads(p.read_text(encoding="utf-8"))
+        quiz = dict_to_quiz(data)
+        quiz.questions, _ = dedup_questions(quiz.questions)
+        quizzes.append((p.name, quiz))
+    return quizzes
 
-    for quiz in (db, cet, net):
-        issues = validate_quiz(quiz)
-        errs = [i for i in issues if i.level == "error"]
-        assert not errs, f"{quiz.source_file}: {errs}"
+
+def test_real_data_gates_no_errors():
+    """CI 门禁：data/ 全部真实题库经真实管线后不得有 ERROR（新样本入库即受检）。"""
+    problems = []
+    for name, quiz in _all_real_quizzes():
+        errs = [i for i in validate_quiz(quiz) if i.level == "error"]
+        if errs:
+            problems.append(f"{name}: {errs}")
+    assert not problems, "真实样本未通过发布校验：" + "；".join(problems)
 
 
 def test_issue_levels_only_error_or_warning():

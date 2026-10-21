@@ -53,6 +53,11 @@ def build_parser() -> argparse.ArgumentParser:
         help="生成 HTML 前逐题核对存疑题目（y 确认 / a 改答案 / s 跳过 / d 删除）",
     )
     p.add_argument(
+        "--diagnose",
+        action="store_true",
+        help="打印文档结构诊断（分节/候选/滤噪），用于排查解析问题",
+    )
+    p.add_argument(
         "--json",
         action="store_true",
         help="同时导出题库 JSON（与 HTML 同名的 .json，便于留存/复用 LLM 结果）",
@@ -113,6 +118,7 @@ def main(argv: list[str] | None = None) -> int:
     # 延迟导入
     from . import parse, render
 
+    blocks = None  # JSON 重渲染路径无 Block 流（诊断不可用）
     if args.input.lower().endswith(".json"):
         # 从 JSON 重新渲染（跳过解析/LLM）——复用已留存的结构化题库
         import json as _json
@@ -158,7 +164,14 @@ def main(argv: list[str] | None = None) -> int:
     if not quiz.questions:
         print("错误：未识别到任何题目（文档可能不含选填题、为空或格式特殊）。", file=sys.stderr)
         print(f"  ignored_summary={quiz.ignored_summary}", file=sys.stderr)
+        if blocks is not None:
+            print(parse.diagnose_blocks(blocks), file=sys.stderr)
+            print("提示：可把本诊断截图连同文档样例提 Issue 请求适配。", file=sys.stderr)
         return 3
+
+    # 3.6 诊断（--diagnose：题量异常少的排查入口）
+    if args.diagnose and blocks is not None:
+        print(parse.diagnose_blocks(blocks), file=sys.stderr)
 
     # 3.5 交互审校（--review）
     if args.review:

@@ -39,7 +39,7 @@ QuizForge/
 
 - 分支：`master`
 - 远程：`origin` → https://github.com/kkkkikun/QuizForge
-- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 重做本组 → 推广路线图确立 + M0 还债/校验关卡 + M1 移动端体验/测试基建/PWA（见 `roadmap.md`）
+- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 重做本组 → 推广路线图确立 + M0 还债/校验关卡 + M1 移动端/测试基建/PWA + M2 运营化 + M3 答案区映射/诊断（见 `roadmap.md`）
 
 ## 关键契约
 
