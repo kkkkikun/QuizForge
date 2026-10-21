@@ -1,0 +1,263 @@
+{
+  "title": "热物理在工程技术中的应用",
+  "source_file": "热物理在工程技术中的应用.docx",
+  "questions": [
+    {
+      "id": 1,
+      "type": "single",
+      "section": "单选题：",
+      "stem": "某热机的高温热源温度为500K，低温热源温度为300K，其最大效率为 (   )",
+      "options": {
+        "A": "40%",
+        "B": "50%",
+        "C": "60%",
+        "D": "20%"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [],
+      "num": 1
+    },
+    {
+      "id": 2,
+      "type": "single",
+      "section": "单选题",
+      "stem": "下列关于静电复印机（N 型感光鼓）工作过程的说法正确的是（  ）",
+      "options": {
+        "A": "充电时让感光鼓表面带正电",
+        "B": "感光鼓静电潜像带正电",
+        "C": "墨粉带正电",
+        "D": "复印过程白纸不带电"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [],
+      "num": 8
+    },
+    {
+      "id": 3,
+      "type": "single",
+      "section": "单选题",
+      "stem": "图示为静电除尘的原理示意图（1.19）. 尘埃在电场中通过某种机制带电，在静电力作用下向集尘极迁移并沉积，以达到除尘的目的，下列表述正确的是（  ）",
+      "options": {
+        "A": "到达集尘极的尘埃可带正电，也可带负电",
+        "B": "电场方向由集尘极指向放电极",
+        "C": "放电极和集尘极间的电场是匀强电场",
+        "D": "尘埃到达集尘极的过程中受力方向与电场方向相同"
+      },
+      "answer": [
+        "A"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [],
+      "num": 11
+    },
+    {
+      "id": 4,
+      "type": "single",
+      "section": "单选题",
+      "stem": "光纤的损耗包括哪些因素？",
+      "options": {
+        "A": "介质吸收",
+        "B": "散射损耗",
+        "C": "辐射损耗",
+        "D": "以上三项都包括"
+      },
+      "answer": [
+        "D"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [],
+      "num": 19
+    },
+    {
+      "id": 5,
+      "type": "single",
+      "section": "单选题",
+      "stem": "光纤通信中，信号传输过程中的损耗是指光信号的（  ）特性的减弱.",
+      "options": {
+        "A": "速度",
+        "B": "频率",
+        "C": "强度",
+        "D": "相位"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [],
+      "num": 21
+    },
+    {
+      "id": 6,
+      "type": "single",
+      "section": "单选题",
+      "stem": "第一根具有实用通信价值的光纤由美国康宁玻璃公司在（  ）年拉制成功的。",
+      "options": {
+        "A": "1966年",
+        "B": "1970年",
+        "C": "1980年",
+        "D": "1992年"
+      },
+      "answer": [
+        "B"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [],
+      "num": 25
+    },
+    {
+      "id": 7,
+      "type": "group",
+      "section": "单选题",
+      "stem": "高于20000Hz",
+      "options": null,
+      "answer": [],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [
+        {
+          "id": 8,
+          "type": "single",
+          "section": "单选题",
+          "stem": "与频谱多普勒相比，彩色多普勒血流成像的优点是（  ）",
+          "options": {
+            "A": "显示血流速度的范围",
+            "B": "显示高速血流时无混叠",
+            "C": "计算流速更准确",
+            "D": "切面上可直观显示血流情况"
+          },
+          "answer": [
+            "D"
+          ],
+          "accepted": [],
+          "tolerant": false,
+          "low_confidence": false,
+          "note": null,
+          "source": "rule",
+          "sub_questions": [],
+          "num": 28
+        },
+        {
+          "id": 9,
+          "type": "single",
+          "section": "单选题",
+          "stem": "超声波是一种(   )",
+          "options": {
+            "A": "电磁波",
+            "B": "机械波",
+            "C": "物质波",
+            "D": "引力波"
+          },
+          "answer": [
+            "B"
+          ],
+          "accepted": [],
+          "tolerant": false,
+          "low_confidence": false,
+          "note": null,
+          "source": "rule",
+          "sub_questions": [],
+          "num": 29
+        },
+        {
+          "id": 10,
+          "type": "single",
+          "section": "单选题",
+          "stem": "已知某个环境噪声的声强级为 60 dB，如果另一个声音源产生的声强是该噪声声强的100 倍，那么这个声音源的声强级为多少？",
+          "options": {
+            "A": "60 dB",
+            "B": "70 dB",
+            "C": "80 dB",
+            "D": "90 dB"
+          },
+          "answer": [
+            "C"
+          ],
+          "accepted": [],
+          "tolerant": false,
+          "low_confidence": false,
+          "note": null,
+          "source": "rule",
+          "sub_questions": [],
+          "num": 30
+        }
+      ],
+      "num": null
+    },
+    {
+      "id": 11,
+      "type": "single",
+      "section": "单选题",
+      "stem": "已知某个环境噪声的声强级为 65 dB，如果另一个声音源产生的声强是该噪声声强的100 倍，那么这个声音源的声强级为多少？",
+      "options": {
+        "A": "65 dB",
+        "B": "75 dB",
+        "C": "85 dB",
+        "D": "95 dB"
+      },
+      "answer": [
+        "C"
+      ],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": false,
+      "note": null,
+      "source": "rule",
+      "sub_questions": [],
+      "num": 31
+    },
+    {
+      "id": 13,
+      "type": "blank",
+      "section": "单选题",
+      "stem": "图示为电除尘气体电离和导电的伏安曲线图（1.20），若提高除尘效果，延长（  ）段的时间。",
+      "options": null,
+      "answer": [],
+      "accepted": [],
+      "tolerant": false,
+      "low_confidence": true,
+      "note": "填空无答案",
+      "source": "llm",
+      "sub_questions": [],
+      "num": null
+    }
+  ],
+  "ignored_summary": {
+    "image": 7,
+    "knowledge": 42,
+    "essay": 14,
+    "invalid": 1
+  }
+}

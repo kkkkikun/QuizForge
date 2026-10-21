@@ -1,10 +1,13 @@
 quizzes:
-  - id: db
-    title: 数据库原理题库
-    source: ../data/数据库原理题库.docx
-  - id: net
-    title: 2026年重点复习题库
-    source: ../data/2026年重点复习题库.json
-  - id: cet4
-    title: 大英四级速记（CET-4）
-    source: ../data/大英四.docx
+- id: db
+  title: 数据库原理题库
+  source: ../data/数据库原理题库.docx
+- id: net
+  title: 2026年重点复习题库
+  source: ../data/2026年重点复习题库.json
+- id: cet4
+  title: 大英四级速记（CET-4）
+  source: ../data/大英四.docx
+- id: thermal
+  title: 热物理在工程技术中的应用
+  source: ../data/thermal-src.json
