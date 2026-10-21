@@ -138,7 +138,7 @@ def test_build_react_quizzes_from_json(tmp_path):
     from quizforge.parse import quiz_to_dict
     from quizforge.reactfmt import build_react_quizzes
     import json
-    quiz = _quiz(Question(1, "single", "选", "x", {"A": "1", "B": "2"}, answer=["B"]))
+    quiz = _quiz(Question(1, "single", "选", "1+1=?", {"A": "1", "B": "2"}, answer=["B"]))
     jp = tmp_path / "q.json"
     jp.write_text(json.dumps(quiz_to_dict(quiz), ensure_ascii=False), encoding="utf-8")
     m = tmp_path / "quizzes.yaml"
@@ -147,6 +147,28 @@ def test_build_react_quizzes_from_json(tmp_path):
     assert len(out) == 1
     assert out[0]["id"] == "t"
     assert out[0]["questions"][0]["answer"] == "B"
+
+
+def test_build_rejects_invalid_quiz(tmp_path):
+    """发布校验关卡：结构错误的题库 → QuizValidationError，拒绝生成。"""
+    import json
+    import pytest
+
+    from quizforge.validate import QuizValidationError
+
+    bad = {
+        "title": "bad", "source_file": "bad.docx", "ignored_summary": {},
+        "questions": [
+            {"id": 1, "type": "single", "section": "选", "stem": "题干",
+             "options": {"A": "1", "B": "2", "C": "3", "D": "4"}, "answer": ["E"]},
+        ],
+    }
+    (tmp_path / "bad.json").write_text(json.dumps(bad, ensure_ascii=False), encoding="utf-8")
+    (tmp_path / "quizzes.yaml").write_text(
+        "quizzes:\n  - id: bad\n    title: 坏题库\n    source: bad.json\n", encoding="utf-8"
+    )
+    with pytest.raises(QuizValidationError):
+        build_react_quizzes(str(tmp_path / "quizzes.yaml"))
 
 
 def test_build_react_quizzes_from_txt(tmp_path):

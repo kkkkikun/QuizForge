@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import sys
 
 from .model import Question, Quiz
 
@@ -147,15 +148,35 @@ def load_manifest(path: str) -> list[dict]:
 
 
 def _load_quiz(src: str) -> Quiz:
-    """加载一个题库：.json → dict_to_quiz；docx/pdf/txt → ingest+parse（无 LLM）。"""
+    """加载一个题库：.json → dict_to_quiz；docx/pdf/txt → ingest+parse（无 LLM）。加载后统一去重。"""
+    from .parse import dedup_questions
+
     if src.lower().endswith(".json"):
         with open(src, encoding="utf-8") as f:
             data = json.load(f)
         from .parse import dict_to_quiz
-        return dict_to_quiz(data)
-    from . import ingest, parse
-    blocks = ingest.load(src)
-    return parse.parse_blocks(blocks, source_file=os.path.basename(src))
+        quiz = dict_to_quiz(data)
+    else:
+        from . import ingest, parse
+        blocks = ingest.load(src)
+        quiz = parse.parse_blocks(blocks, source_file=os.path.basename(src))
+    qs, dup = dedup_questions(quiz.questions)
+    if dup:
+        quiz.ignored_summary["duplicate"] = quiz.ignored_summary.get("duplicate", 0) + dup
+    quiz.questions = qs
+    return quiz
+
+
+def _gate_quiz(quiz: Quiz, label: str) -> None:
+    """发布校验关卡：warning 打印提示，error 抛 QuizValidationError 拒绝生成。"""
+    from .validate import QuizValidationError, format_issues, has_errors, validate_quiz
+
+    issues = validate_quiz(quiz)
+    if issues:
+        print(f"校验 [{label}] 发现 {len(issues)} 个问题：\n{format_issues(issues)}", file=sys.stderr)
+    if has_errors(issues):
+        n_err = sum(1 for i in issues if i.level == "error")
+        raise QuizValidationError(f"[{label}] 未通过发布校验（{n_err} 个错误），已拒绝生成")
 
 
 def build_react_quizzes(manifest_path: str) -> list[dict]:
@@ -166,5 +187,6 @@ def build_react_quizzes(manifest_path: str) -> list[dict]:
         quiz = _load_quiz(os.path.join(base, e["source"]))
         if e.get("title"):
             quiz.title = e["title"]
+        _gate_quiz(quiz, e.get("id") or e.get("title") or e["source"])
         out.append(to_react_quiz(quiz, qid=e.get("id")))
     return out

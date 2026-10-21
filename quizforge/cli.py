@@ -94,8 +94,13 @@ def main(argv: list[str] | None = None) -> int:
     # 多题库模式：读 manifest 生成 frontend/src/data.ts
     if args.react_frontend:
         from . import reactfmt
+        from .validate import QuizValidationError
         manifest = os.path.join(args.react_frontend, "quizzes.yaml")
-        quizzes = reactfmt.build_react_quizzes(manifest)
+        try:
+            quizzes = reactfmt.build_react_quizzes(manifest)
+        except QuizValidationError as e:
+            print(f"错误：{e}。请修复源文档或核对后重试。", file=sys.stderr)
+            return 4
         out_ts = os.path.join(args.react_frontend, "src", "data.ts")
         reactfmt.write_quizzes_ts(quizzes, out_ts)
         titles = "、".join(q["title"] for q in quizzes)
@@ -161,6 +166,15 @@ def main(argv: list[str] | None = None) -> int:
         if not quiz.questions:
             print("审校后无题目保留。", file=sys.stderr)
             return 3
+
+    # 3.7 发布校验（质量门禁）：warning 仅提示，error 拒绝生成
+    from .validate import format_issues, has_errors, validate_quiz
+    issues = validate_quiz(quiz)
+    if issues:
+        print(f"发布校验发现 {len(issues)} 个问题：\n{format_issues(issues)}", file=sys.stderr)
+    if has_errors(issues):
+        print("错误：题库未通过发布校验，拒绝生成。请 --review 人工核对或检查源文档。", file=sys.stderr)
+        return 4
 
     # 4. 渲染 + 5. 写出
     html = render.render_html(quiz, shuffle=args.shuffle)
