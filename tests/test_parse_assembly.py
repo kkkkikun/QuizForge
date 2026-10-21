@@ -44,6 +44,29 @@ def test_assembly_net_filters_noise():
     assert any(q.low_confidence for q in quiz.questions)
 
 
+def test_assembly_dedup_exact_duplicates():
+    """完全相同的题（题型+题干+选项+答案）只留一道，重复计入 ignored_summary。"""
+    from quizforge.model import Block
+
+    blocks = [Block("docx", "Normal", "单选题", "heading")]
+    for n in (1, 2):
+        blocks.append(Block("docx", "Normal", f"{n}. 数据库技术的核心是（B）", "para"))
+        for letter, txt in (("A", "数据"), ("B", "数据库管理系统"),
+                            ("C", "操作系统"), ("D", "应用程序")):
+            blocks.append(Block("docx", "Normal", f"{letter}、{txt}", "para"))
+    quiz = parse_blocks(blocks, source_file="x.docx")
+    assert len(quiz.questions) == 1, "完全相同的两道单选应去重为一道"
+    assert quiz.ignored_summary.get("duplicate", 0) == 1
+
+    blanks = [
+        Block("docx", "Normal", "填空题", "heading"),
+        Block("docx", "Normal", "1. 数据库系统的三级模式结构是指____", "para"),
+        Block("docx", "Normal", "2. 数据库系统的三级模式结构是指____", "para"),
+    ]
+    quiz2 = parse_blocks(blanks, source_file="y.docx")
+    assert len(quiz2.questions) == 1, "完全相同的两道填空应去重为一道"
+
+
 def test_assembly_with_fake_llm_refines():
     blocks = load_docx(str(DATA / "2026年重点复习题库.docx"))
 
@@ -55,3 +78,21 @@ def test_assembly_with_fake_llm_refines():
     quiz = parse_blocks(blocks, source_file="x.docx", llm=FakeLLM())
     refined = [q for q in quiz.questions if q.answer and not q.low_confidence]
     assert len(refined) >= 1, "fake LLM 应能把低置信题目补上答案并提升置信"
+
+
+def test_assembly_drops_unrenderable_llm_questions():
+    """LLM 兜底产出无选项的『假题』→ 组装时丢弃并计入 ignored，不流入渲染。"""
+    blocks = load_docx(str(DATA / "2026年重点复习题库.docx"))
+
+    class BrokenLLM:
+        def adjudicate(self, text):
+            if "操作" in text:
+                return {"is_question": True, "type": "single", "answer": ["A"],
+                        "stem": text[:20], "options": {}}
+            return None
+
+    quiz = parse_blocks(blocks, source_file="x.docx", llm=BrokenLLM())
+    bad = [q for q in quiz.questions
+           if q.type in ("single", "multiple") and (not q.options or len(q.options) < 2)]
+    assert not bad, "无选项的选择题不应流入 Quiz"
+    assert quiz.ignored_summary.get("invalid", 0) >= 1, "废题应计入 ignored_summary"

@@ -88,3 +88,88 @@ def test_cet_module_sections():
     quiz = parse_blocks(blocks, source_file="cet.docx")
     sections = {q.section for q in quiz.questions}
     assert sections == {"听力", "阅读"}
+
+
+def _option_block(answer="A"):
+    return [
+        Block("docx", "Normal", "A、optA", "para"),
+        Block("docx", "Normal", "B、optB", "para"),
+        Block("docx", "Normal", "C、optC", "para"),
+        Block("docx", "Normal", "D、optD", "para"),
+    ]
+
+
+def test_cet_bare_subcontext_titles_separate_groups():
+    """裸 Conversation/Passage 标题（无编号）也必须更新上下文，切断前一组的粘连带。"""
+    blocks = [
+        Block("docx", "Normal", "听力", "heading"),
+        Block("docx", "Normal", "Unit 1", "para"),
+        Block("docx", "Normal", "News report 2", "para"),
+    ]
+    blocks += [Block("docx", "Normal", "1、", "para")] + _option_block()
+    blocks.append(Block("docx", "Normal", "Conversation", "para"))
+    blocks += [Block("docx", "Normal", "2、", "para")] + _option_block()
+    blocks.append(Block("docx", "Normal", "Passage", "para"))
+    blocks += [Block("docx", "Normal", "3、", "para")] + _option_block()
+    quiz = parse_blocks(blocks, source_file="cet.docx")
+    groups = [q for q in quiz.questions if q.type == "group"]
+    assert [g.stem for g in groups] == [
+        "Unit 1 · News report 2",
+        "Unit 1 · Conversation",
+        "Unit 1 · Passage",
+    ]
+    assert [len(g.sub_questions) for g in groups] == [1, 1, 1]
+
+
+def test_group_named_by_title_line():
+    """题前短标题行 → 组名取标题整行，不截断。"""
+    title = "The tide of change: Embracing the industries of the future"
+    blocks = [
+        Block("docx", "Normal", "阅读", "heading"),
+        Block("docx", "Normal", title, "para"),
+        Block("docx", "Normal",
+              "1 Turning back the clock to Britain in the 18th century, we find the Factory Act.",
+              "para"),
+        Block("docx", "Normal",
+              "2 Progress continued with the Second Industrial Revolution in the late 19th century.",
+              "para"),
+        Block("docx", "Normal", "1. What does the passage mainly talk about?", "para"),
+    ] + _option_block()
+    quiz = parse_blocks(blocks, source_file="cet.docx")
+    g = quiz.questions[0]
+    assert g.type == "group"
+    assert g.stem == title
+
+
+def test_group_name_prefers_title_over_leading_header():
+    """文档头（如教材名）之后的短标题行优先作组名。"""
+    blocks = [
+        Block("docx", "Normal", "阅读", "heading"),
+        Block("docx", "Normal", "理解当代中国", "para"),
+        Block("docx", "Normal", "Stargazers at 4,410 meters", "para"),
+        Block("docx", "Normal",
+              "1 In Daocheng County, Garze Tibetan Autonomous Prefecture, the LHAASO project "
+              "observes cosmic rays at high altitude.",
+              "para"),
+        Block("docx", "Normal", "1. What is the main purpose of the project?", "para"),
+    ] + _option_block()
+    quiz = parse_blocks(blocks, source_file="cet.docx")
+    assert quiz.questions[0].stem == "Stargazers at 4,410 meters"
+
+
+def test_group_name_word_boundary_truncation():
+    """无标题行（正文直接开头）→ 首段按词边界截断并加省略号。"""
+    blocks = [
+        Block("docx", "Normal", "综合训练", "heading"),
+        Block("docx", "Normal",
+              "Tea's remarkable journey began in ancient China, evolving from a medicinal "
+              "drink into a global commodity over centuries.",
+              "para"),
+        Block("docx", "Normal",
+              "In the Han Dynasty, tea drinking became widespread in the court and among "
+              "common people alike.",
+              "para"),
+        Block("docx", "Normal", "1. What was the earliest use of tea?", "para"),
+    ] + _option_block()
+    quiz = parse_blocks(blocks, source_file="cet.docx")
+    assert quiz.questions[0].stem == "Tea's remarkable journey began…"

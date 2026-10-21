@@ -99,6 +99,29 @@ def _strip_number(text: str) -> str:
     return QUESTION_NUM_RE.sub("", text, count=1).strip()
 
 
+# 组名候选：题前 leading 短段落视为标题行（整行取用）；超过则按词边界截断
+_GROUP_TITLE_MAX = 60
+
+
+def _truncate_name(text: str, limit: int = 30) -> str:
+    if len(text) <= limit:
+        return text
+    cut = text[:limit]
+    if text[limit] != " " and " " in cut:
+        cut = cut[:cut.rfind(" ")]
+    return cut.rstrip(" ,.;:") + "…"
+
+
+def _pick_group_name(pending: list[str]) -> str:
+    """组名：题前第一个长段落之前的最后一个短段落（标题行）整行取用；无则首段截断。"""
+    name = ""
+    for t in pending:
+        if len(t) > _GROUP_TITLE_MAX:
+            break
+        name = t
+    return name or _truncate_name(pending[0])
+
+
 def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
     """在 choice 节内识别选择题候选。
 
@@ -144,10 +167,10 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
                 stem = real_stem if real_stem else npart
                 current_group = ctx
             else:
-                stem = real_stem
-                # 段落中断：题前累积 ≥2 段非选项文本（文章正文）→ 开新组，组名取首段（段落标题）
+                stem = real_stem or (f"第 {cur_num} 题" if cur_num else "")
+                # 段落中断：题前累积 ≥2 段非选项文本（文章正文）→ 开新组，组名取标题行
                 if len(pending) >= 2:
-                    current_group = pending[0][:30]
+                    current_group = _pick_group_name(pending[:-1])
             cands.append(ChoiceCandidate(section.title, stem, options, answer_letter=hl, group=current_group))
             pending = []
             cur_num = None
@@ -213,6 +236,13 @@ def _detect_matching(section: Section) -> list[tuple[str, str]]:
             passage_buf.append(t)
             i += 1
     return out
+
+
+def _is_unrenderable(q: Question) -> bool:
+    """无法作答的废题：空题干 / 选择题无选项。组装时丢弃而非标存疑（--review 也救不了它们）。"""
+    if len(q.stem.strip()) < 2:
+        return True
+    return q.type in ("single", "multiple") and (not q.options or len(q.options) < 2)
 
 
 def parse_blocks(
@@ -332,6 +362,16 @@ def parse_blocks(
     else:
         for _t, _s, cat in residual:
             ignored[cat] = ignored.get(cat, 0) + 1
+
+    unrenderable = [q for q in questions if _is_unrenderable(q)]
+    if unrenderable:
+        ignored["invalid"] = ignored.get("invalid", 0) + len(unrenderable)
+        drop = {id(q) for q in unrenderable}
+        questions = [q for q in questions if id(q) not in drop]
+
+    questions, dup = dedup_questions(questions)
+    if dup:
+        ignored["duplicate"] = ignored.get("duplicate", 0) + dup
 
     for q in questions:
         _apply_validation(q)
@@ -543,6 +583,24 @@ def quiz_to_dict(quiz: Quiz) -> dict:
     import dataclasses
 
     return dataclasses.asdict(quiz)
+
+
+def dedup_questions(questions: list[Question]) -> tuple[list[Question], int]:
+    """去除完全重复的题（题型+题干+选项+答案全等）；group 不参与。返回 (保留列表, 重复数)。"""
+    seen: set = set()
+    out: list[Question] = []
+    dup = 0
+    for q in questions:
+        if q.type == "group":
+            out.append(q)
+            continue
+        key = (q.type, q.stem, tuple(sorted((q.options or {}).items())), tuple(q.answer))
+        if key in seen:
+            dup += 1
+            continue
+        seen.add(key)
+        out.append(q)
+    return out, dup
 
 
 def dict_to_quiz(d: dict) -> Quiz:

@@ -31,8 +31,9 @@ CET_SECTION_RE = re.compile(
     r"^(听力|阅读|综合训练|翻译|写作|十五选十|匹配|选词填空|仔细阅读|长篇阅读)$"
 )
 # CET 子分组（Unit / News report / Passage 等，作题干上下文，不分新节）
+# News report/Passage/Conversation 编号可省略（真实样本存在裸标题），出现即切换上下文
 CET_SUBCONTEXT_RE = re.compile(
-    r"^(Unit\s*\d+|News report\s*\d+|Passage\s*\d+|Conversation\s*\d+|Section\s+[A-Z])$"
+    r"^(Unit\s*\d+|News report\s*\d*|Passage\s*\d*|Conversation\s*\d*|Section\s+[A-Z])$"
 )
 # 答案序列行（匹配题：空格分隔的数字/字母 A-O，≥2 个 token）
 ANSWER_SEQ_RE = re.compile(r"^(?:\d{1,2}|[A-O])(?:\s+(?:\d{1,2}|[A-O]))+\s*$")
