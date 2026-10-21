@@ -55,6 +55,12 @@ git add frontend/src/data.ts frontend/quizzes.yaml && git commit -m "data: 更�
 ```
 `source` 支持 `.json`（已留存、含 LLM 答案）或 `.docx/.pdf/.txt`（规则解析）。
 
+**新题库一条龙**（复制文档 → 登记 → 生成 → 给出提交命令）：
+```bash
+uv run python scripts/add_quiz.py 同学的计网复习.docx --id network --title 计算机网络期末
+```
+生成经过发布校验关卡（`quizforge/validate.py`：error 拒绝生成）；失败会给出撤销命令。
+
 本地调试前端：`cd frontend && npm install && npm run dev`。
 
 ## 📦 安装

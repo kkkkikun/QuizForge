@@ -147,6 +147,20 @@ def load_manifest(path: str) -> list[dict]:
     ]
 
 
+def append_manifest(manifest_path: str, qid: str, title: str, source: str) -> None:
+    """登记新题库到 quizzes.yaml（id 已存在则拒绝）。"""
+    import yaml
+
+    with open(manifest_path, encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    quizzes = data.get("quizzes") or []
+    if any(e.get("id") == qid for e in quizzes):
+        raise ValueError(f"题库 id 已存在: {qid}")
+    quizzes.append({"id": qid, "title": title, "source": source})
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        yaml.safe_dump({"quizzes": quizzes}, f, allow_unicode=True, sort_keys=False)
+
+
 def _load_quiz(src: str) -> Quiz:
     """加载一个题库：.json → dict_to_quiz；docx/pdf/txt → ingest+parse（无 LLM）。加载后统一去重。"""
     from .parse import dedup_questions

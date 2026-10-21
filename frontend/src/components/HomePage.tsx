@@ -44,8 +44,15 @@ export default function HomePage() {
       </main>
 
       <footer className="bg-white border-t border-slate-200 py-6 px-6 text-center text-xs text-slate-400">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto space-y-1">
           <p>由 QuizForge 生成 · 规则 + LLM 解析</p>
+          <p>
+            <Link to="/about" className="hover:text-blue-600 transition-colors">关于 / 隐私说明</Link>
+            {' · '}
+            <a href="https://github.com/kkkkikun/QuizForge/issues/new?template=new-quiz.yml" target="_blank" rel="noreferrer" className="hover:text-blue-600 transition-colors">
+              想要新题库？
+            </a>
+          </p>
         </div>
       </footer>
     </div>

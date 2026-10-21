@@ -134,6 +134,26 @@ def test_load_manifest(tmp_path):
     assert entries[1]["source"] == "net.docx"
 
 
+def test_append_manifest(tmp_path):
+    """登记新题库：追加到清单末尾，中文不转义。"""
+    import pytest
+
+    from quizforge.reactfmt import append_manifest, load_manifest
+
+    m = tmp_path / "quizzes.yaml"
+    m.write_text("quizzes:\n  - id: db\n    title: 数据库\n    source: db.json\n", encoding="utf-8")
+    append_manifest(str(m), "net", "网络复习", "net.json")
+    entries = load_manifest(str(m))
+    assert entries == [
+        {"id": "db", "title": "数据库", "source": "db.json"},
+        {"id": "net", "title": "网络复习", "source": "net.json"},
+    ]
+    assert "网络复习" in m.read_text(encoding="utf-8")  # 中文不转义
+
+    with pytest.raises(ValueError):
+        append_manifest(str(m), "db", "重复", "again.json")  # id 冲突拒绝
+
+
 def test_build_react_quizzes_from_json(tmp_path):
     from quizforge.parse import quiz_to_dict
     from quizforge.reactfmt import build_react_quizzes
