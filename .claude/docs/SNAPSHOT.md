@@ -30,10 +30,11 @@ QuizForge/
 | 层 | 技术 |
 |----|------|
 | 后端 | Python 3.10+ (uv)；python-docx / pdfplumber / openai / anthropic / pyyaml |
+| 浏览器端 | Pyodide + browser_ingest（纯 stdlib 提取器，/convert 页面，文件不上传）|
 | 前端 | React 19 + Vite + Tailwind v4 + react-router-dom + PWA（vite-plugin-pwa）|
-| 前端质量 | tsc strict + eslint + vitest(jsdom, 24 测试) |
-| 测试 | pytest（含 golden）；frontend lint/test/build 进 CI |
-| 部署 | GitHub Pages（deploy.yml，404.html 回退） |
+| 前端质量 | tsc strict + eslint + vitest(jsdom 30 测试，含 Pyodide 真实集成) |
+| 测试 | pytest 146（含 golden + data/ 全量回归门禁）；frontend lint/test/build 进 CI |
+| 部署 | GitHub Pages（deploy.yml，404.html 回退）；PyPI publish.yml（待首次发布） |
 
 ## Git 状态
 

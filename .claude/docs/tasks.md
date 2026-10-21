@@ -4,7 +4,14 @@
 
 ## 进行中
 
-（无）→ 下一步：M4 推广启动（找同学收文档 + README 分层重写，见 `roadmap.md`）；M3 泛化随收到的文档持续反哺
+（无）→ 代码侧 M0–M5 全部完成；进入持续运营阶段（见 `roadmap.md` 与下方「真实动作」清单）
+
+## 剩余为真实世界动作（非代码）
+
+- [ ] M4 推广：找 5–10 位同学试用收文档 → 每份走 `scripts/add_quiz.py` 流水线（M3 验收 2/3 待补）
+- [ ] PyPI 首次发布：PyPI 侧配置 publisher（kkkkikun/QuizForge + publish.yml）→ `git tag v0.1.0 && git push --tags`
+- [ ] thermal 题库答案人工核对（全为 LLM 推理，源文档无答案）
+- [ ] 真机复核：移动端主流操作 + Lighthouse（M1 遗留）
 
 ### 遗留（小项）
 
@@ -32,6 +39,8 @@
 
 ## 近期完成
 
+- [x] **M5 工具化分发**（2026-10-21）：/convert 浏览器内转换上线（browser_ingest 纯 stdlib 提取器逐块一致 + Pyodide 桥 + vitest 真实集成测试）；PyPI 发布就绪（元数据/sdist 瘦身/publish workflow，待用户打 tag 发布）
+- [x] **M4 推广启动（代码侧）**（2026-10-21）：README 分层重写 + 四张实拍截图 + HomePage 计数口径修复；访问计数评估为不加（零后端/隐私优先）
 - [x] **M3+ 首份陌生文档实战**（2026-10-21）：01-pptx.docx → thermal 题库上线（9 题）；反哺解析层 4 项——丢 A 标签恢复、内联题干、回退组 ≥2 门槛（CET 组豁免）、组内子题 LLM 补答；顺带修复 dict_to_quiz 丢 sub_questions
 - [x] **M3 解析泛化**（2026-10-21）：答案 key 区映射（answer_key 节 + 题号回填，免 LLM）+ 解析失败诊断（diagnose_blocks/--diagnose）+ data/ 全量回归门禁 + Question 契约新增 num 字段
 - [x] **M2 站点可运营化**（2026-10-21）：错题反馈通道（预填 GitHub Issue）+ 错题本卷 + 关于/隐私页 + `scripts/add_quiz.py` 题库流水线 + Issues 模板
