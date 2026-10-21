@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { Question } from '../types';
-import { checkBlankAnswer } from './PracticeSession';
+import { gradeQuestion, isOptionsType } from '../lib/grading';
 import { BookOpen, ArrowRight, RotateCcw } from 'lucide-react';
 
 interface DashboardProps {
@@ -12,24 +12,8 @@ interface DashboardProps {
   onFilterChange: (mode: 'all' | 'choice' | 'blank') => void;
 }
 
-const isOptionsType = (t: string) => t === 'choice' || t === 'multiple' || t === 'group';
-
-function isCorrect(q: Question, uAns: string | string[] | undefined): boolean {
-  if (uAns === undefined) return false;
-  if (q.type === 'group') {
-    if (!Array.isArray(uAns)) return false;
-    return (q.subQuestions || []).every((s, i) => uAns[i] === s.answer);
-  }
-  if (q.type === 'choice') return uAns === q.answer;
-  if (q.type === 'multiple') {
-    const std = q.answer as string[];
-    const user = Array.isArray(uAns) ? uAns : [uAns];
-    return std.length === user.length && std.every(a => user.includes(a));
-  }
-  const stdList = Array.isArray(q.answer) ? q.answer : [q.answer];
-  const userList = Array.isArray(uAns) ? uAns : [uAns];
-  return stdList.every((std, idx) => checkBlankAnswer(userList[idx] || '', std));
-}
+const isCorrect = (q: Question, uAns: string | string[] | undefined): boolean =>
+  gradeQuestion(q, uAns);
 
 const typeLabel = (t: string) => (t === 'choice' ? '单选' : t === 'multiple' ? '多选' : t === 'group' ? '组题' : '填空');
 

@@ -1,4 +1,5 @@
-import { checkBlankAnswer, renderQuestionStem } from './PracticeSession';
+import { renderQuestionStem } from './PracticeSession';
+import { checkBlankAnswer } from '../lib/grading';
 import { render, screen } from '@testing-library/react';
 
 describe('checkBlankAnswer 填空容错判分', () => {

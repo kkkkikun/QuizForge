@@ -1,74 +1,18 @@
-import { useState, useEffect, useMemo, ReactNode } from 'react';
+import { useState, useMemo, ReactNode } from 'react';
 import type { Question } from '../types';
+import { gradeQuestion } from '../lib/grading';
 import {
   ArrowLeft,
   ArrowRight,
   CheckCircle2,
   XCircle,
   BookOpen,
-  Check,
-  RotateCcw
 } from 'lucide-react';
 import { motion } from 'motion/react';
-
-// Smart comparison function for fill-in-the-blank questions
-export function checkBlankAnswer(userInput: string, correctAnswer: string): boolean {
-  if (!userInput) return false;
-  const user = userInput.trim().toLowerCase().replace(/['"“”‘’]/g, '');
-  const correct = correctAnswer.trim().toLowerCase().replace(/['"“”‘’]/g, '');
-  
-  if (user === correct) return true;
-
-  // 容忍空格差异（如匹配题 "7 9 1..." vs "791..."）
-  if (user.replace(/\s+/g, '') === correct.replace(/\s+/g, '')) return true;
-  
-  // Strip common redundant suffixes for high-tolerance matches
-  const cleanUser = user.replace(/(阶段|系统|模型|约束|结构|文件|触发器|约束)/g, '');
-  const cleanCorrect = correct.replace(/(阶段|系统|模型|约束|结构|文件|触发器|约束)/g, '');
-  
-  if (cleanUser && cleanCorrect && cleanUser === cleanCorrect) return true;
-  
-  // Support slash variations (e.g. "E-R图/ E-R模型")
-  if (correct.includes('/')) {
-    const options = correct.split('/').map(s => s.trim());
-    return options.some(opt => checkBlankAnswer(userInput, opt));
-  }
-  
-  // Support multiple alternatives (e.g. "SET或SELECT")
-  if (correct.includes('或')) {
-    const options = correct.split('或').map(s => s.trim());
-    return options.some(opt => checkBlankAnswer(userInput, opt));
-  }
-
-  // Support character index matches like "1次" with "1"
-  if (correct.match(/^\d+$/) && user.includes(correct)) {
-    return true;
-  }
-  
-  // Support parenthesized abbreviations: "数据库管理系统(DBMS)" matches "数据库管理系统" or "dbms"
-  if (correct.includes('(')) {
-    const parenthesizedRegex = /([^(]+)\(([^)]+)\)/;
-    const match = correct.match(parenthesizedRegex);
-    if (match) {
-      const option1 = match[1].trim();
-      const option2 = match[2].trim();
-      if (user === option1 || user === option2) return true;
-    }
-  }
-
-  // Support parenthesized abbreviation with space or different brackets
-  if (correct.includes('（')) {
-    const parenthesizedRegex = /([^（]+)（([^）]+)）/;
-    const match = correct.match(parenthesizedRegex);
-    if (match) {
-      const option1 = match[1].trim();
-      const option2 = match[2].trim();
-      if (user === option1 || user === option2) return true;
-    }
-  }
-  
-  return false;
-}
+import ChoiceQuestion from './question/ChoiceQuestion';
+import MultipleQuestion from './question/MultipleQuestion';
+import BlankQuestion from './question/BlankQuestion';
+import GroupQuestion from './question/GroupQuestion';
 
 // Dynamically hides the bracket answers in fill-in-the-blank question texts
 export function renderQuestionStem(question: string, type: string, isAnswered: boolean): ReactNode {
@@ -110,6 +54,9 @@ interface PracticeSessionProps {
   onRedo?: (qId: number) => void;
 }
 
+const typeBadge = (t: string) =>
+  t === 'choice' ? '单选题' : t === 'multiple' ? '多选题' : t === 'group' ? '组题' : '核心填空题';
+
 export default function PracticeSession({
   questionsList,
   initialIndex,
@@ -119,142 +66,19 @@ export default function PracticeSession({
   onRedo
 }: PracticeSessionProps) {
   const [currentIndex, setCurrentIndex] = useState<number>(initialIndex);
-  
-  // Fill-in-the-blank temporary values
-  const [blankInputs, setBlankInputs] = useState<string[]>([]);
-
-  // Multi-select temporary values
-  const [multiInputs, setMultiInputs] = useState<string[]>([]);
-
-  // Group temporary values（每子题的已选字母）
-  const [groupInputs, setGroupInputs] = useState<string[]>([]);
 
   // Active question details（questionsList 可能为空：如本题库无填空题却切到「填空」卷）
   const activeQuestion = questionsList[currentIndex];
   const totalQuestions = questionsList.length;
-  const qId = activeQuestion?.id ?? -1;
 
   // Has the user answered the current question?
+  const qId = activeQuestion?.id ?? -1;
   const savedAnswer = userAnswers[qId];
   const isAnswered = savedAnswer !== undefined;
-
-  // Calculate blank count
-  const blankCount = useMemo(() => {
-    if (!activeQuestion || activeQuestion.type !== 'blank') return 0;
-    const standardAns = activeQuestion.answer;
-    return Array.isArray(standardAns) ? standardAns.length : 1;
-  }, [activeQuestion]);
-
-  // Sync inputs when current question changes
-  useEffect(() => {
-    if (!activeQuestion) return;
-    if (activeQuestion.type === 'blank') {
-      if (isAnswered) {
-        if (Array.isArray(savedAnswer)) {
-          setBlankInputs([...savedAnswer]);
-        } else {
-          setBlankInputs([savedAnswer]);
-        }
-      } else {
-        setBlankInputs(Array(blankCount).fill(''));
-      }
-    } else if (activeQuestion.type === 'multiple') {
-      setMultiInputs(isAnswered ? (Array.isArray(savedAnswer) ? [...savedAnswer] : [savedAnswer]) : []);
-    } else if (activeQuestion.type === 'group') {
-      const gn = activeQuestion.subQuestions?.length || 0;
-      setGroupInputs(isAnswered && Array.isArray(savedAnswer) ? [...savedAnswer] : Array(gn).fill(''));
-    }
-  }, [currentIndex, activeQuestion, isAnswered, savedAnswer, blankCount]);
-
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  const handleNext = () => {
-    if (currentIndex < totalQuestions - 1) {
-      setCurrentIndex(currentIndex + 1);
-    }
-  };
-
-  // Grade helper for active question
-  const isCorrectActiveQuestion = useMemo(() => {
-    if (!isAnswered || !activeQuestion) return false;
-    
-    if (activeQuestion.type === 'choice') {
-      return savedAnswer === activeQuestion.answer;
-    } else if (activeQuestion.type === 'multiple') {
-      const std = activeQuestion.answer as string[];
-      const user = Array.isArray(savedAnswer) ? savedAnswer : [savedAnswer];
-      return std.length === user.length && std.every(a => user.includes(a));
-    } else if (activeQuestion.type === 'group') {
-      if (!isAnswered || !Array.isArray(savedAnswer)) return false;
-      return (activeQuestion.subQuestions || []).every((s, i) => savedAnswer[i] === s.answer);
-    } else {
-      const standardList = Array.isArray(activeQuestion.answer) 
-        ? activeQuestion.answer 
-        : [activeQuestion.answer];
-      const userList = Array.isArray(savedAnswer) ? savedAnswer : [savedAnswer];
-      
-      return standardList.every((std, idx) => {
-        const uVal = userList[idx] || '';
-        return checkBlankAnswer(uVal, std);
-      });
-    }
-  }, [activeQuestion, isAnswered, savedAnswer]);
-
-  // Choice selection handler
-  const handleSelectChoice = (optionChar: string) => {
-    if (isAnswered) return; // Answer locked
-    onAnswer(qId, optionChar);
-  };
-
-  // Blank input change
-  const handleBlankInputChange = (index: number, val: string) => {
-    if (isAnswered) return;
-    const updated = [...blankInputs];
-    updated[index] = val;
-    setBlankInputs(updated);
-  };
-
-  // Blank submit
-  const handleBlankSubmit = () => {
-    if (isAnswered) return;
-    onAnswer(qId, blankInputs);
-  };
-
-  // Multi-select toggle
-  const handleMultiToggle = (letter: string) => {
-    if (isAnswered) return;
-    setMultiInputs(prev => prev.includes(letter) ? prev.filter(l => l !== letter) : [...prev, letter]);
-  };
-
-  // Multi-select submit
-  const handleMultiSubmit = () => {
-    if (isAnswered) return;
-    onAnswer(qId, multiInputs);
-  };
-
-  // Group: 点选某子题的选项（点选即锁该子题；全部答完则保存整组）
-  const handleGroupPick = (sIdx: number, letter: string) => {
-    if (isAnswered) return;
-    if (groupInputs[sIdx]) return;          // 该子题已锁
-    const updated = [...groupInputs];
-    updated[sIdx] = letter;
-    setGroupInputs(updated);
-    const n = activeQuestion.subQuestions?.length || 0;
-    if (updated.length === n && updated.every(x => x)) {
-      onAnswer(qId, updated);               // 全部子题答完 → 保存
-    }
-  };
-
-  // Group: 快速重做本组（清空该组答案 + 本地状态，重新作答）
-  const handleRedoGroup = () => {
-    if (isAnswered) onRedo?.(qId);
-    const gn = activeQuestion?.subQuestions?.length || 0;
-    setGroupInputs(Array(gn).fill(''));
-  };
+  const isCorrect = useMemo(
+    () => (activeQuestion ? gradeQuestion(activeQuestion, savedAnswer) : false),
+    [activeQuestion, savedAnswer]
+  );
 
   // 空卷兜底（筛选模式下无题）：避免 activeQuestion 未定义时白屏
   if (!activeQuestion) {
@@ -294,14 +118,14 @@ export default function PracticeSession({
         {/* Question Flag / Status */}
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-md">
-            {activeQuestion.type === 'choice' ? '单选题' : activeQuestion.type === 'multiple' ? '多选题' : activeQuestion.type === 'group' ? '组题' : '核心填空题'}
+            {typeBadge(activeQuestion.type)}
           </span>
-          
+
           {isAnswered && (
             <span className={`inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-md ${
-              isCorrectActiveQuestion ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
+              isCorrect ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'
             }`}>
-              {isCorrectActiveQuestion ? (
+              {isCorrect ? (
                 <><CheckCircle2 size={13} /> 答对了!</>
               ) : (
                 <><XCircle size={13} /> 答错了!</>
@@ -315,205 +139,42 @@ export default function PracticeSession({
           {renderQuestionStem(activeQuestion.question, activeQuestion.type, isAnswered)}
         </h2>
 
-        {/* Answers inputs / choices area */}
+        {/* Answers inputs / choices area（key=id：切题重挂载，重置组件内草稿状态） */}
         {activeQuestion.type === 'choice' ? (
-          <div className="grid grid-cols-1 gap-3 pt-2 font-sans">
-            {activeQuestion.options?.map(opt => {
-              const letter = opt.charAt(0); // A, B, C, D
-              const isSelected = savedAnswer === letter;
-              const isCorrectAnswer = activeQuestion.answer === letter;
-              
-              let cardStyle = "border-slate-200 bg-white hover:border-blue-300 hover:bg-blue-50/20 text-slate-700";
-              
-              if (isAnswered) {
-                if (isSelected) {
-                  cardStyle = isCorrectActiveQuestion 
-                    ? "border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold"
-                    : "border-2 border-rose-500 bg-rose-50 text-rose-950 font-bold";
-                } else if (isCorrectAnswer) {
-                  cardStyle = "border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold";
-                } else {
-                  cardStyle = "border-slate-100 bg-slate-50/50 text-slate-400 opacity-60";
-                }
-              }
-
-              return (
-                <button
-                  key={letter}
-                  type="button"
-                  disabled={isAnswered}
-                  onClick={() => handleSelectChoice(letter)}
-                  className={`text-left p-4 rounded-xl border text-sm transition-all flex items-center gap-3.5 cursor-pointer w-full ${cardStyle}`}
-                >
-                  <span className={`w-7 h-7 shrink-0 rounded-full flex items-center justify-center font-mono text-xs font-bold leading-none ${
-                    isSelected 
-                      ? isCorrectActiveQuestion ? "bg-emerald-600 text-white" : "bg-rose-600 text-white"
-                      : isAnswered && isCorrectAnswer
-                        ? "bg-emerald-600 text-white"
-                        : "bg-slate-100 text-slate-500 border border-slate-200"
-                  }`}>
-                    {letter}
-                  </span>
-                  <span className="text-sm font-medium leading-normal">{opt}</span>
-                </button>
-              );
-            })}
-          </div>
+          <ChoiceQuestion
+            key={qId}
+            question={activeQuestion}
+            isAnswered={isAnswered}
+            savedAnswer={savedAnswer}
+            isCorrect={isCorrect}
+            onAnswer={(v) => onAnswer(qId, v)}
+          />
         ) : activeQuestion.type === 'multiple' ? (
-          <div className="space-y-4 pt-2">
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100">
-              <div className="grid grid-cols-1 gap-3">
-                {activeQuestion.options?.map(opt => {
-                  const letter = opt.charAt(0);
-                  const stdSet = new Set(activeQuestion.answer as string[]);
-                  const isSelected = isAnswered
-                    ? (savedAnswer as string[]).includes(letter)
-                    : multiInputs.includes(letter);
-                  const isCorrectOpt = stdSet.has(letter);
-                  let cardStyle = "border-slate-200 bg-white hover:border-blue-300 text-slate-700";
-                  if (isAnswered) {
-                    if (isCorrectOpt) cardStyle = "border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold";
-                    else if (isSelected) cardStyle = "border-2 border-rose-500 bg-rose-50 text-rose-950 font-bold";
-                    else cardStyle = "border-slate-100 bg-slate-50/50 text-slate-400 opacity-60";
-                  }
-                  return (
-                    <label
-                      key={letter}
-                      className={`text-left p-4 rounded-xl border text-sm transition-all flex items-center gap-3.5 ${isAnswered ? '' : 'cursor-pointer'} ${cardStyle}`}
-                    >
-                      <input
-                        type="checkbox"
-                        disabled={isAnswered}
-                        checked={isSelected}
-                        onChange={() => handleMultiToggle(letter)}
-                        className="w-4 h-4 accent-blue-600"
-                      />
-                      <span className="w-7 h-7 shrink-0 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">{letter}</span>
-                      <span className="font-medium leading-normal">{opt}</span>
-                    </label>
-                  );
-                })}
-              </div>
-            </div>
-            {!isAnswered && (
-              <button
-                type="button"
-                onClick={handleMultiSubmit}
-                disabled={multiInputs.length === 0}
-                className="w-full py-3 px-5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl transition-all cursor-pointer"
-              >
-                核对答案并查看解析
-              </button>
-            )}
-          </div>
+          <MultipleQuestion
+            key={qId}
+            question={activeQuestion}
+            isAnswered={isAnswered}
+            savedAnswer={savedAnswer}
+            isCorrect={isCorrect}
+            onAnswer={(v) => onAnswer(qId, v)}
+          />
         ) : activeQuestion.type === 'group' ? (
-          <div className="space-y-5 pt-2">
-            {activeQuestion.subQuestions?.map((sub, sIdx) => {
-              const sel = isAnswered ? (savedAnswer as string[])[sIdx] : (groupInputs[sIdx] || '');
-              const locked = sel !== '';
-              return (
-                <div key={sIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
-                  <p className="text-sm font-bold text-slate-800">{sIdx + 1}. {sub.question}</p>
-                  <div className="grid grid-cols-1 gap-2">
-                    {sub.options.map(opt => {
-                      const letter = opt.charAt(0);
-                      const isSel = sel === letter;
-                      const isCorr = sub.answer === letter;
-                      let style = 'border-slate-200 bg-white hover:border-blue-300 text-slate-700';
-                      if (locked) {
-                        if (isCorr) style = 'border-2 border-emerald-500 bg-emerald-50 text-emerald-900 font-bold';
-                        else if (isSel) style = 'border-2 border-rose-500 bg-rose-50 text-rose-950 font-bold';
-                        else style = 'border-slate-100 bg-slate-50/50 text-slate-400 opacity-60';
-                      }
-                      return (
-                        <button key={letter} type="button" disabled={locked}
-                          onClick={() => handleGroupPick(sIdx, letter)}
-                          className={`text-left p-3 rounded-xl border text-sm transition-all flex items-center gap-3 ${locked ? '' : 'cursor-pointer'} ${style}`}>
-                          <span className="w-6 h-6 shrink-0 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-slate-100 text-slate-600 border border-slate-200">{letter}</span>
-                          <span>{opt}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })}
-            {(isAnswered || groupInputs.some(x => x)) && (
-              <button
-                type="button"
-                onClick={handleRedoGroup}
-                className="w-full py-2.5 px-5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-blue-600 hover:border-blue-300 font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
-              >
-                <RotateCcw size={13} /> 重做本组
-              </button>
-            )}
-          </div>
+          <GroupQuestion
+            key={qId}
+            question={activeQuestion}
+            isAnswered={isAnswered}
+            savedAnswer={savedAnswer}
+            onAnswer={(v) => onAnswer(qId, v)}
+            onRedo={() => onRedo?.(qId)}
+          />
         ) : (
-          <div className="space-y-4 pt-2">
-            <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-4">
-              {Array.from({ length: blankCount }).map((_, bIdx) => {
-                const uVal = blankInputs[bIdx] || '';
-                const stdAns = Array.isArray(activeQuestion.answer) 
-                  ? activeQuestion.answer[bIdx] 
-                  : (activeQuestion.answer as string);
-                
-                const isSingleCorrect = isAnswered && checkBlankAnswer(uVal, stdAns);
-
-                return (
-                  <div key={bIdx} className="space-y-1">
-                    <label className="text-xs font-bold text-slate-500 block">
-                      第 {bIdx + 1} 空
-                    </label>
-                    <div className="relative flex items-center">
-                      <input
-                        type="text"
-                        disabled={isAnswered}
-                        placeholder="请输入您的解答"
-                        value={uVal}
-                        onChange={(e) => handleBlankInputChange(bIdx, e.target.value)}
-                        className={`w-full px-4 py-2.5 text-sm rounded-xl border font-mono transition-all focus:outline-none focus:ring-1 ${
-                          isAnswered
-                            ? isSingleCorrect
-                              ? 'border-emerald-300 bg-emerald-50/30 text-emerald-950 font-bold'
-                              : 'border-rose-300 bg-rose-50/30 text-rose-950 font-bold'
-                            : 'border-slate-200 focus:border-blue-500 focus:ring-blue-500 text-slate-800 bg-white'
-                        }`}
-                      />
-                      {isAnswered && (
-                        <div className="absolute right-3">
-                          {isSingleCorrect ? (
-                            <Check className="text-emerald-600 shrink-0" size={18} />
-                          ) : (
-                            <XCircle className="text-rose-600 shrink-0" size={18} />
-                          )}
-                        </div>
-                      )}
-                    </div>
-                    {isAnswered && !isSingleCorrect && (
-                      <p className="text-[11px] font-semibold text-emerald-700 flex items-center gap-1 pl-1 pt-1">
-                        <span>标准答案: </span>
-                        <code className="text-xs bg-emerald-50 border border-emerald-100 text-emerald-800 px-1.5 py-0.2 rounded font-mono font-bold">
-                          {stdAns}
-                        </code>
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {/* Check blank answers button */}
-            {!isAnswered && (
-              <button
-                type="button"
-                onClick={handleBlankSubmit}
-                disabled={blankInputs.some(v => !v.trim())}
-                className="w-full py-3 px-5 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl transition-all cursor-pointer flex items-center justify-center gap-1.5"
-              >
-                核对答案并查看解析
-              </button>
-            )}
-          </div>
+          <BlankQuestion
+            key={qId}
+            question={activeQuestion}
+            isAnswered={isAnswered}
+            savedAnswer={savedAnswer}
+            onAnswer={(v) => onAnswer(qId, v)}
+          />
         )}
 
         {/* Dynamic Explanation (Only shown if already answered) */}
@@ -522,8 +183,8 @@ export default function PracticeSession({
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className={`p-5 rounded-xl border flex gap-3 text-xs leading-relaxed ${
-              isCorrectActiveQuestion 
-                ? 'bg-emerald-50/40 border-emerald-100 text-emerald-900' 
+              isCorrect
+                ? 'bg-emerald-50/40 border-emerald-100 text-emerald-900'
                 : 'bg-rose-50/40 border-rose-100/60 text-rose-950'
             }`}
           >
@@ -550,7 +211,7 @@ export default function PracticeSession({
       {/* Row Navigation Controls */}
       <div className="flex items-center justify-between gap-4">
         <button
-          onClick={handlePrev}
+          onClick={() => setCurrentIndex(currentIndex - 1)}
           disabled={currentIndex === 0}
           className={`py-3 px-5 rounded-xl font-semibold text-xs border transition-all flex items-center gap-1 ${
             currentIndex === 0
@@ -563,7 +224,7 @@ export default function PracticeSession({
 
         {currentIndex < totalQuestions - 1 ? (
           <button
-            onClick={handleNext}
+            onClick={() => setCurrentIndex(currentIndex + 1)}
             className="py-3 px-5 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 hover:text-slate-900 font-semibold text-xs rounded-xl transition-all flex items-center gap-1 cursor-pointer"
           >
             下一题 <ArrowRight size={14} />
