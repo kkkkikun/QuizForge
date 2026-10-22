@@ -116,6 +116,7 @@ pip install quizforge-cli   # 或 uv tool install quizforge-cli；安装后命�
 - [x] jsdom/vitest 前端测试、移动端优先 + PWA、错题本与反馈通道
 - [x] 答案 key 区映射（文末「参考答案」按题号回填，免 LLM）；解析诊断 `--diagnose`
 - [x] 浏览器端在线转换（Pyodide，纯规则，文件不上传）
+- [x] PyPI 发布 [`quizforge-cli`](https://pypi.org/project/quizforge-cli/)（v0.1.0）
 - [ ] 图片抽取、扫描 PDF OCR、十五选十（待格式样本）
 - 完整推广路线见 [.claude/docs/roadmap.md](.claude/docs/roadmap.md)
 

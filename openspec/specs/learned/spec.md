@@ -49,3 +49,26 @@ Pages 项目站 URL 含 `/<repo>/`，资源引用 MUST 带该前缀。
 
 - **WHEN** 根 `.gitignore` 有 `*.html`
 - **THEN** 会忽略 `frontend/index.html`（构建入口）；MUST 加 `!frontend/index.html` 例外
+
+### Requirement: 纯 stdlib 解析 docx 的两处隐蔽陷阱
+
+不用 python-docx 直解 OOXML（Pyodide 场景）时 MUST 处理中文 Word 的样式 id 与 VML 嵌套。
+
+#### Scenario: 中文 Word 样式 id 为数字
+
+- **WHEN** 段落 `w:pStyle` 的 val 是 `"1"`/`"2"`（中文版 Word 内置标题的 id）
+- **THEN** 不能当样式名用；MUST 读 `word/styles.xml` 建 id→name 映射，再按 python-docx 惯例规范化（`heading 1` → `Heading 1`）
+
+#### Scenario: VML textbox 嵌在 run 内
+
+- **WHEN** 老式 `w:pict` 的 `w:txbxContent` 嵌在段落**直接子 run** 里
+- **THEN** run 文本提取 MUST 只遍历直接 `w:t`/`w:tab` 子节点；若用 `r.iter()` 全后代遍历会把 textbox 内容误并进段落文本（与 python-docx 不一致，parity 测试可拦）
+
+### Requirement: PyPI 分发名撞名
+
+PyPI 项目名全局唯一，MUST 先查再定名。
+
+#### Scenario: 分发名被占用
+
+- **WHEN** 拟用名在 PyPI 已有他人项目（如 `quizforge`）
+- **THEN** pending publisher 登记会报 "This project already exists"；MUST 换分发名（如 `quizforge-cli`），导入包名/命令名可保持不变（分发名≠包名，同 `beautifulsoup4`/`bs4`）
