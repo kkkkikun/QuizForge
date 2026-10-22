@@ -40,6 +40,14 @@ export default function GroupQuestion({ question, isAnswered, savedAnswer, onAns
         return (
           <div key={sIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
             <p className="text-sm font-bold text-slate-800">{sIdx + 1}. {sub.question}</p>
+            {sub.images && sub.images.length > 0 && (
+              <div className="space-y-2">
+                {sub.images.map((src, i) => (
+                  <img key={i} src={src} alt={`配图 ${i + 1}`} loading="lazy"
+                    className="block max-w-full max-h-72 rounded-xl border border-slate-200 bg-white" />
+                ))}
+              </div>
+            )}
             <div className="grid grid-cols-1 gap-2">
               {sub.options.map(opt => {
                 const letter = opt.charAt(0);

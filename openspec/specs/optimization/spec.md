@@ -1,6 +1,6 @@
 ## Purpose
 
-记录 QuizForge 已知优化点与技术债（十五选十未识别、深链 404、阅读正文未入题面、图片/OCR），按优先级持续改进。已实现的优化（答案 key 区映射、解析诊断、PPT 形态适配等）随实现从本 spec 移除。
+记录 QuizForge 已知优化点与技术债（十五选十未识别、深链 404、阅读正文未入题面、扫描 OCR），按优先级持续改进。已实现的优化（答案 key 区映射、解析诊断、PPT 形态适配、题目图片抽取等）随实现从本 spec 移除。
 
 ## Requirements
 
@@ -27,15 +27,10 @@
 
 明确待办的功能缺口 MUST 登记于本 spec 并标优先级。
 
-#### Scenario: 图片/图表抽取
-
-- **WHEN** 题目含图
-- **THEN** 当前占位丢弃；未抽取。优先级：中
-
 #### Scenario: 扫描版 PDF
 
 - **WHEN** PDF 为纯图片
-- **THEN** 抛 `ScannedPdfError` 提示需 OCR；未实现。优先级：低
+- **THEN** 抛 `ScannedPdfError`，CLI 提示「用 WPS/Word 打开后另存为 .docx」的转换路径；直接 OCR 未实现（依赖重：tesseract 系统级或云 API，暂挂起）。优先级：低
 
 #### Scenario: 浏览器版 PDF 支持
 

@@ -10,6 +10,7 @@ export interface SubQuestion {
   question: string;
   options: string[];
   answer: string;
+  images?: string[];   // 子题配图（data URI）
 }
 
 export interface Question {
@@ -21,6 +22,7 @@ export interface Question {
   explanation?: string;     // Short explanation/remarks
   tags: string[];           // Topics, e.g. "数据库系统基础" or "SQL常用查询"
   subQuestions?: SubQuestion[];  // group 题型的子题
+  images?: string[];        // 题目配图（data URI，生成时由 base64 转换）
 }
 
 export interface Quiz {

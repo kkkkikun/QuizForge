@@ -142,6 +142,21 @@ export default function PracticeSession({
           {renderQuestionStem(activeQuestion.question, activeQuestion.type, isAnswered)}
         </h2>
 
+        {/* 题目配图 */}
+        {activeQuestion.images && activeQuestion.images.length > 0 && (
+          <div className="space-y-3">
+            {activeQuestion.images.map((src, i) => (
+              <img
+                key={i}
+                src={src}
+                alt={`题目配图 ${i + 1}`}
+                loading="lazy"
+                className="block max-w-full max-h-80 rounded-xl border border-slate-200 bg-white mx-auto"
+              />
+            ))}
+          </div>
+        )}
+
         {/* Answers inputs / choices area（key=id：切题重挂载，重置组件内草稿状态） */}
         {activeQuestion.type === 'choice' ? (
           <ChoiceQuestion

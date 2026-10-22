@@ -72,3 +72,12 @@ PyPI 项目名全局唯一，MUST 先查再定名。
 
 - **WHEN** 拟用名在 PyPI 已有他人项目（如 `quizforge`）
 - **THEN** pending publisher 登记会报 "This project already exists"；MUST 换分发名（如 `quizforge-cli`），导入包名/命令名可保持不变（分发名≠包名，同 `beautifulsoup4`/`bs4`）
+
+### Requirement: 契约逆函数必须覆盖全部字段
+
+`dict_to_quiz`（quiz_to_dict 的逆）历史上两次漏读新字段（sub_questions、images），每次都被下游校验/数据质量检查拦下。
+
+#### Scenario: Question 加新字段
+
+- **WHEN** 给 Question/Block 数据类新增字段且会进 Quiz JSON
+- **THEN** MUST 同步更新 `dict_to_quiz` 并补契约往返测试（quiz_to_dict → dict_to_quiz 全字段一致），否则 JSON 源题库（net/thermal）静默丢字段

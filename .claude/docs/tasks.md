@@ -25,11 +25,9 @@
 
 ### 已登记技术债
 
-- [x] 答案 key 区映射（M3 完成：answer_key 节识别 + 按题号回填，免 LLM）
-- [x] 解析失败诊断输出（M3 完成：diagnose_blocks + `--diagnose`）
+- [x] ~~图片/图表抽取~~（2026-10-21 完成：docx 配图 base64 内嵌全链路——ingest/browser_ingest 双实现、parse 关联题目、单文件 HTML + React + /convert 渲染；thermal 题 11/12 已带图重建）
 - [ ] **十五选十章节**：勘查确认大英四文档缺词库与答案标记 → 需格式样本才能适配
-- [ ] 图片/图表抽取（题目含图时占位丢弃，未抽取）——酌情
-- [ ] 扫描版 PDF OCR 支持——酌情
+- [ ] 扫描版 PDF OCR：暂挂起（依赖重）；CLI 已提示「WPS/Word 另存 docx」转换路径
 
 ### 数据源已知缺陷（warning 级，源文档问题，随手修）
 

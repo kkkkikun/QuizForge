@@ -15,9 +15,57 @@ from .model import Block
 from .patterns import SECTION_HEADER_RE as _SECTION_RE
 
 _W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
+_A = "http://schemas.openxmlformats.org/drawingml/2006/main"
+_R = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+_V = "urn:schemas-microsoft-com:vml"
 
 # python-docx 内置样式名规范化用（'heading 1' → 'Heading 1'）
 _STYLE_ID_RE = re.compile(r"^[Hh]eading\s*(\d+)$")
+
+# 浏览器可直接渲染的图片格式（与 ingest._RENDERABLE_IMG 一致；wmf/emf 不收）
+_RENDERABLE_IMG = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
+
+# rId → 媒体包内路径（word/_rels/document.xml.rels）
+_REL_TYPE_IMAGE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
+
+
+def _load_image_rels(zf: zipfile.ZipFile) -> dict[str, str]:
+    try:
+        root = ET.fromstring(zf.read("word/_rels/document.xml.rels"))
+    except KeyError:
+        return {}
+    out: dict[str, str] = {}
+    for rel in root:
+        if rel.get("Type") == _REL_TYPE_IMAGE:
+            out[rel.get("Id", "")] = rel.get("Target", "")
+    return out
+
+
+def _para_images(p, rels: dict[str, str], media: dict[str, bytes]) -> list[str]:
+    """段落内图片（a:blip 与 v:imagedata）→ base64；仅收可渲染格式。"""
+    import base64
+    import os
+
+    out: list[str] = []
+    for node in p.iter():
+        rid = None
+        if node.tag == f"{{{_A}}}blip":
+            rid = node.get(f"{{{_R}}}embed")
+        elif node.tag == f"{{{_V}}}imagedata":
+            rid = node.get(f"{{{_R}}}id")
+        if not rid:
+            continue
+        target = rels.get(rid)
+        if not target:
+            continue
+        name = target if target.startswith("word/") else "word/" + target.lstrip("/")
+        blob = media.get(name)
+        if blob is None:
+            continue
+        ext = os.path.splitext(name)[1].lower()
+        if ext in _RENDERABLE_IMG:
+            out.append(base64.b64encode(blob).decode())
+    return out
 
 
 def _q(tag: str) -> str:
@@ -110,10 +158,16 @@ def _table_text(tbl) -> str:
 
 
 def load_docx(path: str) -> list[Block]:
-    """读取 .docx，按文档顺序输出 Block 流（段落 / 表格 / 图片占位）。与 ingest.load_docx 一致。"""
+    """读取 .docx，按文档顺序输出 Block 流（段落 / 表格 / 图片，图片带 base64）。与 ingest.load_docx 一致。"""
     with zipfile.ZipFile(path) as z:
         root = ET.fromstring(z.read("word/document.xml"))
         style_names = _load_style_names(z)
+        image_rels = _load_image_rels(z)
+        media = {
+            name: z.read(name)
+            for name in z.namelist()
+            if name.startswith("word/media/")
+        }
 
     def _style_name(p) -> str:
         ppr = p.find(_q("pPr"))
@@ -132,9 +186,10 @@ def load_docx(path: str) -> list[Block]:
         if child.tag == _q("p"):
             style = _style_name(child)
             text = _para_text(child).strip()
-            has_image = child.find(f".//{_q('drawing')}") is not None
+            images = _para_images(child, image_rels, media)
+            has_image = child.find(f".//{_q('drawing')}") is not None or bool(images)
             if has_image:
-                blocks.append(Block("docx", style, "[图片]", "image"))
+                blocks.append(Block("docx", style, "[图片]", "image", images=images))
             if text:
                 blocks.append(
                     Block("docx", style, text, _para_kind(style),
