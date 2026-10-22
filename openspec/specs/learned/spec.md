@@ -75,7 +75,7 @@ PyPI 项目名全局唯一，MUST 先查再定名。
 
 ### Requirement: 契约逆函数必须覆盖全部字段
 
-`dict_to_quiz`（quiz_to_dict 的逆）历史上两次漏读新字段（sub_questions、images），每次都被下游校验/数据质量检查拦下。
+`dict_to_quiz`（quiz_to_dict 的逆）历史上两次漏读新字段（sub_questions、images），每次都被下游校验/数据质量检查拦下；扩展契约时 MUST 保证逆函数完整。
 
 #### Scenario: Question 加新字段
 
