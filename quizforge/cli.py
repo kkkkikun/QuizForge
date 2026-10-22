@@ -143,6 +143,8 @@ def main(argv: list[str] | None = None) -> int:
             return 2
         except ScannedPdfError as e:
             print(f"错误：{e}", file=sys.stderr)
+            print("  扫描版 PDF 需先转文字：用 WPS/Word 打开后另存为 .docx，"
+                  "或用 OCR 工具导出文本，再喂给 quizforge。", file=sys.stderr)
             return 2
         except ValueError as e:
             print(f"错误：{e}", file=sys.stderr)

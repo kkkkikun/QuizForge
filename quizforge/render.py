@@ -12,6 +12,29 @@ from .parse import quiz_to_dict
 # LaTeX 检测：$...$ / $$...$$ / \( / \begin
 _LATEX_RE = re.compile(r"\$\$.*?\$\$|\$[^$\n]+\$|\\\(|\\\[|\\begin\{")
 
+
+def _img_data_uri(b64: str) -> str:
+    """base64 裸串 → data URI（按 magic bytes 嗅探 MIME）。"""
+    import base64 as _b64
+
+    try:
+        head = _b64.b64decode(b64[:24])
+    except Exception:
+        return f"data:image/png;base64,{b64}"
+    if head.startswith(b"\x89PNG"):
+        mime = "image/png"
+    elif head.startswith(b"\xff\xd8"):
+        mime = "image/jpeg"
+    elif head.startswith(b"GIF8"):
+        mime = "image/gif"
+    elif head.startswith(b"RIFF") and head[8:12] == b"WEBP":
+        mime = "image/webp"
+    elif head.startswith(b"BM"):
+        mime = "image/bmp"
+    else:
+        mime = "image/png"
+    return f"data:{mime};base64,{b64}"
+
 # 仅在检测到 LaTeX 时引入（CDN，需联网；常规 unicode 数学无需）
 _KATEX_BLOCK = (
     '<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16/dist/katex.min.css">\n'
@@ -31,6 +54,9 @@ def has_latex(quiz: Quiz) -> bool:
 
 def render_html(quiz: Quiz, shuffle: bool = True) -> str:
     data = quiz_to_dict(quiz)
+    for q in data.get("questions", []):
+        if q.get("images"):
+            q["images"] = [_img_data_uri(b) for b in q["images"]]
     data_json = json.dumps(data, ensure_ascii=False).replace("<", "\\u003c")
     katex = _KATEX_BLOCK if has_latex(quiz) else ""
     return (
@@ -69,6 +95,7 @@ button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .num .src{background:#fef3c7;color:#b45309;padding:1px 6px;border-radius:999px;font-size:12px}
 .num .typ{float:right;background:#eef2ff;color:var(--accent);padding:1px 8px;border-radius:999px;font-size:12px}
 .stem{margin:0 0 10px;white-space:pre-wrap}
+.qimg{display:block;max-width:100%;max-height:360px;margin:6px 0 12px;border:1px solid var(--line);border-radius:8px;background:#fff}
 .opts{display:flex;flex-direction:column;gap:6px}
 .opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
 .opts label.ok{border-color:var(--ok);background:#f0fdf4}
@@ -126,6 +153,7 @@ function card(q){
   el.className='q'+(q.low_confidence?' low':'');
   let h='<div class="num">第 '+q.id+' 题'+(q.low_confidence?' <span class="warn">⚠️ 存疑，请核对</span>':'')+(q.source==='llm'?' <span class="src">LLM</span>':'')+'<span class="typ">'+typeLabel(q)+'</span></div>';
   h+='<div class="stem">'+esc(q.stem)+'</div>';
+  (q.images||[]).forEach(src=>{ h+='<img class="qimg" src="'+src+'" alt="题目配图" loading="lazy">'; });
   if(q.type==='blank'){
     const cur=(answers[q.id]&&answers[q.id][0])||'';
     h+='<input class="blank" data-id="'+q.id+'" value="'+esc(cur)+'" '+(submitted?'disabled':'')+' oninput="onBlank('+q.id+',this.value)">';

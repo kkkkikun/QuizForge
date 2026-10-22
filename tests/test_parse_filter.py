@@ -42,7 +42,10 @@ def test_filter_blocks_counts():
 
 def test_filter_real_net_counts_noise():
     blocks = load_docx(str(DATA / "2026年重点复习题库.docx"))
-    _, ignored = P.filter_blocks(blocks)
-    assert ignored.get("image", 0) >= 1, "NET 应滤掉图片"
+    kept, ignored = P.filter_blocks(blocks)
+    # 图片增强后：带数据的图块保留（由 parse 关联题目/随 essay 节丢弃），
+    # 仅无数据占位（wmf 公式图）在 filter 层计入 image
+    kept_imgs = [b for b in kept if b.kind == "image"]
+    assert all(b.images for b in kept_imgs), "保留的 image 块必须带数据"
     # NET 含解析/解答/分值 → 至少有 explanation 或 essay 计数
     assert (ignored.get("explanation", 0) + ignored.get("essay", 0)) >= 1

@@ -66,11 +66,15 @@ def _explanation(q: Question) -> str:
 
 
 def to_react_questions(quiz: Quiz) -> list[dict]:
-    """Quiz → React Question[] 字典列表。"""
+    """Quiz → React Question[] 字典列表。images 转 data URI 供前端直渲染。"""
+    from .render import _img_data_uri
+
     out: list[dict] = []
     for q in quiz.questions:
         rtype = _TYPE_MAP.get(q.type, "choice")
         item: dict = {"id": q.id, "type": rtype}
+        if q.images:
+            item["images"] = [_img_data_uri(b) for b in q.images]
         if rtype == "group":
             item["question"] = q.stem
             item["answer"] = ""                # group 无单一答案（前端用 subQuestions），占位满足类型
@@ -79,6 +83,7 @@ def to_react_questions(quiz: Quiz) -> list[dict]:
                     "question": s.stem,
                     "options": [f"{k}. {v}" for k, v in sorted((s.options or {}).items())],
                     "answer": (s.answer[0] if s.answer else ""),
+                    **({"images": [_img_data_uri(b) for b in s.images]} if s.images else {}),
                 }
                 for s in q.sub_questions
             ]

@@ -86,7 +86,7 @@ def test_assembly_drops_unrenderable_llm_questions():
 
     class BrokenLLM:
         def adjudicate(self, text):
-            if "操作" in text:
+            if "路由" in text:
                 return {"is_question": True, "type": "single", "answer": ["A"],
                         "stem": text[:20], "options": {}}
             return None

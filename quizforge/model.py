@@ -17,6 +17,7 @@ class Block:
     text: str
     kind: str = "para"     # heading | para | table | image
     highlight: str = ""    # 被高亮（如黄色）的文本，用于标记答案
+    images: list = field(default_factory=list)  # image 块携带的图片 base64（浏览器可渲染格式）
 
 
 @dataclass
@@ -34,6 +35,7 @@ class Question:
     source: str = "rule"                                   # rule | llm（结构化来源）
     sub_questions: list = field(default_factory=list)      # group 题型的子题列表
     num: int | None = None                                 # 文档中的题号（答案 key 区映射用）
+    images: list = field(default_factory=list)             # 题目配图（base64，浏览器可渲染格式）
 
 
 @dataclass

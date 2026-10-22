@@ -22,7 +22,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 1
+      "num": 1,
+      "images": []
     },
     {
       "id": 2,
@@ -44,7 +45,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 2
+      "num": 2,
+      "images": []
     },
     {
       "id": 3,
@@ -66,7 +68,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 3
+      "num": 3,
+      "images": []
     },
     {
       "id": 4,
@@ -88,7 +91,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 4
+      "num": 4,
+      "images": []
     },
     {
       "id": 5,
@@ -110,7 +114,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 5
+      "num": 5,
+      "images": []
     },
     {
       "id": 6,
@@ -132,7 +137,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 6
+      "num": 6,
+      "images": []
     },
     {
       "id": 7,
@@ -154,7 +160,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 7
+      "num": 7,
+      "images": []
     },
     {
       "id": 8,
@@ -176,7 +183,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 8
+      "num": 8,
+      "images": []
     },
     {
       "id": 9,
@@ -198,7 +206,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 9
+      "num": 9,
+      "images": []
     },
     {
       "id": 10,
@@ -220,7 +229,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 10
+      "num": 10,
+      "images": []
     },
     {
       "id": 11,
@@ -242,7 +252,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 11
+      "num": 11,
+      "images": []
     },
     {
       "id": 12,
@@ -264,7 +275,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 12
+      "num": 12,
+      "images": []
     },
     {
       "id": 13,
@@ -286,7 +298,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 13
+      "num": 13,
+      "images": []
     },
     {
       "id": 14,
@@ -308,7 +321,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 15
+      "num": 15,
+      "images": []
     },
     {
       "id": 15,
@@ -330,7 +344,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 16
+      "num": 16,
+      "images": []
     },
     {
       "id": 16,
@@ -352,7 +367,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 17
+      "num": 17,
+      "images": []
     },
     {
       "id": 17,
@@ -374,7 +390,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 18
+      "num": 18,
+      "images": []
     },
     {
       "id": 18,
@@ -396,7 +413,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 19
+      "num": 19,
+      "images": []
     },
     {
       "id": 19,
@@ -418,7 +436,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 20
+      "num": 20,
+      "images": []
     },
     {
       "id": 20,
@@ -440,7 +459,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 21
+      "num": 21,
+      "images": []
     },
     {
       "id": 21,
@@ -462,7 +482,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 22
+      "num": 22,
+      "images": []
     },
     {
       "id": 22,
@@ -484,7 +505,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 23
+      "num": 23,
+      "images": []
     },
     {
       "id": 23,
@@ -506,7 +528,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 24
+      "num": 24,
+      "images": []
     },
     {
       "id": 24,
@@ -528,7 +551,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 25
+      "num": 25,
+      "images": []
     },
     {
       "id": 25,
@@ -550,7 +574,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 26
+      "num": 26,
+      "images": []
     },
     {
       "id": 26,
@@ -572,7 +597,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 27
+      "num": 27,
+      "images": []
     },
     {
       "id": 27,
@@ -594,7 +620,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 28
+      "num": 28,
+      "images": []
     },
     {
       "id": 28,
@@ -616,7 +643,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 29
+      "num": 29,
+      "images": []
     },
     {
       "id": 29,
@@ -638,7 +666,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 30
+      "num": 30,
+      "images": []
     },
     {
       "id": 30,
@@ -660,7 +689,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 31
+      "num": 31,
+      "images": []
     },
     {
       "id": 31,
@@ -682,7 +712,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 32
+      "num": 32,
+      "images": []
     },
     {
       "id": 32,
@@ -704,7 +735,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 33
+      "num": 33,
+      "images": []
     },
     {
       "id": 33,
@@ -726,7 +758,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 35
+      "num": 35,
+      "images": []
     },
     {
       "id": 34,
@@ -748,7 +781,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 36
+      "num": 36,
+      "images": []
     },
     {
       "id": 35,
@@ -770,7 +804,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 37
+      "num": 37,
+      "images": []
     },
     {
       "id": 36,
@@ -792,7 +827,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 38
+      "num": 38,
+      "images": []
     },
     {
       "id": 37,
@@ -814,7 +850,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 39
+      "num": 39,
+      "images": []
     },
     {
       "id": 38,
@@ -836,7 +873,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 40
+      "num": 40,
+      "images": []
     },
     {
       "id": 39,
@@ -858,7 +896,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 41
+      "num": 41,
+      "images": []
     },
     {
       "id": 40,
@@ -880,7 +919,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 42
+      "num": 42,
+      "images": []
     },
     {
       "id": 41,
@@ -902,7 +942,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 43
+      "num": 43,
+      "images": []
     },
     {
       "id": 42,
@@ -924,7 +965,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 44
+      "num": 44,
+      "images": []
     },
     {
       "id": 43,
@@ -946,7 +988,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 45
+      "num": 45,
+      "images": []
     },
     {
       "id": 44,
@@ -968,7 +1011,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 46
+      "num": 46,
+      "images": []
     },
     {
       "id": 45,
@@ -990,7 +1034,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 47
+      "num": 47,
+      "images": []
     },
     {
       "id": 46,
@@ -1012,7 +1057,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 48
+      "num": 48,
+      "images": []
     },
     {
       "id": 47,
@@ -1034,7 +1080,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 49
+      "num": 49,
+      "images": []
     },
     {
       "id": 48,
@@ -1056,7 +1103,8 @@
       "note": null,
       "source": "rule",
       "sub_questions": [],
-      "num": 50
+      "num": 50,
+      "images": []
     }
   ],
   "ignored_summary": {

@@ -51,8 +51,43 @@ def _para_highlight(para) -> str:
     return "".join(parts)
 
 
+_A_NS = "http://schemas.openxmlformats.org/drawingml/2006/main"
+_R_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+_V_NS = "urn:schemas-microsoft-com:vml"
+
+# 浏览器可直接渲染的图片格式（wmf/emf 公式图不支持，维持丢弃）
+_RENDERABLE_IMG = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
+
+
+def _para_images(p, doc) -> list[str]:
+    """提取段落内图片（DrawingML a:blip 与 VML v:imagedata 双路径）→ base64 列表。
+
+    仅收浏览器可渲染格式；不可渲染（wmf 公式图等）返回空（保持占位丢弃语义）。
+    """
+    import base64
+    import os
+
+    out: list[str] = []
+    rels = doc.part.related_parts
+    for node in p.iter():
+        rid = None
+        if node.tag == f"{{{_A_NS}}}blip":
+            rid = node.get(f"{{{_R_NS}}}embed")
+        elif node.tag == f"{{{_V_NS}}}imagedata":
+            rid = node.get(f"{{{_R_NS}}}id")
+        if not rid:
+            continue
+        part = rels.get(rid)
+        if part is None:
+            continue
+        ext = os.path.splitext(str(part.partname))[1].lower()
+        if ext in _RENDERABLE_IMG:
+            out.append(base64.b64encode(part.blob).decode())
+    return out
+
+
 def load_docx(path: str) -> list[Block]:
-    """读取 .docx，按文档顺序输出 Block 流（段落 / 表格 / 图片占位）。"""
+    """读取 .docx，按文档顺序输出 Block 流（段落 / 表格 / 图片，图片带 base64）。"""
     from docx import Document
     from docx.oxml.table import CT_Tbl
     from docx.oxml.text.paragraph import CT_P
@@ -66,9 +101,10 @@ def load_docx(path: str) -> list[Block]:
             para = Paragraph(child, doc)
             style = para.style.name if para.style else "Normal"
             text = para.text.strip()
-            has_image = bool(child.findall(f".//{{{_W_NS}}}drawing"))
+            images = _para_images(child, doc)
+            has_image = bool(child.findall(f".//{{{_W_NS}}}drawing")) or bool(images)
             if has_image:
-                blocks.append(Block("docx", style, "[图片]", "image"))
+                blocks.append(Block("docx", style, "[图片]", "image", images=images))
             if text:
                 blocks.append(Block("docx", style, text, _para_kind(style),
                                     highlight=_para_highlight(para)))

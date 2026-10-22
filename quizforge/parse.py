@@ -52,6 +52,7 @@ class ChoiceCandidate:
     group: str | None = None           # 子分组上下文（Unit·Passage），有则归组
     group_ctx: bool = False            # True=CET 显式上下文组；False=回退段落组（受 ≥2 门槛）
     num: int | None = None             # 文档中的题号（答案 key 区映射用）
+    images: list = field(default_factory=list)  # 题干附近的配图（base64）
 
 
 def _section_type(title: str) -> str:
@@ -138,6 +139,7 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
     """
     cands: list[ChoiceCandidate] = []
     pending: list[str] = []
+    pending_images: list[str] = []
     cur_unit = None
     cur_passage = None
     cur_num: int | None = None
@@ -195,12 +197,16 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
                     current_group = _pick_group_name(pending[:-1])
                     current_group_ctx = False
             cands.append(ChoiceCandidate(section.title, stem, options, answer_letter=hl,
-                                         group=current_group, group_ctx=current_group_ctx, num=num))
+                                         group=current_group, group_ctx=current_group_ctx,
+                                         num=num, images=pending_images))
             pending = []
+            pending_images = []
             cur_num = None
             j = k
         else:
-            if CET_SUBCONTEXT_RE.match(t):
+            if b.kind == "image":
+                pending_images.extend(b.images)   # 题干/题间配图，成题时挂到该题
+            elif CET_SUBCONTEXT_RE.match(t):
                 if t.startswith("Unit"):
                     cur_unit, cur_passage = t, None
                 else:
@@ -210,14 +216,12 @@ def _detect_choice(section: Section) -> tuple[list[ChoiceCandidate], list[str]]:
             elif b.kind == "para" and t:
                 pending.append(t)
             j += 1
-    return cands, pending
+    return cands, pending, pending_images
 
 
 def detect_choice_questions(section: Section) -> list[ChoiceCandidate]:
     """公开接口：仅返回选择题候选（忽略 leftover 统计）。"""
     return _detect_choice(section)[0]
-
-
 def _detect_matching(section: Section) -> list[tuple[str, str]]:
     """检测匹配题：一篇文章 + 连续「N、陈述」+ 结尾答案序列 → **一整道题**。
 
@@ -262,6 +266,15 @@ def _detect_matching(section: Section) -> list[tuple[str, str]]:
     return out
 
 
+def _is_rescuable_blank(text: str) -> bool:
+    """choice 节残留里可救回的填空句：带空位标记且空位不在句尾（句尾空括号多为选择题残干）。"""
+    t = text.strip()
+    if len(t) <= 4 or _scan_options(t):
+        return False
+    m = BLANK_RE.search(t)
+    return bool(m) and m.end() < len(t) - 2 and re.search(r"[\u4e00-\u9fffa-zA-Z]", t[m.end():])
+
+
 def _is_unrenderable(q: Question) -> bool:
     """无法作答的废题：空题干 / 选择题无选项。组装时丢弃而非标存疑（--review 也救不了它们）。"""
     if len(q.stem.strip()) < 2:
@@ -293,8 +306,11 @@ def parse_blocks(
             title = title or sec.title
             extra = [
                 b for b in sec.blocks
-                if b.text.strip() and b.text.strip() != sec.title.strip()
+                if b.kind != "image" and b.text.strip() and b.text.strip() != sec.title.strip()
             ]
+            n_img = sum(1 for b in sec.blocks if b.kind == "image")
+            if n_img:
+                ignored["image"] = ignored.get("image", 0) + n_img
             if extra:
                 ignored["knowledge"] = ignored.get("knowledge", 0) + len(extra)
             continue
@@ -315,7 +331,29 @@ def parse_blocks(
             key_map.update(parse_answer_key(sec.blocks))
             continue
         if sec.type == "choice":
-            cands, leftover_texts = _detect_choice(sec)
+            cands, leftover_texts, leftover_imgs = _detect_choice(sec)
+            if leftover_imgs:
+                ignored["image"] = ignored.get("image", 0) + len(leftover_imgs)
+            # 单选节里混的填空题（无选项、带空位标记，thermal 题 12 形态）→ 救回为存疑 blank；
+            # 节内残留图挂到第一道（扁平化后无精确归属，近似可接受）
+            rescued_imgs = list(leftover_imgs)
+            for t in leftover_texts:
+                if _is_rescuable_blank(t):
+                    qid += 1
+                    mnum = re.match(r"\s*(\d+)", t)
+                    questions.append(
+                        Question(
+                            id=qid, type="blank", section=sec.title,
+                            stem=_strip_number(t), options=None, answer=[],
+                            tolerant=True, low_confidence=True,
+                            num=int(mnum.group(1)) if mnum else None,
+                            images=rescued_imgs,
+                        )
+                    )
+                    rescued_imgs = []
+                    if leftover_imgs:
+                        ignored["image"] = ignored.get("image", 0) - len(leftover_imgs)
+                        leftover_imgs = []
             # 有 group 的候选按连续同组聚合成 group 题（≥2 道才成组，孤立候选解散为普通题）
             i = 0
             nc = len(cands)
@@ -345,7 +383,11 @@ def parse_blocks(
                     qid += 1
                     questions.append(choice_candidate_to_question(c, qid))
                     i += 1
-            residual.extend((t, sec.title, "knowledge") for t in leftover_texts)
+            rescued = {_strip_number(t) for t in leftover_texts if _is_rescuable_blank(t)}
+            residual.extend(
+                (t, sec.title, "knowledge") for t in leftover_texts
+                if _strip_number(t) not in rescued
+            )
             # 匹配题：陈述 + 结尾答案序列
             for stem, ans in _detect_matching(sec):
                 qid += 1
@@ -357,7 +399,11 @@ def parse_blocks(
                 )
             continue
         if sec.type == "blank":
+            blank_imgs: list[str] = []
             for b in sec.blocks:
+                if b.kind == "image":
+                    blank_imgs.extend(b.images)   # 挂到下一道填空题
+                    continue
                 if b.kind != "para":
                     continue
                 t = b.text.strip()
@@ -372,16 +418,21 @@ def parse_blocks(
                             stem=_strip_number(t), options=None, answer=[],
                             tolerant=True, low_confidence=True,
                             num=int(mnum.group(1)) if mnum else None,
+                            images=blank_imgs,
                         )
                     )
+                    blank_imgs = []
                 else:
                     residual.append((t, sec.title, "fill"))
+            if blank_imgs:
+                ignored["image"] = ignored.get("image", 0) + len(blank_imgs)
             continue
-        # unknown 节 → 残留（可能被 LLM 兜底救回）
-        residual.extend(
-            (b.text, sec.title, "knowledge")
-            for b in sec.blocks if b.kind == "para" and b.text.strip()
-        )
+        # unknown 节 → 残留（可能被 LLM 兜底救回）；图片直接计丢弃
+        for b in sec.blocks:
+            if b.kind == "image":
+                ignored["image"] = ignored.get("image", 0) + 1
+            elif b.kind == "para" and b.text.strip():
+                residual.append((b.text, sec.title, "knowledge"))
 
     # 答案 key 区回填（确定性来源，优先于 LLM 兜底）
     if key_map:
@@ -637,7 +688,7 @@ def choice_candidate_to_question(cand: "ChoiceCandidate", qid: int) -> Question:
         return Question(
             id=qid, type="single", section=cand.section, stem=cand.stem,
             options=dict(cand.options), answer=[cand.answer_letter],
-            low_confidence=False, num=cand.num,
+            low_confidence=False, num=cand.num, images=list(cand.images),
         )
     stem, letters = extract_inline_answer(cand.stem)
     answer = letters or []
@@ -652,6 +703,7 @@ def choice_candidate_to_question(cand: "ChoiceCandidate", qid: int) -> Question:
         answer=answer,
         low_confidence=low,
         num=cand.num,
+        images=list(cand.images),
     )
 
 
@@ -673,12 +725,16 @@ def is_noise_block(text: str) -> str | None:
 
 
 def filter_blocks(blocks: list[Block]) -> tuple[list[Block], dict[str, int]]:
-    """滤除噪声块，返回 (保留块, 各类计数)。图片/解析/分值大题被丢弃。"""
+    """滤除噪声块，返回 (保留块, 各类计数)。解析文字/带数据的图片保留；解析/分值大题丢弃；
+    无数据的图片占位（wmf 公式图等）丢弃。未挂到题目的图片由 parse 层计入 ignored。"""
     kept: list[Block] = []
     ignored: dict[str, int] = {}
     for b in blocks:
         if b.kind == "image":
-            ignored["image"] = ignored.get("image", 0) + 1
+            if b.images:
+                kept.append(b)          # 题目配图（base64），交给 parse 关联
+            else:
+                ignored["image"] = ignored.get("image", 0) + 1
             continue
         cat = is_noise_block(b.text) if b.kind == "para" else None
         if cat:
@@ -697,7 +753,7 @@ def diagnose_blocks(blocks: list[Block]) -> str:
     for s in sections:
         note = ""
         if s.type == "choice":
-            cands, _ = _detect_choice(s)
+            cands, _leftover, _imgs = _detect_choice(s)
             total_cands += len(cands)
             note = f"，识别选择题 {len(cands)} 道"
         lines.append(f"  · [{s.type}] {s.title!r}（{len(s.blocks)} 块{note}）")
@@ -751,6 +807,7 @@ def dict_to_quiz(d: dict) -> Quiz:
                 stem=sd.get("stem", ""),
                 options=sd.get("options"),
                 answer=list(sd.get("answer") or []),
+                images=list(sd.get("images") or []),
             )
             for sd in qd.get("sub_questions") or []
         ]
@@ -769,6 +826,7 @@ def dict_to_quiz(d: dict) -> Quiz:
                 source=qd.get("source", "rule"),
                 sub_questions=subs,
                 num=qd.get("num"),
+                images=list(qd.get("images") or []),
             )
         )
     return Quiz(
