@@ -1,7 +1,7 @@
 [project]
 # PyPI 分发名 quizforge 已被他人占用；导入包名/命令名仍为 quizforge（分发名≠包名，同 beautifulsoup4/bs4）
 name = "quizforge-cli"
-version = "0.1.0"
+version = "0.2.0"
 description = "期末选填题速刷：Word/PDF/TXT → 单文件静态答题网页（规则解析 + LLM 可选兜底）"
 readme = "README.md"
 requires-python = ">=3.10"
