@@ -1,13 +1,15 @@
 import { useMemo } from 'react';
 import type { AnswerMap, FilterMode, Question } from '../types';
 import { collectWrongQuestions, gradeQuestion, isOptionsType } from '../lib/grading';
-import { BookOpen, ArrowRight, RotateCcw } from 'lucide-react';
+import { BookOpen, ArrowRight, RotateCcw, Download, Upload } from 'lucide-react';
 
 interface DashboardProps {
   questions: Question[];
   userAnswers: AnswerMap;
   onStartPractice: (qId: number) => void;
   onClearAnswers: () => void;
+  onExport: () => void;
+  onImport: (file: File) => void;
   filterMode: FilterMode;
   onFilterChange: (mode: FilterMode) => void;
 }
@@ -21,7 +23,7 @@ const progressLabel = (mode: FilterMode) =>
   mode === 'all' ? '复习总进度' : mode === 'choice' ? '选择复习进度' : mode === 'blank' ? '填空复习进度' : '错题重刷进度';
 
 export default function Dashboard({
-  questions, userAnswers, onStartPractice, onClearAnswers, filterMode, onFilterChange,
+  questions, userAnswers, onStartPractice, onClearAnswers, onExport, onImport, filterMode, onFilterChange,
 }: DashboardProps) {
   const counts = useMemo(() => ({
     all: questions.length,
@@ -120,12 +122,33 @@ export default function Dashboard({
             {isStarted ? '继续刷题' : '开始练习'} <ArrowRight size={16} />
           </button>
           {isStarted && (
-            <button
-              onClick={() => { if (confirm('确认清空本题库的答题记录吗？')) onClearAnswers(); }}
-              className="text-xs text-slate-400 hover:text-rose-600 transition-colors flex items-center gap-1 py-1.5 px-2 -mx-2"
-            >
-              <RotateCcw size={12} /> 清空记录
-            </button>
+            <>
+              <button
+                onClick={onExport}
+                className="text-xs text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1 py-1.5 px-2 -mx-2"
+              >
+                <Download size={12} /> 导出进度
+              </button>
+              <label className="text-xs text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1 py-1.5 px-2 -mx-2 cursor-pointer">
+                <Upload size={12} /> 导入进度
+                <input
+                  type="file"
+                  accept=".json,application/json"
+                  className="hidden"
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) onImport(f);
+                    e.target.value = '';
+                  }}
+                />
+              </label>
+              <button
+                onClick={() => { if (confirm('确认清空本题库的答题记录吗？')) onClearAnswers(); }}
+                className="text-xs text-slate-400 hover:text-rose-600 transition-colors flex items-center gap-1 py-1.5 px-2 -mx-2"
+              >
+                <RotateCcw size={12} /> 清空记录
+              </button>
+            </>
           )}
         </div>
       </div>

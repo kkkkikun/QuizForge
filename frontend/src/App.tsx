@@ -3,6 +3,8 @@ import HomePage from './components/HomePage';
 import QuizPage from './components/QuizPage';
 import AboutPage from './components/AboutPage';
 import ConvertPage from './components/ConvertPage';
+import ErrorBoundary from './components/ErrorBoundary';
+import UpdateBanner from './components/UpdateBanner';
 
 // 与 vite base 一致（dev 与 Pages 部署都用 /QuizForge/）
 const BASE = import.meta.env.BASE_URL.replace(/\/$/, '');
@@ -15,13 +17,16 @@ function QuizRoute() {
 
 export default function App() {
   return (
-    <BrowserRouter basename={BASE}>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/quiz/:id" element={<QuizRoute />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/convert" element={<ConvertPage />} />
-      </Routes>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter basename={BASE}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/quiz/:id" element={<QuizRoute />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/convert" element={<ConvertPage />} />
+        </Routes>
+        <UpdateBanner />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }

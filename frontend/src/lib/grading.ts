@@ -33,7 +33,7 @@ export function checkBlankAnswer(userInput: string, correctAnswer: string): bool
 
   // 纯数字答案：用户输入中的完整数字串须恰好包含该值（"第1层"✓含"1"；"123"✗不匹配"12"）
   if (correct.match(/^\d+$/)) {
-    const nums = user.match(/\d+/g) || [];
+    const nums: string[] = user.match(/\d+/g) || [];
     if (nums.includes(correct)) return true;
   }
 

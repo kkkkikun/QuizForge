@@ -4,6 +4,10 @@ import type { Question } from '../types';
 
 const ISSUE_NEW = 'https://github.com/kkkkikun/QuizForge/issues/new';
 
+export function buildIssueNewUrl(): string {
+  return `${ISSUE_NEW}?template=feature.yml`;
+}
+
 export function buildQuestionIssueUrl(quizId: string, quizTitle: string, q: Question): string {
   const params = new URLSearchParams({
     template: 'question-error.yml',

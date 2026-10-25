@@ -79,6 +79,40 @@ export default function QuizPage() {
     setActiveState('session');
   };
 
+  const handleExport = () => {
+    const payload = {
+      app: 'QuizForge',
+      version: 1,
+      quizId: quiz.id,
+      title: quiz.title,
+      exportedAt: new Date().toISOString(),
+      answers: userAnswers,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `quizforge-progress-${quiz.id}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const handleImport = async (file: File) => {
+    try {
+      const payload = JSON.parse(await file.text());
+      if (payload.app !== 'QuizForge' || payload.quizId !== quiz.id) {
+        alert('进度文件与当前题库不匹配，请确认导出来源。');
+        return;
+      }
+      const imported: AnswerMap = payload.answers || {};
+      setUserAnswers(imported);
+      try { localStorage.setItem(storageKey, JSON.stringify(imported)); } catch { /* ignore */ }
+      alert(`已导入 ${Object.keys(imported).length} 条答题记录。`);
+    } catch {
+      alert('进度文件解析失败，请确认是 QuizForge 导出的 JSON。');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900 font-sans flex flex-col justify-between">
       <nav className="bg-white border-b border-slate-200 py-4 px-6 sticky top-0 z-30 shadow-sm">
@@ -103,6 +137,8 @@ export default function QuizPage() {
             userAnswers={userAnswers}
             onStartPractice={handleStartPractice}
             onClearAnswers={handleClearAnswers}
+            onExport={handleExport}
+            onImport={handleImport}
             filterMode={filterMode}
             onFilterChange={setFilterMode}
           />
