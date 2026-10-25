@@ -22,7 +22,7 @@ export default function ConvertPage() {
     setMessage('正在加载解析引擎（首次约 10MB，之后有浏览器缓存）…');
     try {
       let name = file.name;
-      let bytes = new Uint8Array(await file.arrayBuffer());
+      let bytes: Uint8Array = new Uint8Array(await file.arrayBuffer());
       if (file.name.toLowerCase().endsWith('.pdf')) {
         setMessage('正在提取 PDF 文字…');
         const text = await extractPdfText(bytes);

@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { QUIZZES } from '../data';
-import { isOptionsType } from '../lib/grading';
 import { BookOpen, ArrowRight, FileQuestion } from 'lucide-react';
 import ThemeToggle from './ThemeToggle';
 
@@ -30,26 +29,22 @@ export default function HomePage() {
           </p>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          {QUIZZES.map(q => {
-            const choice = q.questions.filter(x => isOptionsType(x.type)).length;
-            const blank = q.questions.filter(x => x.type === 'blank').length;
-            return (
-              <Link
-                to={`/quiz/${q.id}`}
-                key={q.id}
-                className="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all flex flex-col gap-3"
-              >
-                <div className="flex items-start justify-between">
-                  <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
-                    <FileQuestion className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+          {QUIZZES.map(q => (
+            <Link
+              to={`/quiz/${q.id}`}
+              key={q.id}
+              className="group bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:border-blue-300 hover:shadow-md transition-all flex flex-col gap-3"
+            >
+              <div className="flex items-start justify-between">
+                <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center">
+                  <FileQuestion className="w-5 h-5 text-blue-600" />
                 </div>
-                <h2 className="text-lg font-bold text-slate-900">{q.title}</h2>
-                <p className="text-xs text-slate-500">共 {q.questions.length} 题 · 选择 {choice} · 填空 {blank}</p>
-              </Link>
-            );
-          })}
+                <ArrowRight className="w-4 h-4 text-slate-300 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </div>
+              <h2 className="text-lg font-bold text-slate-900">{q.title}</h2>
+              <p className="text-xs text-slate-500">共 {q.questionCount} 题 · 选择 {q.choice} · 填空 {q.blank}</p>
+            </Link>
+          ))}
         </div>
       </main>
 

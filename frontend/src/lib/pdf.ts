@@ -9,16 +9,21 @@ export class ScannedPdfInBrowserError extends Error {
 }
 
 export async function extractPdfText(bytes: Uint8Array): Promise<string> {
-  // node（vitest）用 legacy 构建自带 worker 处理；浏览器走 vite 的 ?url 资源
+  // node（vitest）用 legacy 构建自带 worker 处理；浏览器走 vite 的 ?url 资源。
+  // 变量间接导入：legacy 分支不进浏览器 bundle（避免双份 pdfjs chunk）
   const isNode = typeof window === 'undefined';
-  const pdfjs: typeof import('pdfjs-dist') = isNode
-    ? await import('pdfjs-dist/legacy/build/pdf.mjs')
-    : await import('pdfjs-dist');
+  let pdfjs: typeof import('pdfjs-dist');
+  if (isNode) {
+    const legacy = 'pdfjs-dist/legacy/build/pdf.mjs';
+    pdfjs = (await import(/* @vite-ignore */ legacy)) as typeof import('pdfjs-dist');
+  } else {
+    pdfjs = await import('pdfjs-dist');
+  }
   if (!isNode) {
     pdfjs.GlobalWorkerOptions.workerSrc = (await import('pdfjs-dist/build/pdf.worker.min.mjs?url')).default;
   }
 
-  const doc = await pdfjs.getDocument({ data: bytes }).promise;
+  const doc = await pdfjs.getDocument({ data: bytes.slice().buffer as ArrayBuffer }).promise;
   const pageTexts: string[] = [];
   for (let i = 1; i <= doc.numPages; i++) {
     const page = await doc.getPage(i);

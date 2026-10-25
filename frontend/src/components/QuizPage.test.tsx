@@ -20,6 +20,7 @@ beforeEach(() => {
 describe('QuizPage 状态流转（真实 db 题库，无填空题）', () => {
   it('切到「填空」卷：开始按钮禁用，进入则空卷兜底', async () => {
     renderQuiz('db');
+    await screen.findByRole('button', { name: /开始练习/ });
     await userEvent.click(screen.getByRole('button', { name: /开始练习/ }));
     await userEvent.click(screen.getAllByRole('button', { name: /A\. / })[0]);
     await userEvent.click(screen.getByText('返回主页'));
@@ -31,6 +32,7 @@ describe('QuizPage 状态流转（真实 db 题库，无填空题）', () => {
 
   it('答错一题 → 错题卷含 1 题 → 可进入错题重刷', async () => {
     renderQuiz('db');
+    await screen.findByRole('button', { name: /开始练习/ });
     await userEvent.click(screen.getByRole('button', { name: /开始练习/ }));
     await userEvent.click(screen.getAllByRole('button', { name: /A\. / })[0]);
     expect(await screen.findByText('答错了!')).toBeInTheDocument();
@@ -47,6 +49,7 @@ describe('QuizPage 状态流转（真实 db 题库，无填空题）', () => {
 
   it('localStorage 持久化：答错后重进题库仍记录', async () => {
     renderQuiz('db');
+    await screen.findByRole('button', { name: /开始练习/ });
     await userEvent.click(screen.getByRole('button', { name: /开始练习/ }));
     await userEvent.click(screen.getAllByRole('button', { name: /A\. / })[0]);
     expect(localStorage.getItem('quizforge-answers-db')).toBeTruthy();
@@ -56,6 +59,7 @@ describe('QuizPage 状态流转（真实 db 题库，无填空题）', () => {
 describe('Dashboard 统计', () => {
   it('进度与正确率随作答更新', async () => {
     renderQuiz('db');
+    await screen.findByRole('button', { name: /开始练习/ });
     await userEvent.click(screen.getByRole('button', { name: /开始练习/ }));
     await userEvent.click(screen.getAllByRole('button', { name: /A\. / })[0]);  // 错
     await userEvent.click(screen.getByText('返回主页'));

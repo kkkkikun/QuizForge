@@ -140,6 +140,49 @@ def write_data_ts(quiz: Quiz, path: str) -> None:
     write_quizzes_ts([to_react_quiz(quiz)], path)
 
 
+def write_quiz_data_dir(quizzes: list[dict], out_dir: str) -> str:
+    """按题库拆分写出：<dir>/<id>.json（题库数据，按需加载）+ <dir>/index.ts（清单 + getQuiz）。
+
+    相比单一 data.ts：首页只带清单（轻量），进题库才拉对应 JSON chunk（图片 base64 不再全量进主包）。
+    返回 index.ts 路径。
+    """
+    import os
+
+    os.makedirs(out_dir, exist_ok=True)
+    metas = []
+    for q in quizzes:
+        qs = q["questions"]
+        counts = {
+            "choice": sum(1 for x in qs if x["type"] in ("choice", "multiple", "group")),
+            "blank": sum(1 for x in qs if x["type"] == "blank"),
+        }
+        with open(os.path.join(out_dir, f'{q["id"]}.json'), "w", encoding="utf-8") as f:
+            json.dump(q, f, ensure_ascii=False, indent=2)
+        metas.append({"id": q["id"], "title": q["title"],
+                      "questionCount": len(qs), **counts})
+    index_ts = (
+        "import type { Quiz } from '../types';\n\n"
+        "// 由 quizforge --react-frontend 生成：清单（轻量）+ 各题库独立 JSON 按需加载\n"
+        "export interface QuizMeta {\n"
+        "  id: string;\n  title: string;\n  questionCount: number;\n"
+        "  choice: number;\n  blank: number;\n}\n\n"
+        f"export const QUIZZES: QuizMeta[] = {json.dumps(metas, ensure_ascii=False, indent=2)};\n\n"
+        "const modules = import.meta.glob<{ default: Quiz }>('./*.json');\n"
+        "const cache: Record<string, Quiz> = {};\n\n"
+        "export async function getQuiz(id: string): Promise<Quiz | undefined> {\n"
+        "  if (cache[id]) return cache[id];\n"
+        "  const load = modules[`./${id}.json`];\n"
+        "  if (!load) return undefined;\n"
+        "  cache[id] = (await load()).default;\n"
+        "  return cache[id];\n"
+        "}\n"
+    )
+    index_path = os.path.join(out_dir, "index.ts")
+    with open(index_path, "w", encoding="utf-8") as f:
+        f.write(index_ts)
+    return index_path
+
+
 def load_manifest(path: str) -> list[dict]:
     """读取 quizzes.yaml → [{id, title, source}, ...]。"""
     import yaml

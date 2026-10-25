@@ -106,10 +106,15 @@ def main(argv: list[str] | None = None) -> int:
         except QuizValidationError as e:
             print(f"错误：{e}。请修复源文档或核对后重试。", file=sys.stderr)
             return 4
-        out_ts = os.path.join(args.react_frontend, "src", "data.ts")
-        reactfmt.write_quizzes_ts(quizzes, out_ts)
+        out_dir = os.path.join(args.react_frontend, "src", "data")
+        index_ts = reactfmt.write_quiz_data_dir(quizzes, out_dir)
+        # 兼容旧单文件入口：src/data.ts 转发到目录（老引用不破）
+        legacy = os.path.join(args.react_frontend, "src", "data.ts")
+        with open(legacy, "w", encoding="utf-8") as f:
+            f.write("export { QUIZZES, getQuiz } from './data/index';\n"
+                    "export type { QuizMeta } from './data/index';\n")
         titles = "、".join(q["title"] for q in quizzes)
-        print(f"✅ 已生成 {out_ts}（{len(quizzes)} 个题库：{titles}）")
+        print(f"✅ 已生成 {out_dir}/（{len(quizzes)} 个题库：{titles}）+ 清单 {index_ts}")
         return 0
 
     if not args.input:

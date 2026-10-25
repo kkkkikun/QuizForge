@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { QUIZZES } from '../data';
-import type { AnswerMap, FilterMode, Question } from '../types';
+import { getQuiz } from '../data';
+import type { AnswerMap, FilterMode, Question, Quiz } from '../types';
 import { collectWrongQuestions } from '../lib/grading';
 import Dashboard from './Dashboard';
 import PracticeSession from './PracticeSession';
-import { BookOpen } from 'lucide-react';
+import { BookOpen, Loader2 } from 'lucide-react';
 
 // 进入题库时从 localStorage 恢复答题记录（惰性初始化；切题库靠 key 重挂载重新执行）
 function loadAnswers(storageKey: string): AnswerMap {
@@ -20,22 +20,30 @@ function loadAnswers(storageKey: string): AnswerMap {
 
 export default function QuizPage() {
   const { id } = useParams<{ id: string }>();
-  const quiz = QUIZZES.find(q => q.id === id);
+
+  // 题库数据按需加载（data/<id>.json 独立 chunk）
+  const [quiz, setQuiz] = useState<Quiz | undefined | null>(null);  // null=加载中, undefined=不存在
+  useEffect(() => {
+    let alive = true;
+    getQuiz(id ?? '').then(q => { if (alive) setQuiz(q); });
+    return () => { alive = false; };
+  }, [id]);
 
   const [activeState, setActiveState] = useState<'dashboard' | 'session'>('dashboard');
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [currentIndex, setCurrentIndex] = useState(0);
   // 练习列表在进入答题时快照：刷题中作答变化不会改变本次列表（错题卷重做答对后尤其重要）
   const [questionsList, setQuestionsList] = useState<Question[]>([]);
-  const [userAnswers, setUserAnswers] = useState<AnswerMap>(() =>
-    loadAnswers(quiz ? `quizforge-answers-${quiz.id}` : '')
-  );
+  const [userAnswers, setUserAnswers] = useState<AnswerMap>({});
 
   const QUESTIONS: Question[] = quiz?.questions ?? [];
   const storageKey = quiz ? `quizforge-answers-${quiz.id}` : '';
 
   useEffect(() => {
-    if (quiz) document.title = quiz.title;
+    if (quiz) {
+      document.title = quiz.title;
+      setUserAnswers(loadAnswers(`quizforge-answers-${quiz.id}`));
+    }
   }, [quiz]);
 
   const computeList = (mode: FilterMode): Question[] => {
@@ -44,6 +52,16 @@ export default function QuizPage() {
     if (mode === 'wrong') return collectWrongQuestions(QUESTIONS, userAnswers);
     return QUESTIONS;
   };
+
+  if (quiz === null) {
+    return (
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center font-sans">
+        <div className="flex items-center gap-2 text-slate-400 text-sm">
+          <Loader2 size={16} className="animate-spin" /> 题库加载中…
+        </div>
+      </div>
+    );
+  }
 
   if (!quiz) {
     return (
