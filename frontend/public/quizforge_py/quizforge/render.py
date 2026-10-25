@@ -96,6 +96,10 @@ button.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
 .num .typ{float:right;background:#eef2ff;color:var(--accent);padding:1px 8px;border-radius:999px;font-size:12px}
 .stem{margin:0 0 10px;white-space:pre-wrap}
 .qimg{display:block;max-width:100%;max-height:360px;margin:6px 0 12px;border:1px solid var(--line);border-radius:8px;background:#fff}
+.subs{display:grid;gap:12px;margin-bottom:6px}
+.sub{border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+.substem{font-weight:600;margin-bottom:8px}
+label.sel{border-color:var(--accent)}
 .opts{display:flex;flex-direction:column;gap:6px}
 .opts label{display:flex;gap:8px;align-items:flex-start;padding:8px 10px;border:1px solid var(--line);border-radius:8px;cursor:pointer}
 .opts label.ok{border-color:var(--ok);background:#f0fdf4}
@@ -132,7 +136,7 @@ let order = [], answers = {}, submitted = false, shuffle = __SHUFFLE__;
 
 function shuffleArr(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
 function esc(s){return String(s==null?'':s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-function typeLabel(q){return q.type==='multiple'?'多选':q.type==='blank'?'填空':'单选';}
+function typeLabel(q){return q.type==='multiple'?'多选':q.type==='blank'?'填空':q.type==='group'?'组题':'单选';}
 function byId(id){return DATA.questions.find(x=>x.id===id);}
 
 function save(){try{localStorage.setItem(STORE,JSON.stringify({answers,submitted,shuffle}));}catch(e){}}
@@ -148,13 +152,39 @@ function markClass(q,L){
   return '';
 }
 
+function groupMarkClass(gid,sub,subIdx,L){
+  const picked=((answers[gid]||[])[subIdx])===L;
+  if(submitted){
+    if(sub.answer===L)return 'ok';
+    if(picked)return 'bad';
+    return '';
+  }
+  return picked?'sel':'';
+}
+
 function card(q){
   const el=document.createElement('div');
   el.className='q'+(q.low_confidence?' low':'');
   let h='<div class="num">第 '+q.id+' 题'+(q.low_confidence?' <span class="warn">⚠️ 存疑，请核对</span>':'')+(q.source==='llm'?' <span class="src">LLM</span>':'')+'<span class="typ">'+typeLabel(q)+'</span></div>';
   h+='<div class="stem">'+esc(q.stem)+'</div>';
   (q.images||[]).forEach(src=>{ h+='<img class="qimg" src="'+src+'" alt="题目配图" loading="lazy">'; });
-  if(q.type==='blank'){
+  if(q.type==='group'){
+    // 组题：子题点选即锁（同 React 前端语义），整组作答后参与判分
+    const a=answers[q.id]||[];
+    h+='<div class="subs">';
+    (q.sub_questions||[]).forEach((s,i)=>{
+      h+='<div class="sub"><div class="substem">'+(i+1)+'. '+esc(s.stem)+'</div>';
+      (s.images||[]).forEach(src=>{ h+='<img class="qimg" src="'+src+'" alt="配图" loading="lazy">'; });
+      let keys=Object.keys(s.options||{});
+      h+='<div class="opts">';
+      keys.forEach(L=>{
+        const lock=submitted||a[i];
+        h+='<label class="'+groupMarkClass(q.id,s,i,L)+'"><input type="radio" name="q'+q.id+'_'+i+'" value="'+L+'" '+((a[i]===L)?'checked':'')+' '+(lock?'disabled':'')+' onchange="onGroupPick('+q.id+','+i+')"> <span class="L">'+L+'</span>. '+esc(s.options[L])+'</label>';
+      });
+      h+='</div></div>';
+    });
+    h+='</div>';
+  }else if(q.type==='blank'){
     const cur=(answers[q.id]&&answers[q.id][0])||'';
     h+='<input class="blank" data-id="'+q.id+'" value="'+esc(cur)+'" '+(submitted?'disabled':'')+' oninput="onBlank('+q.id+',this.value)">';
     if(submitted){
@@ -199,10 +229,28 @@ function onPick(id){
   save();
 }
 function onBlank(id,v){answers[id]=[v];save();}
+function onGroupPick(id,i){
+  const q=byId(id);
+  const c=document.querySelector('input[name="q'+id+'_'+i+'"]:checked');
+  if(!c)return;
+  const a=answers[id]||new Array(q.sub_questions.length).fill('');
+  a[i]=c.value;
+  answers[id]=a;
+  save();
+  render();  // 重渲染以锁定该子题
+}
 
 function grade(){
   let score=0,total=0;
   DATA.questions.forEach(q=>{
+    if(q.type==='group'){
+      const subs=q.sub_questions||[];
+      if(!subs.length||subs.some(s=>!s.answer))return;
+      total++;
+      const a=answers[q.id]||[];
+      if(subs.every((s,i)=>a[i]===s.answer))score++;
+      return;
+    }
     if(!q.answer||!q.answer.length)return;
     total++;
     const a=answers[q.id]||[];

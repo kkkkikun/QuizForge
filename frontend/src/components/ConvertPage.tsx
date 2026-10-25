@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, FileUp, Loader2, Download, ShieldCheck, CheckCircle2, AlertTriangle, XCircle, FlaskConical } from 'lucide-react';
 import { browserDeps, runConvert } from '../lib/convert';
+import { extractPdfText } from '../lib/pdf';
 import type { ConvertResult } from '../lib/convert';
 
 type Phase = 'idle' | 'loading' | 'done' | 'error';
@@ -20,9 +21,16 @@ export default function ConvertPage() {
     setResult(null);
     setMessage('正在加载解析引擎（首次约 10MB，之后有浏览器缓存）…');
     try {
-      const bytes = new Uint8Array(await file.arrayBuffer());
+      let name = file.name;
+      let bytes = new Uint8Array(await file.arrayBuffer());
+      if (file.name.toLowerCase().endsWith('.pdf')) {
+        setMessage('正在提取 PDF 文字…');
+        const text = await extractPdfText(bytes);
+        name = file.name.replace(/\.pdf$/i, '.txt');
+        bytes = new TextEncoder().encode(text);
+      }
       setMessage('正在解析（文件不出浏览器）…');
-      const r = await runConvert({ name: file.name, bytes }, browserDeps);
+      const r = await runConvert({ name, bytes }, browserDeps);
       setResult(r);
       setPhase('done');
     } catch (e) {
@@ -61,7 +69,7 @@ export default function ConvertPage() {
           <div>
             <h1 className="font-bold text-xl">把复习资料变成刷题网页</h1>
             <p className="text-sm text-slate-500 mt-1">
-              选择 <b>.docx</b> / <b>.txt</b> 题库文档，在浏览器里解析，下载双击即开的单文件答题网页。
+              选择 <b>.docx</b> / <b>.txt</b> / <b>.pdf（文字版）</b> 题库文档，在浏览器里解析，下载双击即开的单文件答题网页。
             </p>
           </div>
 
@@ -69,12 +77,12 @@ export default function ConvertPage() {
             <label className="flex-1 flex items-center gap-3 px-4 py-3 border-2 border-dashed border-slate-200 rounded-xl hover:border-blue-300 transition-colors cursor-pointer">
               <FileUp size={18} className="text-blue-600 shrink-0" />
               <span className="text-sm truncate flex-1">
-                {fileName || '选择文件（.docx / .txt）'}
+                {fileName || '选择文件（.docx / .txt / .pdf）'}
               </span>
               <input
                 ref={fileRef}
                 type="file"
-                accept=".docx,.txt"
+                accept=".docx,.txt,.pdf"
                 className="hidden"
                 onChange={(e) => {
                   setFileName(e.target.files?.[0]?.name || '');
@@ -96,7 +104,7 @@ export default function ConvertPage() {
           <p className="text-xs text-slate-400 flex items-center gap-1.5">
             <ShieldCheck size={13} className="text-emerald-600 shrink-0" />
             文件全程不离开你的浏览器（解析引擎在本机运行，不上传任何内容）。首次使用需联网加载引擎。
-            PDF 暂请使用命令行版。
+            扫描版 PDF 无法识别，请先转存 docx。
           </p>
         </section>
 

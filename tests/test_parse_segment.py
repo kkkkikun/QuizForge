@@ -68,3 +68,22 @@ def test_detect_choice_db_first_question():
     assert "数据库技术的核心" in first.stem
     assert set(first.options) >= {"A", "B", "C", "D"}
     assert first.options["B"] == "数据库管理系统"
+
+
+def test_english_section_headers():
+    """英文节头（PDF/英文题库常见）→ 识别为 choice/blank 节。"""
+    blocks = [
+        P.Block("txt", "text", "Single Choice", "para"),
+        P.Block("txt", "text", "1. What is 1+1? (B)", "para"),
+        P.Block("txt", "text", "A. 1", "para"),
+        P.Block("txt", "text", "B. 2", "para"),
+        P.Block("txt", "text", "C. 3", "para"),
+        P.Block("txt", "text", "D. 4", "para"),
+        P.Block("txt", "text", "Fill in the Blanks", "para"),
+        P.Block("txt", "text", "2. The core of DB is ____", "para"),
+    ]
+    from quizforge.parse import parse_blocks
+    quiz = parse_blocks(blocks, source_file="en.txt")
+    assert len(quiz.questions) == 2
+    assert quiz.questions[0].answer == ["B"]
+    assert quiz.questions[1].type == "blank"

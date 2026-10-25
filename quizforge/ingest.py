@@ -5,6 +5,7 @@ from __future__ import annotations
 import os
 
 from .model import Block
+from .patterns import EN_SECTION_HEADER_RE as _EN_SECTION_RE
 from .patterns import SECTION_HEADER_RE as _SECTION_RE
 
 # OOXML 命名空间（用于检测段落内图片）
@@ -23,7 +24,10 @@ def _para_kind(style: str) -> str:
 
 
 def _text_kind(text: str) -> str:
-    return "heading" if _SECTION_RE.match(text.strip()) else "para"
+    t = text.strip()
+    if _SECTION_RE.match(t) or _EN_SECTION_RE.match(t):
+        return "heading"
+    return "para"
 
 
 def _table_text(table) -> str:

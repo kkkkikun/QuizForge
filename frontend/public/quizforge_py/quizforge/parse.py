@@ -16,6 +16,7 @@ from .model import Block, Question, Quiz
 from .patterns import (
     ANSWER_KEY_RE,
     ANSWER_LINE_RE,
+    EN_SECTION_HEADER_RE,
     ANSWER_SEQ_RE,
     BLANK_RE,
     CET_SECTION_RE,
@@ -63,6 +64,10 @@ def _section_type(title: str) -> str:
         return "answer_key"
     if CET_SECTION_RE.match(t):
         return "choice"
+    if EN_SECTION_HEADER_RE.match(t):
+        if "blank" in t.lower() or "fill" in t.lower():
+            return "blank"
+        return "choice"
     for k, v in _TYPE_MAP.items():
         if k in t:
             return v
@@ -78,6 +83,7 @@ def segment(blocks: list[Block]) -> list[Section]:
             or (b.kind == "para" and SECTION_HEADER_RE.match(b.text.strip()))
             or (b.kind == "para" and CET_SECTION_RE.match(b.text.strip()))
             or (b.kind == "para" and ANSWER_KEY_RE.match(b.text.strip()))
+            or (b.kind == "para" and EN_SECTION_HEADER_RE.match(b.text.strip()))
         )
         if is_header:
             sections.append(Section(_section_type(b.text), b.text.strip(), []))

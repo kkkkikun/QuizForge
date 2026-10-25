@@ -53,3 +53,21 @@ describe('runConvert 浏览器转换管线（真实 Pyodide）', () => {
     expect(r.html).toBeNull();
   });
 });
+
+describe('extractPdfText 浏览器 PDF 提取（真实 pdfjs，node）', () => {
+  it('文字版 PDF → 逐行文本可走 txt 管线', { timeout: 60_000 }, async () => {
+    const { extractPdfText } = await import('./pdf');
+    const bytes = new Uint8Array(
+      readFileSync(resolve(here, './__fixtures__/mini-en.pdf')),
+    );
+    const text = await extractPdfText(bytes);
+    expect(text).toContain('What is 1+1?');
+    expect(text).toContain('B. 2');
+
+    // 提取的文本直接走转换管线
+    const r = await runConvert(
+      { name: 'mini.pdf.txt', bytes: new TextEncoder().encode(text) }, deps,
+    );
+    expect(r.questionCount).toBeGreaterThanOrEqual(1);
+  });
+})

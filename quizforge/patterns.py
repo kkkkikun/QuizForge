@@ -5,6 +5,13 @@ import re
 # 章节标题：选择题 / 单选题 / 多选题 / 填空题 / 判断题 / 简答题 / 计算题 …
 SECTION_HEADER_RE = re.compile(r"^(选择|单选|多选|填空|判断|简答|计算|应用|综合)题")
 
+# 英文章节标题（英文题库/PDF 常见）
+EN_SECTION_HEADER_RE = re.compile(
+    r"^(single\s+choice|multiple\s+choice|choice\s+questions?|true\s+or\s+false|"
+    r"fill[- ]in[- ]the[- ]blanks?|questions?)$",
+    re.IGNORECASE,
+)
+
 # 答案 key 区标题（文档末尾独立答案区，如「参考答案」）
 ANSWER_KEY_RE = re.compile(r"^([一二三四五六七八九十\d]+[、.．])?\s*(参考答案|标准答案|试题答案|答案)\s*$")
 
