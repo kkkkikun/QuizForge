@@ -62,6 +62,28 @@ def test_error_empty_group():
     assert has_errors(validate_quiz(Quiz(questions=[g])))
 
 
+def test_error_group_sub_answer_out_of_options():
+    """组题子题答案不在选项中 → error（关卡盲区修复）。"""
+    def sub(n, answer, options):
+        return Question(id=n, type="single", stem=f"第 {n} 题",
+                        options=options, answer=answer)
+    g = Question(id=1, type="group", stem="Unit 1 · Conversation", sub_questions=[
+        sub(2, ["A"], {"A": "a", "B": "b", "C": "c", "D": "d"}),
+        sub(3, ["E"], {"A": "a", "B": "b", "C": "c"}),   # 越界
+    ])
+    issues = validate_quiz(Quiz(questions=[g]))
+    errs = [i for i in issues if i.level == "error"]
+    assert errs and "不在选项" in errs[0].message
+
+
+def test_error_group_sub_few_options():
+    """组题子题选项不足 → error。"""
+    g = Question(id=1, type="group", stem="G", sub_questions=[
+        Question(id=2, type="single", stem="子题", options={"A": "x"}, answer=["A"]),
+    ])
+    assert has_errors(validate_quiz(Quiz(questions=[g])))
+
+
 def test_warning_group_duplicate_sub_numbering():
     def sub(n):
         return Question(id=n, type="single", stem=f"第 {n} 题",

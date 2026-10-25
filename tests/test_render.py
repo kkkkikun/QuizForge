@@ -66,3 +66,19 @@ def test_render_blank_reveal_present():
     html = render_html(_sample_quiz())
     assert "正确答案" in html
     assert "无标准答案" in html
+
+
+def test_render_group_questions():
+    """组题：子题题干/选项入页，radio 按子题编号分组，JS 引擎含组题判分。"""
+    g = Question(1, "group", stem="Unit 1 · News report 1", sub_questions=[
+        Question(2, "single", stem="第 1 题",
+                 options={"A": "x", "B": "y", "C": "z", "D": "w"}, answer=["A"]),
+        Question(3, "single", stem="第 2 题",
+                 options={"A": "x", "B": "y", "C": "z", "D": "w"}, answer=["B"]),
+    ])
+    html = render_html(Quiz(title="组题测试", source_file="g.docx", questions=[g]))
+    assert "Unit 1 · News report 1" in html
+    assert "第 1 题" in html and "第 2 题" in html
+    assert "q'+q.id+'_'+i" in html    # 子题 radio 按题号+子题序分组
+    assert "onGroupPick" in html
+    assert "q.type==='group'" in html                          # 判分分支

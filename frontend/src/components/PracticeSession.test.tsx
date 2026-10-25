@@ -34,8 +34,10 @@ describe('checkBlankAnswer 填空容错判分', () => {
     expect(checkBlankAnswer('SELECT', 'SET或SELECT')).toBe(true);
   });
 
-  it('纯数字答案支持包含匹配', () => {
+  it('纯数字答案：完整数字串匹配（"第1层"对"1"，"123"不误匹配"12"）', () => {
     expect(checkBlankAnswer('第1层', '1')).toBe(true);
+    expect(checkBlankAnswer('123', '12')).toBe(false);
+    expect(checkBlankAnswer('12', '12')).toBe(true);
   });
 
   it('半角括号缩写：全称或缩写均可', () => {

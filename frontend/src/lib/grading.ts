@@ -31,9 +31,10 @@ export function checkBlankAnswer(userInput: string, correctAnswer: string): bool
     return options.some(opt => checkBlankAnswer(userInput, opt));
   }
 
-  // Support character index matches like "1次" with "1"
-  if (correct.match(/^\d+$/) && user.includes(correct)) {
-    return true;
+  // 纯数字答案：用户输入中的完整数字串须恰好包含该值（"第1层"✓含"1"；"123"✗不匹配"12"）
+  if (correct.match(/^\d+$/)) {
+    const nums = user.match(/\d+/g) || [];
+    if (nums.includes(correct)) return true;
   }
 
   // Support parenthesized abbreviations: "数据库管理系统(DBMS)" matches "数据库管理系统" or "dbms"

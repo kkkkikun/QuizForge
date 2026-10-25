@@ -55,6 +55,11 @@ def _group_issues(q: Question, out: list[Issue]) -> None:
         if s.stem in seen:
             out.append(Issue("warning", q.id, f"子题编号重复：{s.stem}"))
         seen.add(s.stem)
+        # 子题按单选校验（answer 越界/选项不足 → error；无答案 → warning）
+        sub_issues: list[Issue] = []
+        _choice_issues(s, sub_issues)
+        for i in sub_issues:
+            out.append(Issue(i.level, q.id, f"子题「{s.stem[:16]}」{i.message}"))
 
 
 def _blank_issues(q: Question, out: list[Issue]) -> None:
