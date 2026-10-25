@@ -5,6 +5,10 @@ import type { AnswerMap, FilterMode, Question, Quiz } from '../types';
 import { collectWrongQuestions } from '../lib/grading';
 import Dashboard from './Dashboard';
 import PracticeSession from './PracticeSession';
+import ExamSession from './ExamSession';
+import ExamResult from './ExamResult';
+import ExamSetupView from './ExamSetupView';
+import { pickExamQuestions } from '../lib/exam';
 import { BookOpen, Loader2 } from 'lucide-react';
 
 // 进入题库时从 localStorage 恢复答题记录（惰性初始化；切题库靠 key 重挂载重新执行）
@@ -29,7 +33,11 @@ export default function QuizPage() {
     return () => { alive = false; };
   }, [id]);
 
-  const [activeState, setActiveState] = useState<'dashboard' | 'session'>('dashboard');
+  const [activeState, setActiveState] = useState<'dashboard' | 'session' | 'examSetup' | 'exam' | 'examResult'>('dashboard');
+  const [examQuestions, setExamQuestions] = useState<Question[]>([]);
+  const [examDuration, setExamDuration] = useState(20);
+  const [examAnswers, setExamAnswers] = useState<AnswerMap>({});
+  const [examUsedSec, setExamUsedSec] = useState(0);
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [currentIndex, setCurrentIndex] = useState(0);
   // 练习列表在进入答题时快照：刷题中作答变化不会改变本次列表（错题卷重做答对后尤其重要）
@@ -88,6 +96,17 @@ export default function QuizPage() {
     delete updated[qId];
     setUserAnswers(updated);
     try { localStorage.setItem(storageKey, JSON.stringify(updated)); } catch { /* ignore */ }
+  };
+  const handleStartExam = (count: number, durationMin: number) => {
+    setExamQuestions(pickExamQuestions(QUESTIONS, count));
+    setExamDuration(durationMin);
+    setExamAnswers({});
+    setActiveState('exam');
+  };
+  const handleExamSubmit = (answers: AnswerMap, usedSec: number) => {
+    setExamAnswers(answers);
+    setExamUsedSec(usedSec);
+    setActiveState('examResult');
   };
   const handleStartPractice = (qId: number) => {
     const list = computeList(filterMode);
@@ -154,13 +173,14 @@ export default function QuizPage() {
             questions={QUESTIONS}
             userAnswers={userAnswers}
             onStartPractice={handleStartPractice}
+            onStartExam={() => setActiveState('examSetup')}
             onClearAnswers={handleClearAnswers}
             onExport={handleExport}
             onImport={handleImport}
             filterMode={filterMode}
             onFilterChange={setFilterMode}
           />
-        ) : (
+        ) : activeState === 'session' ? (
           <PracticeSession
             questionsList={questionsList}
             initialIndex={currentIndex}
@@ -170,6 +190,27 @@ export default function QuizPage() {
             onAnswer={handleAnswer}
             onExit={() => setActiveState('dashboard')}
             onRedo={handleClearOne}
+          />
+        ) : activeState === 'examSetup' ? (
+          <ExamSetupView
+            total={QUESTIONS.length}
+            onStart={handleStartExam}
+            onExit={() => setActiveState('dashboard')}
+          />
+        ) : activeState === 'exam' ? (
+          <ExamSession
+            questions={examQuestions}
+            durationMin={examDuration}
+            onSubmit={handleExamSubmit}
+            onExit={() => setActiveState('dashboard')}
+          />
+        ) : (
+          <ExamResult
+            questions={examQuestions}
+            answers={examAnswers}
+            usedSec={examUsedSec}
+            onRetry={() => setActiveState('examSetup')}
+            onExit={() => setActiveState('dashboard')}
           />
         )}
       </main>

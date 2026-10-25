@@ -7,6 +7,7 @@ interface DashboardProps {
   questions: Question[];
   userAnswers: AnswerMap;
   onStartPractice: (qId: number) => void;
+  onStartExam: () => void;
   onClearAnswers: () => void;
   onExport: () => void;
   onImport: (file: File) => void;
@@ -23,7 +24,7 @@ const progressLabel = (mode: FilterMode) =>
   mode === 'all' ? '复习总进度' : mode === 'choice' ? '选择复习进度' : mode === 'blank' ? '填空复习进度' : '错题重刷进度';
 
 export default function Dashboard({
-  questions, userAnswers, onStartPractice, onClearAnswers, onExport, onImport, filterMode, onFilterChange,
+  questions, userAnswers, onStartPractice, onStartExam, onClearAnswers, onExport, onImport, filterMode, onFilterChange,
 }: DashboardProps) {
   const counts = useMemo(() => ({
     all: questions.length,
@@ -120,6 +121,12 @@ export default function Dashboard({
             className="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             {isStarted ? '继续刷题' : '开始练习'} <ArrowRight size={16} />
+          </button>
+          <button
+            onClick={onStartExam}
+            className="w-full py-2.5 px-6 bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-200 font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+          >
+            ⏱ 模拟考试（随机抽题限时）
           </button>
           {isStarted && (
             <>

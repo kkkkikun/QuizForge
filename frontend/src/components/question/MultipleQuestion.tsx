@@ -6,16 +6,23 @@ interface MultipleQuestionProps {
   isAnswered: boolean;
   savedAnswer: string | string[] | undefined;
   onAnswer: (v: string[]) => void;
+  initialDraft?: string[];   // 考试模式：切题后恢复已勾选（不判分）
+  onDraftChange?: (v: string[]) => void;  // 考试模式：草稿即时上报
+  hideSubmit?: boolean;                    // 考试模式：无「核对答案」按钮
 }
 
 // 多选：勾选暂存 + 提交核对；答后按标准答案高亮
-export default function MultipleQuestion({ question, isAnswered, savedAnswer, onAnswer }: MultipleQuestionProps) {
-  const [multiInputs, setMultiInputs] = useState<string[]>([]);
+export default function MultipleQuestion({ question, isAnswered, savedAnswer, onAnswer, initialDraft, onDraftChange, hideSubmit }: MultipleQuestionProps) {
+  const [multiInputs, setMultiInputs] = useState<string[]>(initialDraft ?? []);
   const stdSet = new Set(question.answer as string[]);
 
   const handleToggle = (letter: string) => {
     if (isAnswered) return;
-    setMultiInputs(prev => prev.includes(letter) ? prev.filter(l => l !== letter) : [...prev, letter]);
+    setMultiInputs(prev => {
+      const next = prev.includes(letter) ? prev.filter(l => l !== letter) : [...prev, letter];
+      onDraftChange?.(next);
+      return next;
+    });
   };
 
   return (
@@ -53,7 +60,7 @@ export default function MultipleQuestion({ question, isAnswered, savedAnswer, on
           })}
         </div>
       </div>
-      {!isAnswered && (
+      {!isAnswered && !hideSubmit && (
         <button
           type="button"
           onClick={() => onAnswer(multiInputs)}

@@ -8,16 +8,19 @@ interface BlankQuestionProps {
   isAnswered: boolean;
   savedAnswer: string | string[] | undefined;
   onAnswer: (v: string[]) => void;
+  initialDraft?: string[];   // 考试模式：切题后恢复已填内容（不判分）
+  onDraftChange?: (v: string[]) => void;  // 考试模式：草稿即时上报
+  hideSubmit?: boolean;                    // 考试模式：无「核对答案」按钮
 }
 
 // 填空：多空输入 + 提交核对；答后逐空标注正误并给标准答案
-export default function BlankQuestion({ question, isAnswered, savedAnswer, onAnswer }: BlankQuestionProps) {
+export default function BlankQuestion({ question, isAnswered, savedAnswer, onAnswer, initialDraft, onDraftChange, hideSubmit }: BlankQuestionProps) {
   const blankCount = Array.isArray(question.answer) ? question.answer.length : 1;
   const [inputs, setInputs] = useState<string[]>(() => {
     if (isAnswered) {
       return Array.isArray(savedAnswer) ? [...savedAnswer] : savedAnswer ? [savedAnswer] : Array(blankCount).fill('');
     }
-    return Array(blankCount).fill('');
+    return initialDraft ? [...initialDraft] : Array(blankCount).fill('');
   });
 
   const handleChange = (index: number, val: string) => {
@@ -25,6 +28,7 @@ export default function BlankQuestion({ question, isAnswered, savedAnswer, onAns
     const updated = [...inputs];
     updated[index] = val;
     setInputs(updated);
+    onDraftChange?.(updated);
   };
 
   return (
@@ -78,7 +82,7 @@ export default function BlankQuestion({ question, isAnswered, savedAnswer, onAns
         })}
       </div>
 
-      {!isAnswered && (
+      {!isAnswered && !hideSubmit && (
         <button
           type="button"
           onClick={() => onAnswer(inputs)}

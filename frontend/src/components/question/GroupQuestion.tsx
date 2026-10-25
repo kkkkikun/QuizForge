@@ -8,21 +8,27 @@ interface GroupQuestionProps {
   savedAnswer: string | string[] | undefined;
   onAnswer: (v: string[]) => void;
   onRedo?: () => void;
+  initialDraft?: string[];   // 考试模式：切题后恢复已选（不判分）
+  mutable?: boolean;                      // 考试模式：子题可改选
+  onDraftChange?: (v: string[]) => void;  // 考试模式：草稿即时上报
 }
 
 // 组题：子题点选即锁、全组答完才保存；支持一键重做本组
-export default function GroupQuestion({ question, isAnswered, savedAnswer, onAnswer, onRedo }: GroupQuestionProps) {
+export default function GroupQuestion({ question, isAnswered, savedAnswer, onAnswer, onRedo, initialDraft, mutable, onDraftChange }: GroupQuestionProps) {
   const gn = question.subQuestions?.length || 0;
-  const [groupInputs, setGroupInputs] = useState<string[]>(() =>
-    isAnswered && Array.isArray(savedAnswer) ? [...savedAnswer] : Array(gn).fill('')
-  );
+  const [groupInputs, setGroupInputs] = useState<string[]>(() => {
+    if (isAnswered && Array.isArray(savedAnswer)) return [...savedAnswer];
+    if (initialDraft) return [...initialDraft];
+    return Array(gn).fill('');
+  });
 
   const handlePick = (sIdx: number, letter: string) => {
-    if (isAnswered || groupInputs[sIdx]) return;   // 整组已保存 / 该子题已锁
+    if (isAnswered || (!mutable && groupInputs[sIdx])) return;  // 整组已保存 / 非考试时该子题已锁
     const updated = [...groupInputs];
     updated[sIdx] = letter;
     setGroupInputs(updated);
-    if (gn > 0 && updated.length === gn && updated.every(x => x)) {
+    onDraftChange?.(updated);
+    if (!mutable && gn > 0 && updated.length === gn && updated.every(x => x)) {
       onAnswer(updated);                            // 全部子题答完 → 保存
     }
   };
@@ -36,7 +42,7 @@ export default function GroupQuestion({ question, isAnswered, savedAnswer, onAns
     <div className="space-y-5 pt-2">
       {question.subQuestions?.map((sub, sIdx) => {
         const sel = isAnswered ? (savedAnswer as string[])[sIdx] : (groupInputs[sIdx] || '');
-        const locked = sel !== '';
+        const locked = !mutable && sel !== '';
         return (
           <div key={sIdx} className="bg-slate-50 rounded-2xl p-4 border border-slate-100 space-y-3">
             <p className="text-sm font-bold text-slate-800">{sIdx + 1}. {sub.question}</p>
