@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { QUIZZES } from '../data';
 import { isOptionsType } from '../lib/grading';
 import { BookOpen, ArrowRight, FileQuestion } from 'lucide-react';
+import ThemeToggle from './ThemeToggle';
 
 export default function HomePage() {
   return (
@@ -12,6 +13,9 @@ export default function HomePage() {
             <BookOpen className="w-5 h-5 text-white" />
           </div>
           <span className="font-bold text-base tracking-tight text-slate-950">QuizForge 题库</span>
+          <div className="ml-auto">
+            <ThemeToggle />
+          </div>
         </div>
       </nav>
 

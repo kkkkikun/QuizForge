@@ -7,8 +7,7 @@
   --font-mono: "JetBrains Mono", Courier, monospace;
 
   /* Custom high-contrast theme values for a modern, beautiful aesthetic */
-  --color-accent-blue: #2563eb;
-  --color-accent-teal: #0f766e;
+  --color-accent-blue: #2563eb;  --color-accent-teal: #0f766e;
   --color-accent-crimson: #be123c;
   
   --shadow-premium: 0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.02);
@@ -39,3 +38,39 @@ code {
   color: #c2410c;
 }
 
+
+/* ---------- 深色模式：覆盖 Tailwind 色阶变量（html.dark 生效，全部 slate 反转 + white/浅色底暗化） ---------- */
+html.dark {
+  --color-white: #1e293b;        /* 卡片底 */
+  --color-slate-50: #0f172a;     /* 页面底 */
+  --color-slate-100: #1e293b;
+  --color-slate-200: #334155;
+  --color-slate-300: #475569;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #94a3b8;
+  --color-slate-600: #cbd5e1;
+  --color-slate-700: #e2e8f0;
+  --color-slate-800: #f1f5f9;
+  --color-slate-900: #f8fafc;
+  --color-slate-950: #f8fafc;
+  --color-slate-905: #f8fafc;
+  /* 浅色功能底暗化 */
+  --color-blue-50: #172554;
+  --color-blue-100: #1e3a8a;
+  --color-blue-300: #3b82f6;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #3b82f6;
+  --color-emerald-50: #052e16;
+  --color-emerald-100: #064e3b;
+  --color-emerald-300: #34d399;
+  --color-emerald-700: #6ee7b7;
+  --color-emerald-800: #a7f3d0;
+  --color-emerald-900: #d1fae5;
+  --color-emerald-950: #ecfdf5;
+  --color-rose-50: #4c0519;
+  --color-rose-100: #881337;
+  --color-rose-200: #9f1239;
+  --color-rose-300: #fb7185;
+  --color-rose-950: #ffe4e6;
+  --color-amber-500: #f59e0b;
+}

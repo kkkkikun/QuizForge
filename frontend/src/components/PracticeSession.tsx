@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import type { Question } from '../types';
 import { gradeQuestion } from '../lib/grading';
 import { renderQuestionStem } from '../lib/stem';
@@ -69,6 +69,35 @@ export default function PracticeSession({
     if (dx < 0 && currentIndex < totalQuestions - 1) setCurrentIndex(currentIndex + 1);
     if (dx > 0 && currentIndex > 0) setCurrentIndex(currentIndex - 1);
   };
+
+  // 键盘作答：A-D/1-4 选项（choice 直接选 / multiple 切换勾选 / group 作用于首个未锁子题），←/→ 翻题
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement)?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || e.metaKey || e.ctrlKey || e.altKey) return;
+      const q = questionsList[currentIndex];
+      if (!q) return;
+      if (e.key === 'ArrowRight' || e.key === 'Enter') {
+        if (currentIndex < totalQuestions - 1) setCurrentIndex(currentIndex + 1);
+        return;
+      }
+      if (e.key === 'ArrowLeft') {
+        if (currentIndex > 0) setCurrentIndex(currentIndex - 1);
+        return;
+      }
+      const k = e.key.toUpperCase();
+      const letter = /^[A-D]$/.test(k) ? k
+        : /^[1-4]$/.test(k) ? 'ABCD'[Number(k) - 1] : null;
+      if (!letter) return;
+      // 键盘选项仅支持单选（多选/组题的草稿在子组件内，保持鼠标/触摸操作）
+      if (q.type === 'choice' && userAnswers[q.id] === undefined) {
+        if (q.options?.some(o => o.charAt(0) === letter)) onAnswer(q.id, letter);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex, questionsList, userAnswers, totalQuestions]);
 
   // Has the user answered the current question?
   const qId = activeQuestion?.id ?? -1;
