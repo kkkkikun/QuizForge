@@ -36,6 +36,8 @@
 
 ## 近期完成
 
+- [x] **改进大 batch（2026-10-25，v0.2.0）**：判分/校验收紧（组题子题校验、数字串完整匹配）、单文件引擎组题支持、韧性三件套（ErrorBoundary/PWA 更新横幅/进度导出导入）、体验三件套（OG 卡片/深色模式/键盘作答）、/convert 支持 PDF+英文节头、题库数据按需加载（主包 -145KB）、模拟考试模式（随机+限时+成绩单）、Playwright E2E×3 进 CI、CHANGELOG 首建、v0.2.0 tag（PyPI 发布随 workflow，因本机网络波动待线上确认）
+
 - [x] **M5 工具化分发**（2026-10-21）：/convert 浏览器内转换上线（browser_ingest 纯 stdlib 提取器逐块一致 + Pyodide 桥 + vitest 真实集成测试）；PyPI 发布就绪（元数据/sdist 瘦身/publish workflow，待用户打 tag 发布）
 - [x] **M4 推广启动（代码侧）**（2026-10-21）：README 分层重写 + 四张实拍截图 + HomePage 计数口径修复；访问计数评估为不加（零后端/隐私优先）
 - [x] **M3+ 首份陌生文档实战**（2026-10-21）：01-pptx.docx → thermal 题库上线（9 题）；反哺解析层 4 项——丢 A 标签恢复、内联题干、回退组 ≥2 门槛（CET 组豁免）、组内子题 LLM 补答；顺带修复 dict_to_quiz 丢 sub_questions
