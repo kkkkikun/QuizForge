@@ -28,7 +28,7 @@
 **发现题目有错？** 刷题页每道题下方有「这道题有问题？」按钮，点开就是预填好的反馈表单。
 **想要新题库？** [提一个 Issue](https://github.com/kkkkikun/QuizForge/issues/new?template=new-quiz.yml)（或把 Word/PDF 复习资料发给站长）。
 
-**手上有资料、想立刻自己转？** 用上面的**在线转换**：选一个 `.docx`/`.txt`，在**你自己的浏览器里**解析成题库网页下载——文件全程不上传（纯前端，离线可用）。也可以用下面的命令行版本。
+**手上有资料、想立刻自己转？** 用上面的**在线转换**：选一个 `.docx`/`.txt`/`.pdf`（文字版 PDF），在**你自己的浏览器里**解析成题库网页下载——文件全程不上传（纯前端，离线可用）。也可以用下面的命令行版本。
 
 ---
 
@@ -93,7 +93,7 @@ uv run python scripts/add_quiz.py 同学的计网复习.docx --id network --titl
 ### 开发约定
 
 - **TDD**：先测后码；`data/*.docx` 是回归基线，新文档入库即自动受检（`tests/test_validate.py` 扫 `data/` 全量）
-- **数据契约**：Quiz JSON 是层间唯一中间表示（`openspec/changes/quizforge-mvp/design.md §3.2`）
+- **数据契约**：Quiz JSON 是层间唯一中间表示（`openspec/changes/archive/2026-10-31-quizforge-mvp/design.md §3.2`）
 - 文档体系：`CLAUDE.md`（索引）→ `.claude/docs/`（roadmap / SNAPSHOT / tasks）→ `openspec/specs/`
 - 提交规范：不加 `Co-Authored-By`
 
@@ -110,14 +110,14 @@ pip install quizforge-cli   # 或 uv tool install quizforge-cli；安装后命�
 - 题目图片：已支持 docx 内 png/jpg/gif/webp 配图（base64 内嵌，浏览器内转换同样支持）；wmf 公式图不支持
 - 扫描版 PDF：不支持直接 OCR——用 WPS/Word 打开后另存为 .docx 再转换（CLI 会提示）
 - LLM 答案是其推理结果（文档无答案 key 时）；标准课程知识可靠，冷门题可能偏差
-- 在线转换（浏览器版）目前支持 `.docx`/`.txt`，PDF 请用命令行版
+- 在线转换（浏览器版）支持 `.docx`/`.txt`/`.pdf`（文字版 PDF），但只走纯规则解析、不启用 LLM 兜底
 
 ## 🗺 路线图
 
 - [x] jsdom/vitest 前端测试、移动端优先 + PWA、错题本与反馈通道
 - [x] 答案 key 区映射（文末「参考答案」按题号回填，免 LLM）；解析诊断 `--diagnose`
 - [x] 浏览器端在线转换（Pyodide，纯规则，文件不上传）
-- [x] PyPI 发布 [`quizforge-cli`](https://pypi.org/project/quizforge-cli/)（v0.1.0）
+- [x] PyPI 发布 [`quizforge-cli`](https://pypi.org/project/quizforge-cli/)（v0.2.0）
 - [x] 题目图片抽取（docx 配图 base64 内嵌，含浏览器版）
 - [ ] 扫描 PDF OCR（建议直接转存 docx）、十五选十（待格式样本）
 - 完整推广路线见 [.claude/docs/roadmap.md](.claude/docs/roadmap.md)

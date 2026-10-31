@@ -32,7 +32,3 @@
 - **WHEN** PDF 为纯图片
 - **THEN** 抛 `ScannedPdfError`，CLI 提示「用 WPS/Word 打开后另存为 .docx」的转换路径；直接 OCR 未实现（依赖重：tesseract 系统级或云 API，暂挂起）。优先级：低
 
-#### Scenario: 浏览器版 PDF 支持
-
-- **WHEN** 在 `/convert` 页面上传 PDF
-- **THEN** 提示不支持（pdfplumber 无法在 Pyodide 运行），引导用命令行版。优先级：低

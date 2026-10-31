@@ -36,7 +36,9 @@
 
 ## 近期完成
 
-- [x] **改进大 batch（2026-10-25，v0.2.0）**：判分/校验收紧（组题子题校验、数字串完整匹配）、单文件引擎组题支持、韧性三件套（ErrorBoundary/PWA 更新横幅/进度导出导入）、体验三件套（OG 卡片/深色模式/键盘作答）、/convert 支持 PDF+英文节头、题库数据按需加载（主包 -145KB）、模拟考试模式（随机+限时+成绩单）、Playwright E2E×3 进 CI、CHANGELOG 首建、v0.2.0 tag（PyPI 发布随 workflow，因本机网络波动待线上确认）
+- [x] **维护批次（2026-10-31）**：CI 前端门禁修复（eslint 9 个 error，含 react-hooks v7 / React Compiler 规则；新增「进题库时从 localStorage 恢复答题记录」回归测试）+ 提交 `uv.lock` 并对齐 0.2.0 + 门禁加固（`uv sync --frozen`、`uv lock --check`、Pyodide bundle `--check` 校验、部署前 lint/test、发版前校验 CI 绿）+ 文档刷新（pytest 157 / vitest 43、PyPI v0.2.0、浏览器版 PDF 支持）+ openspec 归档 quizforge-mvp / react-frontend-pages
+
+- [x] **改进大 batch（2026-10-25，v0.2.0）**：判分/校验收紧（组题子题校验、数字串完整匹配）、单文件引擎组题支持、韧性三件套（ErrorBoundary/PWA 更新横幅/进度导出导入）、体验三件套（OG 卡片/深色模式/键盘作答）、/convert 支持 PDF+英文节头、题库数据按需加载（主包 -145KB）、模拟考试模式（随机+限时+成绩单）、Playwright E2E×3 进 CI、CHANGELOG 首建、v0.2.0 tag（PyPI 发布随 workflow，已确认线上发布：2026-10-25T14:50:19Z）
 
 - [x] **M5 工具化分发**（2026-10-21）：/convert 浏览器内转换上线（browser_ingest 纯 stdlib 提取器逐块一致 + Pyodide 桥 + vitest 真实集成测试）；PyPI 发布就绪（元数据/sdist 瘦身/publish workflow，待用户打 tag 发布）
 - [x] **M4 推广启动（代码侧）**（2026-10-21）：README 分层重写 + 四张实拍截图 + HomePage 计数口径修复；访问计数评估为不加（零后端/隐私优先）

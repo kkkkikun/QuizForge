@@ -8,12 +8,12 @@ uv sync                                         # 装依赖
 uv run quizforge ./data/数据库原理题库.docx        # → 单文件 HTML（离线）
 uv run quizforge --react-frontend frontend      # 多题库：读 frontend/quizzes.yaml → frontend/src/data.ts
 uv run quizforge 怪文档.docx --diagnose          # 打印文档结构诊断（排查解析问题）
-uv run pytest                                   # 后端测试（146，含 data/ 全量回归门禁）
+uv run pytest                                   # 后端测试（157，含 data/ 全量回归门禁）
 uv run python scripts/add_quiz.py 新文档.docx --id xx --title 标题   # 新题库一条龙上线
 # 前端（cd frontend）：
 npm run dev        # 开发服务器
 npm run lint       # tsc strict + eslint
-npm test           # vitest（30，含 Pyodide 真实集成）
+npm test           # vitest（43，含 Pyodide 真实集成）
 ```
 LLM 兜底为**可选增强**（设 `LLM_API_KEY`/`DEEPSEEK_API_KEY` 启用；不配也能跑）。已发布 PyPI：`pip install quizforge-cli`（命令仍为 `quizforge`）。
 
@@ -28,7 +28,7 @@ tests/       pytest + golden 快照（data/*.docx 为回归基线，新文档入
 data/        真实样本（数据库原理 / 2026复习 / 大英四 / 热物理[PPT形态]）
 docs/        站点截图
 .github/     CI(pytest+前端三连) · deploy(Pages) · publish(PyPI, tag 触发) · ISSUE_TEMPLATE
-openspec/    specs/（5 domain）+ changes/（mvp / react-frontend-pages）
+openspec/    specs/（7 domain）+ changes/archive/（已归档变更）
 ```
 
 ---
@@ -61,7 +61,7 @@ openspec/    specs/（5 domain）+ changes/（mvp / react-frontend-pages）
 | 开始新会话 | CLAUDE.md → SNAPSHOT.md → tasks.md |
 | 写新功能 | rules/ + architecture/ + learned/ |
 | 修 bug | rules/ + SNAPSHOT.md + learned/ |
-| 改解析/数据契约 | architecture/（数据契约 §）+ quizforge-mvp/design.md |
+| 改解析/数据契约 | architecture/（数据契约 §）+ archive/2026-10-31-quizforge-mvp/design.md |
 
 ## OpenSpec 命令
 
@@ -76,7 +76,7 @@ openspec/    specs/（5 domain）+ changes/（mvp / react-frontend-pages）
 ## 开发约定
 
 - **TDD**：先测后码；两份 `data/*.docx`（干净+脏）+ 大英四 + 热物理 是回归基线；golden 变化需人工复查后重生成。
-- **数据契约**：`Quiz JSON`（层间唯一中间表示，见 `openspec/changes/quizforge-mvp/design.md §3.2`）。
+- **数据契约**：`Quiz JSON`（层间唯一中间表示，见 `openspec/changes/archive/2026-10-31-quizforge-mvp/design.md §3.2`）。
 - **解析**：不依赖题号；选项按 `A./B./C./D.` 切分；答案多策略（内联/高亮/答案序列/文末答案区按题号回填）；大题/知识点必滤；PPT 转换丢首选项标签会自动恢复。
 - **浏览器 bundle**：改 quizforge 纯 Python 模块（model/patterns/parse/render/validate/browser_ingest）后 MUST `uv run python scripts/build_browser_bundle.py` 重生成，否则 `/convert` 页面用旧引擎。
 - **提交规范**：**不加 `Co-Authored-By`、不设共同创作者**。

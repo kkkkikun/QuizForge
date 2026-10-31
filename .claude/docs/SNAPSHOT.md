@@ -1,6 +1,6 @@
 # SNAPSHOT — QuizForge 项目状态
 
-> 最近更新：2026-10-21（M0–M5 全阶段收官，PyPI v0.1.0 已发布）
+> 最近更新：2026-10-31（M0–M5 全阶段收官，PyPI v0.2.0 已发布）
 
 ## 项目结构
 
@@ -26,7 +26,7 @@ QuizForge/
 ├── data/                   # 真实样本（含 PPT 形态热物理）
 ├── docs/                   # 站点截图
 ├── .github/                # ci(pytest+前端) · deploy(Pages) · publish(PyPI) · ISSUE_TEMPLATE
-└── openspec/               # specs/（5 domain）+ changes/
+└── openspec/               # specs/（7 domain）+ changes/archive/
 ```
 
 ## 技术栈
@@ -36,19 +36,19 @@ QuizForge/
 | 后端 | Python 3.10+ (uv)；python-docx / pdfplumber / openai / anthropic / pyyaml |
 | 浏览器端 | Pyodide + browser_ingest（纯 stdlib 提取器，/convert 页面，文件不上传）|
 | 前端 | React 19 + Vite + Tailwind v4 + react-router-dom + PWA（vite-plugin-pwa）|
-| 前端质量 | tsc strict + eslint + vitest(jsdom 30 测试，含 Pyodide 真实集成) |
-| 测试 | pytest 146（含 golden + data/ 全量回归门禁）；frontend lint/test/build 进 CI |
-| 部署 | GitHub Pages（deploy.yml，404.html 回退）；PyPI `quizforge-cli` v0.1.0 已发布（tag 触发 trusted publishing） |
+| 前端质量 | tsc strict + eslint + vitest(jsdom 43 测试，含 Pyodide 真实集成) |
+| 测试 | pytest 157（含 golden + data/ 全量回归门禁）；frontend lint/test/build 进 CI |
+| 部署 | GitHub Pages（deploy.yml，404.html 回退）；PyPI `quizforge-cli` v0.2.0 已发布（tag 触发 trusted publishing） |
 
 ## Git 状态
 
 - 分支：`master`
 - 远程：`origin` → https://github.com/kkkkikun/QuizForge
-- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 推广路线图 M0–M5 全程（还债/校验关卡 → 移动端+PWA → 运营化 → 解析泛化+陌生文档实战 → README 分层/Lighthouse → 浏览器转换 /convert + PyPI v0.1.0 发布）（详见 `roadmap.md`）
+- 最近主线：MVP → LLM 双 provider → React 前端 + Pages CI → 多题库 → CET 高亮/匹配 → group 题型 → 推广路线图 M0–M5 全程（还债/校验关卡 → 移动端+PWA → 运营化 → 解析泛化+陌生文档实战 → README 分层/Lighthouse → 浏览器转换 /convert + PyPI 发布 → v0.2.0 改进批次）（详见 `roadmap.md`）
 
 ## 关键契约
 
-- **Quiz JSON**（`openspec/changes/quizforge-mvp/design.md §3.2`）：层间唯一中间表示（含 `num` 题号字段，答案区映射用）。
+- **Quiz JSON**（`openspec/changes/archive/2026-10-31-quizforge-mvp/design.md §3.2`）：层间唯一中间表示（含 `num` 题号字段，答案区映射用）。
 - **React data.ts**：`QUIZZES: Quiz[]`，每题 `{type: choice|multiple|blank|group, ...}`；group 带 `subQuestions`。
 - **PyPI 分发名**：`quizforge-cli`（`quizforge` 被他人占用；导入包名/命令名仍为 `quizforge`）。
 - **浏览器 bundle**：`frontend/public/quizforge_py/` 由 `scripts/build_browser_bundle.py` 生成，改核心纯 Python 模块后须重跑。
