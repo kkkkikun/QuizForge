@@ -111,6 +111,7 @@ pip install quizforge-cli   # 或 uv tool install quizforge-cli；安装后命�
 - 扫描版 PDF：不支持直接 OCR——用 WPS/Word 打开后另存为 .docx 再转换（CLI 会提示）
 - LLM 答案是其推理结果（文档无答案 key 时）；标准课程知识可靠，冷门题可能偏差
 - 在线转换（浏览器版）支持 `.docx`/`.txt`/`.pdf`（文字版 PDF），但只走纯规则解析、不启用 LLM 兜底
+- 浏览器版 PDF：pdfjs 取文字后按纯文本解析，PDF 的表格与版式信息会丢失——需要保版式请用命令行版（pdfplumber）
 
 ## 🗺 路线图
 

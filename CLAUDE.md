@@ -44,6 +44,8 @@ openspec/    specs/（7 domain）+ changes/archive/（已归档变更）
 | `openspec/specs/learned/` | 踩坑与模式（python-docx/Pages/vite） | `grep 关键词 openspec/specs/learned/spec.md` |
 | `openspec/specs/references/` | 依赖与外部参考 | `grep 关键词 openspec/specs/references/spec.md` |
 | `openspec/specs/optimization/` | 已知优化点与技术债 | `grep 关键词 openspec/specs/optimization/spec.md` |
+| `openspec/specs/quizforge/` | 后端核心契约（CLI/摄取/解析/渲染/答题） | `grep 关键词 openspec/specs/quizforge/spec.md` |
+| `openspec/specs/frontend/` | 前端与部署契约（数据管道/题型/Pages CI） | `grep 关键词 openspec/specs/frontend/spec.md` |
 | `openspec/changes/` | 变更提案 | `openspec list` |
 
 ### 项目状态（日常维护）
