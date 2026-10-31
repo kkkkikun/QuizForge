@@ -65,7 +65,7 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--react",
         metavar="PATH",
-        help="导出 React 前端数据到 PATH（如 frontend/src/data.ts），供 frontend/ 构建",
+        help="单题库导出：把当前题库写成 React 数据到 PATH（QUIZZES 单元素），供 frontend/ 构建；多题库请用 --react-frontend <DIR>",
     )
     p.add_argument(
         "--react-frontend",
@@ -210,7 +210,12 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.react:
         from . import reactfmt
-        reactfmt.write_data_ts(quiz, args.react)
+        try:
+            reactfmt.write_data_ts(quiz, args.react)
+        except reactfmt.ForwardingStubError as e:
+            print(f"错误：{e}", file=sys.stderr)
+            print(f"  （HTML 已生成：{out_path}；仅 React 数据导出被拒绝）", file=sys.stderr)
+            return 2
 
     n_low = sum(1 for q in quiz.questions if q.low_confidence)
     print(f"✅ 已生成 {out_path}")

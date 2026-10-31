@@ -80,3 +80,40 @@ def test_cli_render_from_json(tmp_path):
     html = (tmp_path / "db2.html").read_text(encoding="utf-8")
     assert "数据库原理题库" in html
     assert "数据库技术的核心" in html  # 题干来自 JSON
+
+
+def _txt_input(tmp_path):
+    """一份最小可解析的 txt 题库（单选 1 题）。"""
+    f = tmp_path / "q.txt"
+    f.write_text("选择题\n1.题干(B)\nA.甲\nB.乙\nC.丙\nD.丁\n", encoding="utf-8")
+    return f
+
+
+def test_cli_react_refuses_to_overwrite_forwarding_stub(tmp_path):
+    """--react 指向多题库转发桩（src/data.ts 再导出 ./data/index）时必须拒绝，不静默覆盖。
+
+    单题库全量导出与转发桩的导出类型不兼容（Quiz[] vs QuizMeta[]），
+    覆盖后 tsc 会挂，且全部题库重新进主包（抵消按需加载），src/data/*.json 变孤儿。
+    """
+    stub = tmp_path / "data.ts"
+    stub.write_text(
+        "export { QUIZZES, getQuiz } from './data/index';\n"
+        "export type { QuizMeta } from './data/index';\n",
+        encoding="utf-8",
+    )
+    before = stub.read_text(encoding="utf-8")
+    src = _txt_input(tmp_path)
+    r = _run(str(src), "-o", str(tmp_path / "q.html"), "--react", str(stub))
+    assert r.returncode != 0, "覆盖多题库转发桩必须非零退出"
+    assert "--react-frontend" in (r.stderr + r.stdout), "错误信息应指向 --react-frontend"
+    assert stub.read_text(encoding="utf-8") == before, "转发桩不能被改写"
+
+
+def test_cli_react_writes_plain_target(tmp_path):
+    """目标是普通新路径时照常成功（--react 仍是可用的单题库导出入口）。"""
+    out = tmp_path / "single.ts"
+    src = _txt_input(tmp_path)
+    r = _run(str(src), "-o", str(tmp_path / "q.html"), "--react", str(out))
+    assert r.returncode == 0, r.stderr
+    assert out.exists(), "--react 应产出数据文件"
+    assert "export const QUIZZES: Quiz[]" in out.read_text(encoding="utf-8")

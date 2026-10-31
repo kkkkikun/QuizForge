@@ -13,6 +13,27 @@ import sys
 
 from .model import Question, Quiz
 
+
+class ForwardingStubError(ValueError):
+    """目标文件是多题库模式的转发桩，单题库导出不能覆盖它。"""
+
+
+# 多题库模式的 src/data.ts 是转发桩：只从 ./data/index 再导出，不自带题库数据
+_FORWARD_STUB_RE = re.compile(r"from\s+['\"]\./data/index['\"]")
+
+
+def is_forwarding_stub(path: str) -> bool:
+    """判断 path 是否是多题库转发桩（src/data.ts 再导出 ./data/index）。"""
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+    except OSError:
+        return False
+    if "export const QUIZZES" in content:
+        return False  # 自己写出的单题库数据文件，不是转发桩
+    return bool(_FORWARD_STUB_RE.search(content))
+
+
 # QuizForge 填空空位标记（___ / ＿＿＿ / （ ） / ( ) / 〔〕）
 _BLANK_MARK = re.compile(r"_{2,}|＿{2,}|[（(]\s*[)）]|〔\s*〕]")
 _TYPE_MAP = {"single": "choice", "multiple": "multiple", "blank": "blank", "group": "group"}
@@ -136,7 +157,18 @@ def write_quizzes_ts(quizzes: list[dict], path: str) -> None:
 
 
 def write_data_ts(quiz: Quiz, path: str) -> None:
-    """单题库 → data.ts（写成单元素 QUIZZES，与多题库格式统一）。"""
+    """单题库 → data.ts（写成单元素 QUIZZES，与多题库格式统一）。
+
+    目标是多题库转发桩（src/data.ts 再导出 ./data/index）时拒绝覆盖：
+    单题库全量导出与转发桩的导出类型不兼容（Quiz[] vs QuizMeta[]），覆盖会让
+    tsc 挂掉，且所有题库重新进主包（抵消按需加载）、src/data/*.json 变孤儿。
+    多题库请用 CLI 的 --react-frontend <DIR>。
+    """
+    if is_forwarding_stub(path):
+        raise ForwardingStubError(
+            f"{path} 是多题库模式的转发桩（再导出 ./data/index），单题库导出不能覆盖它。"
+            f"多题库请用 --react-frontend <DIR>；单题库请换一个输出路径。"
+        )
     write_quizzes_ts([to_react_quiz(quiz)], path)
 
 
