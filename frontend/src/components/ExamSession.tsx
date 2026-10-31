@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ArrowLeft, ArrowRight, Clock, Flag } from 'lucide-react';
 import type { AnswerMap, Question } from '../types';
 import { formatClock } from '../lib/exam';
@@ -26,25 +26,25 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
   const q = questions[currentIndex];
   const total = questions.length;
 
-  const finish = (final: AnswerMap) => {
+  const finish = useCallback((final: AnswerMap) => {
     if (submittedRef.current) return;
     submittedRef.current = true;
     onSubmit(final, Math.round((Date.now() - startAt) / 1000));
-  };
+  }, [onSubmit, startAt]);
 
+  // 倒计时：按固定结束时刻算剩余秒数，interval 只创建一次（不随作答重建）
   useEffect(() => {
+    const endAt = startAt + durationMin * 60 * 1000;
     const t = setInterval(() => {
-      setRemainSec(prev => {
-        if (prev <= 1) {
-          finish(answers);
-          return 0;
-        }
-        return prev - 1;
-      });
+      setRemainSec(Math.max(0, Math.ceil((endAt - Date.now()) / 1000)));
     }, 1000);
     return () => clearInterval(t);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [answers]);
+  }, [startAt, durationMin]);
+
+  // 到时自动交卷（用最新作答；finish 内部有 submittedRef 幂等保护）
+  useEffect(() => {
+    if (remainSec <= 0) finish(answers);
+  }, [remainSec, answers, finish]);
 
   const answeredCount = useMemo(
     () => Object.values(answers).filter(a => Array.isArray(a) ? a.length > 0 : a !== '').length,
