@@ -9,20 +9,86 @@ on:
 
 permissions:
   id-token: write
+  actions: read
+  checks: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      # 发版门禁：当前 commit 的 CI 必须跑完且为绿，否则拒绝构建/发布。
+      # 注意 GitHub Actions 的 check run 是按「job 名」建的（test (3.10) / test (3.12) /
+      # frontend），并不存在名为 "CI" 的 check run，所以这里查的是 CI 工作流运行
+      # 本身的 status/conclusion——它已聚合所有 job 的结果。
+      - name: Wait for CI to pass
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          repo="${GITHUB_REPOSITORY}"
+          sha="${GITHUB_SHA}"
+          api_runs="repos/${repo}/actions/workflows/ci.yml/runs"
+          api_checks="repos/${repo}/commits/${sha}/check-runs"
+          timeout_sec=1200
+          deadline=$(( $(date +%s) + timeout_sec ))
+
+          dump_checks() {
+            echo "---- 该 commit 的 check runs ----"
+            if ! gh api "$api_checks" --jq '(.check_runs // [])[] | "  \(.name): \(.status)/\(.conclusion)  \(.html_url)"' 2>/dev/null; then
+              echo "  （读取 check runs 失败：该 SHA 可能尚未推送到远端，或 API 暂时不可用）"
+            fi
+          }
+
+          while :; do
+            if ! info=$(gh api "$api_runs?head_sha=${sha}&per_page=1" --jq '(.workflow_runs[0] // {}) | [.status, .conclusion, .html_url] | map(. // "-") | @tsv' 2>&1); then
+              case "$info" in
+                *"HTTP 401"*|*"HTTP 403"*|*"HTTP 404"*|*"HTTP 422"*)
+                  echo "::error::查询 CI 运行记录失败（认证/权限或参数错误，重试不会自愈）：${info}"
+                  exit 1
+                  ;;
+                *)
+                  echo "查询 CI 运行记录暂时失败（网络抖动/限流），30s 后重试：${info}"
+                  ;;
+              esac
+              info=""
+            fi
+            [ -n "$info" ] || info=$'-\t-\t-'
+            IFS=$'\t' read -r status conclusion url <<<"$info"
+            echo "CI 状态：status=${status} conclusion=${conclusion} ${url}"
+
+            if [ "$status" = "completed" ]; then
+              if [ "$conclusion" = "success" ]; then
+                echo "✅ CI 已通过：${url}"
+                exit 0
+              fi
+              echo "::error::CI 未通过（conclusion=${conclusion}），拒绝发布"
+              echo "CI 运行地址：${url}"
+              dump_checks
+              exit 1
+            fi
+
+            if [ "$(date +%s)" -ge "$deadline" ]; then
+              echo "::error::等待 CI 超过 ${timeout_sec}s 仍未得到终态，拒绝发布"
+              echo "CI 运行地址：${url}"
+              echo "（tag push 不会触发 CI——CI 只在 push 到 master/main 或 PR 时触发；"
+              echo "  请确认被发布的 commit 已经推送到 master/main 且 CI 跑过）"
+              dump_checks
+              exit 1
+            fi
+
+            sleep 30
+          done
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+      - name: Install uv
+        run: pip install --upgrade uv
+      - name: Sync dependencies (frozen)
+        run: uv sync --frozen
       - name: Build sdist + wheel
-        run: |
-          pip install --upgrade uv
-          uv build
+        run: uv build
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:

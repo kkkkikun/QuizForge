@@ -26,8 +26,11 @@ jobs:
       - name: Install uv
         run: pip install --upgrade uv
 
+      - name: Check lock file is up to date
+        run: uv lock --check
+
       - name: Sync dependencies
-        run: uv sync --python "${{ matrix.python-version }}"
+        run: uv sync --frozen --python "${{ matrix.python-version }}"
 
       - name: Run tests
         run: uv run pytest -q
@@ -36,6 +39,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        run: pip install --upgrade uv
+
+      - name: Check browser bundle is in sync with quizforge/
+        run: uv run --frozen python scripts/build_browser_bundle.py --check
 
       - name: Set up Node
         uses: actions/setup-node@v5
