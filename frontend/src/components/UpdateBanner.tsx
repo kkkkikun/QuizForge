@@ -10,7 +10,9 @@ export default function UpdateBanner() {
     updateServiceWorker,
   } = useRegisterSW({
     onRegisteredSW(_url, r) {
-      r && setInterval(() => r.update(), 60 * 60 * 1000);  // 每小时检查
+      if (r) {
+        setInterval(() => r.update(), 60 * 60 * 1000);  // 每小时检查
+      }
     },
   });
   const [hidden, setHidden] = useState(false);

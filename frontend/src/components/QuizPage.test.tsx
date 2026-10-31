@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import QuizPage from './QuizPage';
@@ -66,5 +66,15 @@ describe('Dashboard 统计', () => {
     expect(screen.getByText('/ 48 题')).toBeInTheDocument();
     expect(screen.getByText('0%')).toBeInTheDocument();  // 正确率 0
     expect(screen.getByText('答对 0，答错 1')).toBeInTheDocument();
+  });
+});
+
+describe('localStorage 恢复', () => {
+  it('进题库时从 localStorage 恢复答题记录', async () => {
+    // db 第 1 题答案为 B（frontend/src/data/db.json）
+    localStorage.setItem('quizforge-answers-db', JSON.stringify({ 1: 'B' }));
+    renderQuiz('db');
+    // 恢复失败时这里会渲染「答对 0，答错 0」，findByText 超时即测试失败
+    expect(await screen.findByText('答对 1，答错 0')).toBeInTheDocument();
   });
 });

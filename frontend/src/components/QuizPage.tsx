@@ -25,11 +25,22 @@ function loadAnswers(storageKey: string): AnswerMap {
 export default function QuizPage() {
   const { id } = useParams<{ id: string }>();
 
+  // 答题记录（题库就绪时从 localStorage 恢复，见下方加载 effect）
+  const [userAnswers, setUserAnswers] = useState<AnswerMap>({});
+
   // 题库数据按需加载（data/<id>.json 独立 chunk）
   const [quiz, setQuiz] = useState<Quiz | undefined | null>(null);  // null=加载中, undefined=不存在
   useEffect(() => {
     let alive = true;
-    getQuiz(id ?? '').then(q => { if (alive) setQuiz(q); });
+    getQuiz(id ?? '').then(q => {
+      if (!alive) return;
+      setQuiz(q);
+      // 题库就绪时一并恢复本地答题记录并设置标题（放进异步回调，避免 effect 内同步 setState）
+      if (q) {
+        document.title = q.title;
+        setUserAnswers(loadAnswers(`quizforge-answers-${q.id}`));
+      }
+    });
     return () => { alive = false; };
   }, [id]);
 
@@ -42,17 +53,9 @@ export default function QuizPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   // 练习列表在进入答题时快照：刷题中作答变化不会改变本次列表（错题卷重做答对后尤其重要）
   const [questionsList, setQuestionsList] = useState<Question[]>([]);
-  const [userAnswers, setUserAnswers] = useState<AnswerMap>({});
 
   const QUESTIONS: Question[] = quiz?.questions ?? [];
   const storageKey = quiz ? `quizforge-answers-${quiz.id}` : '';
-
-  useEffect(() => {
-    if (quiz) {
-      document.title = quiz.title;
-      setUserAnswers(loadAnswers(`quizforge-answers-${quiz.id}`));
-    }
-  }, [quiz]);
 
   const computeList = (mode: FilterMode): Question[] => {
     if (mode === 'choice') return QUESTIONS.filter(q => q.type === 'choice' || q.type === 'multiple' || q.type === 'group');

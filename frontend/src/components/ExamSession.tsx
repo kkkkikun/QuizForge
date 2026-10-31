@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowLeft, ArrowRight, Clock, Flag, XCircle, CheckCircle2, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Clock, Flag } from 'lucide-react';
 import type { AnswerMap, Question } from '../types';
-import { formatClock, scoreExam } from '../lib/exam';
+import { formatClock } from '../lib/exam';
 import ChoiceQuestion from './question/ChoiceQuestion';
 import MultipleQuestion from './question/MultipleQuestion';
 import BlankQuestion from './question/BlankQuestion';
@@ -19,7 +19,8 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<AnswerMap>({});
   const [remainSec, setRemainSec] = useState(durationMin * 60);
-  const startRef = useRef(Date.now());
+  // 开始时刻：惰性初始化，只在首次挂载取值（render 期不读时钟，满足 React Compiler purity 规则）
+  const [startAt] = useState(() => Date.now());
   const submittedRef = useRef(false);
 
   const q = questions[currentIndex];
@@ -28,7 +29,7 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
   const finish = (final: AnswerMap) => {
     if (submittedRef.current) return;
     submittedRef.current = true;
-    onSubmit(final, Math.round((Date.now() - startRef.current) / 1000));
+    onSubmit(final, Math.round((Date.now() - startAt) / 1000));
   };
 
   useEffect(() => {
