@@ -27,6 +27,7 @@ export default function ThemeToggle({ className = '' }: { className?: string }) 
 
   return (
     <button
+      type="button"
       onClick={toggle}
       aria-label={dark ? '切换到浅色模式' : '切换到深色模式'}
       className={`inline-flex items-center justify-center w-10 h-10 rounded-xl text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer ${className}`}

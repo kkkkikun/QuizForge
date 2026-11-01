@@ -92,6 +92,7 @@ export default function ConvertPage() {
               />
             </label>
             <button
+              type="button"
               onClick={handleConvert}
               disabled={!fileName || phase === 'loading'}
               className="min-h-11 px-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2"
@@ -164,6 +165,7 @@ export default function ConvertPage() {
 
             <div className="flex flex-col sm:flex-row gap-3 pt-1">
               <button
+                type="button"
                 onClick={() => result.html && download(result.html, '.html', 'text/html')}
                 disabled={!result.html}
                 className="flex-1 min-h-11 inline-flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl transition-all cursor-pointer"
@@ -171,6 +173,7 @@ export default function ConvertPage() {
                 <Download size={15} /> 下载答题网页（HTML）
               </button>
               <button
+                type="button"
                 onClick={() => download(result.quizJson, '.json', 'application/json')}
                 className="flex-1 min-h-11 inline-flex items-center justify-center gap-2 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-xl transition-all cursor-pointer"
               >

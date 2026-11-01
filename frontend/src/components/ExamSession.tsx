@@ -72,6 +72,7 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
       {/* 顶栏：进度 + 倒计时 */}
       <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between sticky top-14 z-20">
         <button
+          type="button"
           onClick={() => { if (window.confirm('退出将放弃本场考试，确认吗？')) onExit(); }}
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors px-3 min-h-11 rounded-lg hover:bg-slate-50"
         >
@@ -151,6 +152,7 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
       <div className="sticky bottom-0 z-20 -mx-2 px-2 pt-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] bg-gradient-to-t from-slate-50 via-slate-50/95 to-transparent">
         <div className="bg-white/95 backdrop-blur border border-slate-200 rounded-2xl shadow-lg shadow-slate-900/5 p-2 flex items-center gap-2">
           <button
+            type="button"
             onClick={() => setCurrentIndex(currentIndex - 1)}
             disabled={currentIndex === 0}
             className="min-h-11 min-w-20 px-4 rounded-xl font-semibold text-sm border transition-all flex items-center justify-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed border-slate-200 text-slate-700 bg-white hover:bg-slate-50 cursor-pointer"
@@ -162,6 +164,7 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
           </span>
           {currentIndex < total - 1 ? (
             <button
+              type="button"
               onClick={() => setCurrentIndex(currentIndex + 1)}
               className="min-h-11 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer shrink-0"
             >
@@ -169,6 +172,7 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
             </button>
           ) : (
             <button
+              type="button"
               onClick={confirmSubmit}
               className="min-h-11 px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer shrink-0 inline-flex items-center gap-1.5"
             >
@@ -178,7 +182,7 @@ export default function ExamSession({ questions, durationMin, onSubmit, onExit }
         </div>
         {currentIndex === total - 1 && total > 1 && (
           <div className="pt-2 flex justify-center">
-            <button onClick={confirmSubmit} className="text-xs font-bold text-emerald-700 hover:text-emerald-600 py-1.5 cursor-pointer">
+            <button type="button" onClick={confirmSubmit} className="text-xs font-bold text-emerald-700 hover:text-emerald-600 py-1.5 cursor-pointer">
               直接交卷
             </button>
           </div>

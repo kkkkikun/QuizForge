@@ -53,10 +53,12 @@ export default function ExamResult({ questions, answers, usedSec, onRetry, onExi
         </div>
         <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
           <button onClick={onRetry}
+            type="button"
             className="min-h-11 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer">
             再来一场
           </button>
           <button onClick={onExit}
+            type="button"
             className="min-h-11 px-6 bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-semibold text-sm rounded-xl transition-all cursor-pointer inline-flex items-center justify-center gap-1.5">
             <ArrowLeft size={14} /> 返回题库
           </button>

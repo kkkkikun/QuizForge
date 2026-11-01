@@ -4,11 +4,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 import sys
 from pathlib import Path
 
 from . import __version__
+
+logger = logging.getLogger(__name__)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -90,11 +93,14 @@ def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
 
     # 加载 .env（密钥等本地配置，已 gitignore）
+    # 有意兜底：python-dotenv 没装、或 .env 内容畸形，都不该让 CLI 崩——
+    # 环境变量仍可由 shell / 运行环境提供。这里吞掉的只是「加载 .env」这一
+    # 件事本身，不掩盖别的问题；细节记到 debug 日志（默认不输出）。
     try:
         from dotenv import load_dotenv
         load_dotenv()
-    except Exception:
-        pass
+    except Exception as e:
+        logger.debug("加载 .env 失败，已忽略：%s", e)
 
     # 多题库模式：读 manifest 生成 frontend/src/data.ts
     if args.react_frontend:

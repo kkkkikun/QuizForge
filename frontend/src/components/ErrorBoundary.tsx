@@ -34,6 +34,7 @@ export default class ErrorBoundary extends Component<Props, State> {
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <button
+              type="button"
               onClick={() => { this.setState({ error: null }); }}
               className="min-h-11 px-5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer inline-flex items-center justify-center gap-1.5"
             >

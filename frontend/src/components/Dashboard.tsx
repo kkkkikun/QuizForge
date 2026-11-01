@@ -85,6 +85,7 @@ export default function Dashboard({
           {([['all', `全部 (${counts.all})`], ['choice', `选择 (${counts.choice})`], ['blank', `填空 (${counts.blank})`], ['wrong', `错题 (${counts.wrong})`]] as const).map(([mode, label]) => (
             <button
               key={mode}
+              type="button"
               onClick={() => onFilterChange(mode)}
               className={`px-4 py-2.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                 filterMode === mode ? 'bg-white shadow-sm text-blue-600' : 'text-slate-500 hover:text-slate-800'
@@ -116,6 +117,7 @@ export default function Dashboard({
         </div>
         <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm flex flex-col justify-center items-center md:items-end gap-3">
           <button
+            type="button"
             onClick={() => onStartPractice(stats.firstUnansweredQId)}
             disabled={stats.total === 0}
             className="w-full py-3.5 px-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-sm rounded-xl shadow-sm transition-all flex items-center justify-center gap-2 cursor-pointer"
@@ -123,6 +125,7 @@ export default function Dashboard({
             {isStarted ? '继续刷题' : '开始练习'} <ArrowRight size={16} />
           </button>
           <button
+            type="button"
             onClick={onStartExam}
             className="w-full py-2.5 px-6 bg-violet-50 hover:bg-violet-100 text-violet-700 border border-violet-200 font-semibold text-xs rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer"
           >
@@ -131,6 +134,7 @@ export default function Dashboard({
           {isStarted && (
             <>
               <button
+                type="button"
                 onClick={onExport}
                 className="text-xs text-slate-400 hover:text-blue-600 transition-colors flex items-center gap-1 py-1.5 px-2 -mx-2"
               >
@@ -150,6 +154,7 @@ export default function Dashboard({
                 />
               </label>
               <button
+                type="button"
                 onClick={() => { if (confirm('确认清空本题库的答题记录吗？')) onClearAnswers(); }}
                 className="text-xs text-slate-400 hover:text-rose-600 transition-colors flex items-center gap-1 py-1.5 px-2 -mx-2"
               >
@@ -184,6 +189,7 @@ export default function Dashboard({
             return (
               <button
                 key={q.id}
+                type="button"
                 onClick={() => onStartPractice(q.id)}
                 className={`aspect-square rounded-xl border text-sm font-bold font-mono transition-all flex flex-col items-center justify-center cursor-pointer py-2 ${cellStyle}`}
                 title={`第 ${originalIdx + 1} 题 (${typeLabel(q.type)}): ${q.question.replace(/\[.*?\]/g, '( ___ )')}`}

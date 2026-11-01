@@ -19,6 +19,7 @@ export default function ExamSetupView({ total, onStart, onExit }: ExamSetupViewP
   return (
     <div className="max-w-xl mx-auto space-y-5 py-4">
       <button
+        type="button"
         onClick={onExit}
         className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors min-h-11 px-3 -ml-3 rounded-lg hover:bg-slate-50"
       >
@@ -38,6 +39,7 @@ export default function ExamSetupView({ total, onStart, onExit }: ExamSetupViewP
           <div className="flex gap-2">
             {counts.map(n => (
               <button key={n} onClick={() => setCount(n)}
+                type="button"
                 className={`flex-1 min-h-11 rounded-xl font-bold text-sm border transition-all cursor-pointer ${
                   count === n ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'
                 }`}>
@@ -54,6 +56,7 @@ export default function ExamSetupView({ total, onStart, onExit }: ExamSetupViewP
           <div className="flex gap-2">
             {DURATION_OPTIONS.map(m => (
               <button key={m} onClick={() => setDuration(m)}
+                type="button"
                 className={`flex-1 min-h-11 rounded-xl font-bold text-sm border transition-all cursor-pointer ${
                   duration === m ? 'bg-blue-600 border-blue-600 text-white' : 'bg-white border-slate-200 text-slate-600 hover:border-blue-300'
                 }`}>
@@ -64,6 +67,7 @@ export default function ExamSetupView({ total, onStart, onExit }: ExamSetupViewP
         </div>
 
         <button
+          type="button"
           onClick={() => onStart(count, duration)}
           className="w-full min-h-12 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm rounded-xl transition-all cursor-pointer"
         >

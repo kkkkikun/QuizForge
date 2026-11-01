@@ -20,6 +20,8 @@ def _img_data_uri(b64: str) -> str:
     try:
         head = _b64.b64decode(b64[:24])
     except Exception:
+        # 有意兜底：这里只为「猜 MIME」嗅探前几个字节；解不出来就按 PNG 猜，
+        # 让图片仍能出图（浏览器会自己嗅探，或显示裂图），不该让整页渲染失败。
         return f"data:image/png;base64,{b64}"
     if head.startswith(b"\x89PNG"):
         mime = "image/png"

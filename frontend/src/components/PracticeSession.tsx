@@ -115,6 +115,7 @@ export default function PracticeSession({
         <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm text-center space-y-4">
           <p className="text-sm text-slate-600">本题库在该练习模式下没有题目。</p>
           <button
+            type="button"
             onClick={onExit}
             className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer"
           >
@@ -130,6 +131,7 @@ export default function PracticeSession({
       {/* Top Header Controls */}
       <div className="bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex items-center justify-between">
         <button
+          type="button"
           onClick={onExit}
           className="inline-flex items-center gap-1.5 text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors px-3 min-h-11 rounded-lg hover:bg-slate-50"
         >
@@ -267,6 +269,7 @@ export default function PracticeSession({
       <div className="sticky bottom-0 z-20 -mx-2 px-2 pt-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] bg-gradient-to-t from-slate-50 via-slate-50/95 to-transparent">
         <div className="bg-white/95 backdrop-blur border border-slate-200 rounded-2xl shadow-lg shadow-slate-900/5 p-2 flex items-center gap-2">
           <button
+            type="button"
             onClick={() => setCurrentIndex(currentIndex - 1)}
             disabled={currentIndex === 0}
             className="min-h-11 min-w-20 px-4 rounded-xl font-semibold text-sm border transition-all flex items-center justify-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed border-slate-200 text-slate-700 bg-white hover:bg-slate-50 cursor-pointer"
@@ -280,6 +283,7 @@ export default function PracticeSession({
 
           {currentIndex < totalQuestions - 1 ? (
             <button
+              type="button"
               onClick={() => setCurrentIndex(currentIndex + 1)}
               className="min-h-11 px-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer shrink-0"
             >
@@ -287,6 +291,7 @@ export default function PracticeSession({
             </button>
           ) : (
             <button
+              type="button"
               onClick={onExit}
               className="min-h-11 px-5 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-sm rounded-xl transition-all cursor-pointer shrink-0"
             >

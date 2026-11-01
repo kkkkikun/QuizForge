@@ -503,6 +503,11 @@ def _normalize_llm_answers(vals) -> list[str]:
                     out.extend(_normalize_llm_answers(parsed))
                     continue
             except json.JSONDecodeError:
+                # 有意兜底：LLM 偶尔把答案数组写成「看着像 JSON 但非法」的串
+                # （如 ["A" "B"]）。这里只是判断「能不能当数组解析」，不能就
+                # 按普通字符串答案继续——解析失败不代表整篇题库坏了，不该让
+                # 整篇解析崩掉。这里只捕获 JSONDecodeError（解析失败这一种），
+                # 其它异常照常抛出。
                 pass
         out.append(s)
     return out

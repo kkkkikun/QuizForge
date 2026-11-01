@@ -31,6 +31,7 @@ export default function UpdateBanner() {
         </span>
         {needRefresh && (
           <button
+            type="button"
             onClick={() => updateServiceWorker(true)}
             className="min-h-9 px-4 py-1.5 bg-blue-600 hover:bg-blue-700 rounded-xl text-xs font-bold transition-all cursor-pointer inline-flex items-center gap-1.5"
           >
@@ -38,6 +39,7 @@ export default function UpdateBanner() {
           </button>
         )}
         <button
+          type="button"
           onClick={() => {
             setNeedRefresh(false);
             setHidden(true);
