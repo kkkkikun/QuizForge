@@ -12,7 +12,9 @@ import zipfile
 import xml.etree.ElementTree as ET
 
 from .model import Block
+from .patterns import RENDERABLE_IMG as _RENDERABLE_IMG
 from .patterns import SECTION_HEADER_RE as _SECTION_RE
+from .patterns import para_kind as _para_kind
 
 _W = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 _A = "http://schemas.openxmlformats.org/drawingml/2006/main"
@@ -22,8 +24,6 @@ _V = "urn:schemas-microsoft-com:vml"
 # python-docx 内置样式名规范化用（'heading 1' → 'Heading 1'）
 _STYLE_ID_RE = re.compile(r"^[Hh]eading\s*(\d+)$")
 
-# 浏览器可直接渲染的图片格式（与 ingest._RENDERABLE_IMG 一致；wmf/emf 不收）
-_RENDERABLE_IMG = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
 
 # rId → 媒体包内路径（word/_rels/document.xml.rels）
 _REL_TYPE_IMAGE = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/image"
@@ -70,13 +70,6 @@ def _para_images(p, rels: dict[str, str], media: dict[str, bytes]) -> list[str]:
 
 def _q(tag: str) -> str:
     return f"{{{_W}}}{tag}"
-
-
-def _para_kind(style: str) -> str:
-    s = (style or "").lower()
-    if s.startswith("heading") or s.startswith("title"):
-        return "heading"
-    return "para"
 
 
 def _text_kind(text: str) -> str:

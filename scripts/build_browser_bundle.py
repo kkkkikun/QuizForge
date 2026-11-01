@@ -106,7 +106,9 @@ def check() -> int:
 def main() -> int:
     if "--check" in sys.argv[1:]:
         return check()
-    build(DEST)
+    # build() 内部会拼一层 "quizforge"，故传 DEST.parent（= quizforge_py），
+    # 否则会生成到 quizforge_py/quizforge/quizforge/，已提交 bundle 不会被更新。
+    build(DEST.parent)
     print(f"✅ 已生成 {DEST}（{len(PURE_MODULES)} 个模块）")
     return 0
 

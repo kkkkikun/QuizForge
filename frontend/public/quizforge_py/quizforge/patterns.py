@@ -1,4 +1,7 @@
-"""共享正则模式（ingest / parse 复用）。"""
+"""共享正则模式与判定（ingest / browser_ingest / parse 复用）。
+
+零第三方依赖：本模块会被打进浏览器 Pyodide bundle（scripts/build_browser_bundle.py）。
+"""
 
 import re
 
@@ -47,3 +50,18 @@ CET_SUBCONTEXT_RE = re.compile(
 )
 # 答案序列行（匹配题：空格分隔的数字/字母 A-O，≥2 个 token）
 ANSWER_SEQ_RE = re.compile(r"^(?:\d{1,2}|[A-O])(?:\s+(?:\d{1,2}|[A-O]))+\s*$")
+
+
+# 可渲染的图片扩展名白名单（其余格式如 wmf/emf 不收）
+RENDERABLE_IMG = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
+
+
+def para_kind(style: str) -> str:
+    """段落样式名 → 块类型（heading / para）。
+
+    python-docx 路径与浏览器 stdlib 路径的判定完全一致，故共用本实现。
+    """
+    s = (style or "").lower()
+    if s.startswith("heading") or s.startswith("title"):
+        return "heading"
+    return "para"

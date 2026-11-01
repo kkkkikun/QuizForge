@@ -6,7 +6,9 @@ import os
 
 from .model import Block
 from .patterns import EN_SECTION_HEADER_RE as _EN_SECTION_RE
+from .patterns import RENDERABLE_IMG as _RENDERABLE_IMG
 from .patterns import SECTION_HEADER_RE as _SECTION_RE
+from .patterns import para_kind as _para_kind
 
 # OOXML 命名空间（用于检测段落内图片）
 _W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
@@ -14,13 +16,6 @@ _W_NS = "http://schemas.openxmlformats.org/wordprocessingml/2006/main"
 
 class ScannedPdfError(Exception):
     """PDF 几乎无可提取文本（疑似扫描版/图片版）。"""
-
-
-def _para_kind(style: str) -> str:
-    s = (style or "").lower()
-    if s.startswith("heading") or s.startswith("title"):
-        return "heading"
-    return "para"
 
 
 def _text_kind(text: str) -> str:
@@ -60,7 +55,6 @@ _R_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
 _V_NS = "urn:schemas-microsoft-com:vml"
 
 # 浏览器可直接渲染的图片格式（wmf/emf 公式图不支持，维持丢弃）
-_RENDERABLE_IMG = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp"}
 
 
 def _para_images(p, doc) -> list[str]:
